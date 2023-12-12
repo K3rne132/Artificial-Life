@@ -20,14 +20,14 @@ void Simulation::dispatchEvent() {
 		if (_Event.button.button == SDL_BUTTON_MIDDLE) {
 			if (!_MiddleButtonPressed) {
 				_MiddleButtonPressed = true;
-				SDL_GetMouseState(&_BaseX, &_BaseY);
+				SDL_GetMouseState(&_BasePoint.X, &_BasePoint.Y);
 			}
 		}
 		break;
 	case SDL_MOUSEMOTION:
 		if (_MiddleButtonPressed) {
-			SDL_GetMouseState(&_X, &_Y);
-			_Window.moveCamera(_BaseX - _X, _BaseY - _Y);
+			SDL_GetMouseState(&_Point.X, &_Point.Y);
+			_Window.moveCamera(_BasePoint.X - _Point.X, _BasePoint.Y - _Point.Y);
 		}
 		break;
 	case SDL_MOUSEBUTTONUP:

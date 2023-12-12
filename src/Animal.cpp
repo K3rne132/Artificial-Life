@@ -2,5 +2,5 @@
 
 bool Animal::isMoving() {
 	if (_AnimalMovement) return true;
-	else return true;
+	else return false;
 }

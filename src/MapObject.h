@@ -1,15 +1,17 @@
 #pragma once
+#include "basePoint.hpp"
+using Point = basePoint<int>;
 
 class MapObject {
 private:
-	int _X, _Y;
+	Point _Point;
 
 public:
-	MapObject() : _X(0), _Y(0) {
+	MapObject() : _Point(0, 0) {
 
 	}
 
-	MapObject(int x, int y) : _X(x), _Y(y) {
+	MapObject(int x, int y) : _Point(x, y) {
 	
 	}
 };

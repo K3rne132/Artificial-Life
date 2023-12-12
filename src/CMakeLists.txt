@@ -9,8 +9,8 @@ file(GLOB_RECURSE SOURCES
     "*.cpp"
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
-add_library(lib${PROJECT_NAME} STATIC ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} )
+add_library(lib${PROJECT_NAME} STATIC ${SOURCES} )
 target_include_directories(lib${PROJECT_NAME} INTERFACE /)
 target_link_libraries(${PROJECT_NAME} SDL2)
 target_link_libraries(lib${PROJECT_NAME} SDL2)

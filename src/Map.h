@@ -2,18 +2,21 @@
 #include <vector>
 #include <memory>
 #include "MapObject.h"
+#include "baseSize.hpp"
+
+using Size = baseSize <int>;
 
 class Map {
 private:
-	int _Width, _Height;
+	Size _Size;
 	std::vector<std::unique_ptr<MapObject>> _Objects;
 
 public:
-	Map() : _Width(0), _Height(0) {
+	Map() : _Size(0, 0) {
 
 	}
 
-	Map(int width, int height) : _Width(width), _Height(height) {
+	Map(int width, int height) : _Size(width, height) {
 
 	}
 

@@ -1,23 +1,27 @@
 #include "Window.h"
+#include "basePoint.hpp"
+#include "baseSize.hpp"
+using Point = basePoint<int>;
+using Size = baseSize<int>;
 
 void Window::drawBorder() {
 	SDL_SetRenderDrawColor(_Renderer, 0, 0, 0, 255);
 	int offsetx = _Camera.getOffset().x;
 	int offsety = _Camera.getOffset().y;
-	SDL_Rect border = SDL_Rect{ -offsetx, -offsety, _Width, _Height };
+	SDL_Rect border = SDL_Rect{ -offsetx, -offsety, _Size.Width, _Size.Height };
 	SDL_RenderDrawRect(_Renderer, &border);
 }
 
 SDL_FPoint Window::getWindowSize() {
 	SDL_FPoint size = {};
-	size.x = _Width;
-	size.y = _Height;
+	size.x = _Size.Width;
+	size.y = _Size.Height;
 	return size;
 }
 
 void Window::setWindowSize(int width, int height) {
-	_Width = width;
-	_Height = height;
+	_Size.Width = width;
+	_Size.Height = height;
 	if (_Window)
 		SDL_SetWindowSize(_Window, width, height);
 }
@@ -27,9 +31,9 @@ void Window::setWindowSize(SDL_FPoint size) {
 }
 
 void Window::scaleWindow(float width, float height) {
-	_ScaleX = width / _Width;
-	_ScaleY = height / _Height;
-	SDL_RenderSetScale(_Renderer, _ScaleX, _ScaleY);
+	_Scale.Width = width / _Size.Width;
+	_Scale.Height = height / _Size.Height;
+	SDL_RenderSetScale(_Renderer, _Scale.Width, _Scale.Height);
 }
 
 void Window::zoomIn() {
@@ -53,8 +57,8 @@ bool Window::createWindow(const char* title) {
 		title,
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		_Width,
-		_Height,
+		_Size.Width,
+		_Size.Height,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
 	);
 	if (_Window == nullptr)
@@ -83,12 +87,12 @@ void Window::render() {
 	SDL_SetRenderDrawColor(_Renderer, 255, 255, 255, 255);
 	SDL_RenderClear(_Renderer);
 	SDL_RenderSetScale(_Renderer,
-		_ScaleX * _Camera.getZoom(),
-		_ScaleY * _Camera.getZoom());
+		_Scale.Width * _Camera.getZoom(),
+		_Scale.Height * _Camera.getZoom());
 	drawBorder();
 	for (const auto& target : _Targets)
 		target->draw(_Renderer, _Camera.getOffset());
-	SDL_RenderSetScale(_Renderer, _ScaleX, _ScaleY);
+	SDL_RenderSetScale(_Renderer, _Scale.Width, _Scale.Height);
 	for (const auto& element : _MenuElements)
 		element->draw(_Renderer);
 	SDL_RenderPresent(_Renderer);

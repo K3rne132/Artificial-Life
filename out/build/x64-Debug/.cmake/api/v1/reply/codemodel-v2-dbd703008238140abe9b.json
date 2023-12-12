@@ -1,0 +1,331 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						6
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "third party/SDL",
+					"jsonFile" : "directory-third party.SDL-Debug-888f511d381891f0b72f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "third party/SDL",
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						10,
+						11
+					]
+				},
+				{
+					"build" : "src",
+					"jsonFile" : "directory-src-Debug-c94b7c2814d5a21df52c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "src",
+					"targetIndexes" : 
+					[
+						0,
+						9
+					]
+				},
+				{
+					"build" : "third party/googletest",
+					"childIndexes" : 
+					[
+						4
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-third party.googletest-Debug-3d9be0fcdc543fbb30fe.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "third party/googletest"
+				},
+				{
+					"build" : "third party/googletest/googlemock",
+					"childIndexes" : 
+					[
+						5
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-third party.googletest.googlemock-Debug-d367b1dd961e7e3f0917.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 4,
+					"source" : "third party/googletest/googlemock",
+					"targetIndexes" : 
+					[
+						5,
+						6
+					]
+				},
+				{
+					"build" : "third party/googletest/googletest",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-third party.googletest.googletest-Debug-e265fa6106aa79877864.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 5,
+					"source" : "third party/googletest/googletest",
+					"targetIndexes" : 
+					[
+						7,
+						8
+					]
+				},
+				{
+					"build" : "test",
+					"jsonFile" : "directory-test-Debug-f18be1977b403cfd1a50.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 6,
+					"source" : "test",
+					"targetIndexes" : 
+					[
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						6
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "AL-dist"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "SDL2",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4,
+						10,
+						11
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "ArtificialLife",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						9
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						4
+					],
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "googletest-distribution",
+					"parentIndex" : 0
+				},
+				{
+					"childIndexes" : 
+					[
+						5
+					],
+					"directoryIndexes" : 
+					[
+						4
+					],
+					"name" : "gmock",
+					"parentIndex" : 3,
+					"targetIndexes" : 
+					[
+						5,
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "gtest",
+					"parentIndex" : 4,
+					"targetIndexes" : 
+					[
+						7,
+						8
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "ArtificialLifeTests",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "ArtificialLife::@145eef247bfb46b6828c",
+					"jsonFile" : "target-ArtificialLife-Debug-8cecb9a831a33b45327a.json",
+					"name" : "ArtificialLife",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "ArtificialLifeTests::@36f028580bb02cc8272a",
+					"jsonFile" : "target-ArtificialLifeTests-Debug-b20ca6b40aa6bddbbe87.json",
+					"name" : "ArtificialLifeTests",
+					"projectIndex" : 6
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL2::@64846c1c22ca817de8be",
+					"jsonFile" : "target-SDL2-Debug-951930faef0f42bb500e.json",
+					"name" : "SDL2",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL2-static::@64846c1c22ca817de8be",
+					"jsonFile" : "target-SDL2-static-Debug-15b704836c549075ebba.json",
+					"name" : "SDL2-static",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL2main::@64846c1c22ca817de8be",
+					"jsonFile" : "target-SDL2main-Debug-a4fa3267af6a02ee2291.json",
+					"name" : "SDL2main",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "gmock::@e0df3f92aee0418fd5b0",
+					"jsonFile" : "target-gmock-Debug-974da3ce97a354c65156.json",
+					"name" : "gmock",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "gmock_main::@e0df3f92aee0418fd5b0",
+					"jsonFile" : "target-gmock_main-Debug-7540aa7d3738df513908.json",
+					"name" : "gmock_main",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "gtest::@1bd2871394c8b13bba3e",
+					"jsonFile" : "target-gtest-Debug-6baf76a803a01442ad3d.json",
+					"name" : "gtest",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "gtest_main::@1bd2871394c8b13bba3e",
+					"jsonFile" : "target-gtest_main-Debug-37e8dd5da7d9de7d8962.json",
+					"name" : "gtest_main",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "libArtificialLife::@145eef247bfb46b6828c",
+					"jsonFile" : "target-libArtificialLife-Debug-f452adfbe1508b1cb0f2.json",
+					"name" : "libArtificialLife",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "sdl_headers_copy::@64846c1c22ca817de8be",
+					"jsonFile" : "target-sdl_headers_copy-Debug-a8068eb68fd6dad402b9.json",
+					"name" : "sdl_headers_copy",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@64846c1c22ca817de8be",
+					"jsonFile" : "target-uninstall-Debug-fe4f2a9323c911e03741.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/rando/OneDrive/Desktop/studia/23Z/ZPR/PROJEKT/sztuczne-zycie/out/build/x64-Debug",
+		"source" : "C:/Users/rando/OneDrive/Desktop/studia/23Z/ZPR/PROJEKT/sztuczne-zycie"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

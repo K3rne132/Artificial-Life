@@ -5,22 +5,24 @@
 #include "Drawable.h"
 #include "Camera.h"
 #undef main
+using Size = baseSize<int>;
+using FSize = baseSize<float>;
 
 class Window {
 private:
 	SDL_Window* _Window;
 	SDL_Renderer* _Renderer;
-	int _Width, _Height;
+	Size _Size;
 	std::vector<std::unique_ptr<Drawable>> _MenuElements;
 	std::vector<std::unique_ptr<Drawable>> _Targets;
-	float _ScaleX, _ScaleY;
+	FSize _Scale;
 	Camera _Camera;
 
 	void drawBorder();
 
 public:
 	Window(int width, int height) : _Window(nullptr), _Renderer(nullptr),
-		_Width(width), _Height(height), _ScaleX(1.f), _ScaleY(1.f),
+		_Size(width, height), _Scale(1.f, 1.f),
 		_Camera(width, height) {}
 
 	~Window() {
