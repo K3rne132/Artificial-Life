@@ -4,11 +4,15 @@
 #include "Statistics.h"
 #include "Movement.h"
 
-class Animal : MapObject {
+class Animal : public MapObject {
 private:
-	Statistics					_Statistics;
-	std::unique_ptr<Movement>	_AnimalMovement;
+	Statistics                _Statistics;
+	std::unique_ptr<Movement> _AnimalMovement;
 
 public:
-	bool isMoving();
+	Animal() {}
+	Animal(int x, int y) : MapObject(x, y) {}
+
+	bool isMoving() const;
+	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
 };

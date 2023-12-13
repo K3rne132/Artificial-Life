@@ -1,5 +1,8 @@
 #include <iostream>
 #include "Simulation.h"
+#include "FilledRect.h"
+#include "Animal.h"
+#undef main
 
 int main() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -11,17 +14,19 @@ int main() {
 		return 1;
 	}
 
-	SDL_FRect rect = { 100, 100, 100, 100 };
-	SDL_Color color = { 127, 80, 180, 255 };
-	window.addTarget(std::unique_ptr<Drawable>(new Drawable(rect, color)));
-	rect = { 500, 400, 100, 100 };
-	color = { 80, 180, 127, 255 };
-	window.addTarget(std::unique_ptr<Drawable>(new Drawable(rect, color)));
-	rect = { 600, 200, 200, 200 };
-	color = { 180, 80, 127, 255 };
-	window.addMenuElement(std::unique_ptr<Drawable>(new Drawable(rect, color)));
+	Map map(3000, 3000);
 
-	Simulation simulation(window);
+	map.addObject(std::unique_ptr<MapObject>(new Animal(100, 200)));
+	map.addObject(std::unique_ptr<MapObject>(new Animal(400, 600)));
+	SDL_FRect rect = {};
+	rect.x = 100;
+	rect.y = 100;
+	rect.h = 200;
+	rect.w = 200;
+	SDL_Color color = { 127, 80, 180, 255 };
+	window.addMenuElement(std::unique_ptr<Drawable>(new FilledRect(rect, color)));
+
+	Simulation simulation(window, map);
 	simulation.launch();
 
 	SDL_Quit();

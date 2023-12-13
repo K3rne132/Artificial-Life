@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "FixtureBasePointTests.h"
-using Point = basePoint<unsigned long>;
-using FPoint = basePoint<float>;
 
 TEST(basePointTests, AssignOperatorTest) {
 	Point p1(1, 2);

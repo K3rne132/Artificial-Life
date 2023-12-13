@@ -19,7 +19,7 @@ bool Map::removeObject(MapObject &map_object) {
 	return false;
 }
 
-MapObject& Map::operator[](size_t index) {
+MapObject& Map::operator[](size_t index) const {
 	if (index >= _Objects.size()) {
 		throw std::out_of_range("Index out of bounds!");
 	}
@@ -27,7 +27,10 @@ MapObject& Map::operator[](size_t index) {
 	return *_Objects[index].get();
 }
 
-size_t Map::getSize() { 
-	return _Objects.size(); 
+Point Map::getMapSize() const {
+	return _Size;
 }
 
+size_t Map::getSize() const { 
+	return _Objects.size(); 
+}

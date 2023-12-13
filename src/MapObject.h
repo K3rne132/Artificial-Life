@@ -1,17 +1,12 @@
 #pragma once
-#include "basePoint.hpp"
-using Point = basePoint<int>;
+#include "PointBase.hpp"
+#include "Drawable.h"
 
-class MapObject {
-private:
-	Point _Point;
+class MapObject : public Drawable {
+protected:
+	Point _Position;
 
 public:
-	MapObject() : _Point(0, 0) {
-
-	}
-
-	MapObject(int x, int y) : _Point(x, y) {
-	
-	}
+	MapObject() : _Position(0, 0) {}
+	MapObject(int x, int y) : _Position(x, y) {}
 };

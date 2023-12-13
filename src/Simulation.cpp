@@ -1,4 +1,5 @@
 #include "Simulation.h"
+#include "EmptyRect.h"
 
 void Simulation::dispatchEvent() {
 	switch (_Event.type) {
@@ -11,39 +12,37 @@ void Simulation::dispatchEvent() {
 		}
 		break;
 	case SDL_MOUSEWHEEL:
-		if (_Event.wheel.y > 0)
-			_Window.zoomIn();
-		if (_Event.wheel.y < 0)
-			_Window.zoomOut();
+		_Controls.mouseWheel(_Window, _Event.wheel.y);
 		break;
 	case SDL_MOUSEBUTTONDOWN:
-		if (_Event.button.button == SDL_BUTTON_MIDDLE) {
-			if (!_MiddleButtonPressed) {
-				_MiddleButtonPressed = true;
-				SDL_GetMouseState(&_BasePoint.X, &_BasePoint.Y);
-			}
-		}
+		_Controls.mouseButtonDown(_Event.button.button);
 		break;
 	case SDL_MOUSEMOTION:
-		if (_MiddleButtonPressed) {
-			SDL_GetMouseState(&_Point.X, &_Point.Y);
-			_Window.moveCamera(_BasePoint.X - _Point.X, _BasePoint.Y - _Point.Y);
-		}
+		_Controls.mouseMotion(_Window);
 		break;
 	case SDL_MOUSEBUTTONUP:
-		if (_Event.button.button == SDL_BUTTON_MIDDLE) {
-			_MiddleButtonPressed = false;
-			_Window.stopMoveCamera();
-		}
+		_Controls.mouseButtonUp(_Window, _Event.button.button);
 		break;
 	}
+}
+
+void Simulation::addMapBorder() {
+	SDL_FRect dest = {};
+	dest.w = _Map.getMapSize().X;
+	dest.h = _Map.getMapSize().Y;
+	auto border = std::unique_ptr<Drawable>(new EmptyRect(dest, SDL_Color()));
+	_Window.setBorder(border);
+}
+
+void Simulation::resetCamera() {
+	_Window.resetCamera(_Map.getMapSize());
 }
 
 void Simulation::launch() {
 	while (!_Quit) {
 		while (SDL_PollEvent(&_Event)) {
 			dispatchEvent();
-			_Window.render();
+			_Window.render(_Map);
 		}
 		SDL_Delay(16); // 60fps
 	}

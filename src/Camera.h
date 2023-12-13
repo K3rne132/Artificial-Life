@@ -3,62 +3,58 @@
 #include <memory>
 #include <iostream>
 #include "SDL.h"
-#include "baseSize.hpp"
-using FSize = baseSize<float>;
+#include "PointBase.hpp"
 
 class Camera {
 private:
 	float _Zoom;
-	FSize _FSize;
-	const float _MapWidth, _MapHeight;
-	SDL_FPoint _Offset;
-	SDL_FPoint _OldOffset;
+	FPoint _Size;
+	Point _MapSize;
+	FPoint _Offset;
+	FPoint _OldOffset;
 
 	void adjustOffset() {
-		if (_Offset.x < -10.f)
-			_Offset.x = -10.f;
-		if (_Offset.y < -10.f)
-			_Offset.y = -10.f;
-		if (_Offset.x + _FSize.Width > _MapWidth + 10.f)
-			_Offset.x = _MapWidth - _FSize.Width + 10.f;
-		if (_Offset.y + _FSize.Height> _MapHeight + 10.f)
-			_Offset.y = _MapHeight - _FSize.Height + 10.f;
+		const float MARGIN = 500.f;
+		if (_Offset.X < -MARGIN)
+			_Offset.X = -MARGIN;
+		if (_Offset.Y < -MARGIN)
+			_Offset.Y = -MARGIN;
+		if (_Offset.X + _Size.X / _Zoom > _MapSize.X + MARGIN)
+			_Offset.X = _MapSize.X - _Size.X / _Zoom + MARGIN;
+		if (_Offset.Y + _Size.Y / _Zoom > _MapSize.Y + MARGIN)
+			_Offset.Y = _MapSize.Y - _Size.Y / _Zoom + MARGIN;
 	}
 
 public:
-	Camera(float width, float height) :  _Zoom(1.f), _FSize(width, height),
-		_MapWidth(width), _MapHeight(height),
-		_OldOffset({ 0,0 }), _Offset({ 0,0 }) {}
+	Camera(float width, float height, float map_width, float map_height) :
+		_Zoom(1.f), _Size(width, height), _MapSize(map_width, map_height) {}
 
 	float getZoom() { return _Zoom; }
 	void setZoom(float zoom) {
-		if (zoom < 1.f)
-			_Zoom = 1.f;
-		else if (zoom > 2.5f)
-			_Zoom = 2.5f;
+		if (zoom < 0.5f)
+			_Zoom = 0.5f;
+		else if (zoom > 10.f)
+			_Zoom = 10.f;
 		else
 			_Zoom = zoom;
-		float old_width = _FSize.Width;
-		float old_height = _FSize.Height;
-		_FSize.Width = _MapWidth / _Zoom;
-		_FSize.Height = _MapHeight / _Zoom;
-		_Offset.x += (old_width - _FSize.Width) / 2;
-		_Offset.y += (old_height - _FSize.Height) / 2;
-		_OldOffset = _Offset;
+		//FPoint old = _Size;
+		//_Size.X = _Size.X / _Zoom;
+		//_Size.Y = _Size.X / _Zoom;
+		//_Offset += (old - _Size) / 2;
+		//_OldOffset = _Offset;
 		adjustOffset();
 	}
-	SDL_FPoint getOffset() {
+	FPoint getOffset() {
 		return _Offset;
 	}
-	SDL_FPoint getCenter() {
-		SDL_FPoint center = {};
-		center.x = _Offset.x + _FSize.Width / 2;
-		center.y = _Offset.y + _FSize.Height / 2;
-		return center;
+	FPoint getCenter() {
+		return (_Offset + _Size) / 2;
 	}
-	void setOffset(SDL_FPoint offset) {
-		_Offset.x = _OldOffset.x + offset.x / _Zoom;
-		_Offset.y = _OldOffset.y + offset.y / _Zoom;
+	void setMapSize(Point size) {
+		_MapSize = size;
+	}
+	void setOffset(FPoint offset) {
+		_Offset = _OldOffset + offset / _Zoom;
 		adjustOffset();
 	}
 	void storeOffset() {

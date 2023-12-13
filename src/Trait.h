@@ -16,13 +16,8 @@ private:
     }
 
 public:
-    Trait(float min, float max, float current) : _Min(min), _Max(max), _Current(current) {
-
-    }
-
-    Trait(float min, float max) : _Min(min), _Max(max), _Current(min) {
-
-    }
+    Trait(float min, float max, float current) : _Min(min), _Max(max), _Current(current) {}
+    Trait(float min, float max) : _Min(min), _Max(max), _Current(min) {}
 
     inline operator float() const {
         return _Current;

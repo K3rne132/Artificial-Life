@@ -1,39 +1,36 @@
 #include "Window.h"
-#include "basePoint.hpp"
-#include "baseSize.hpp"
-using Point = basePoint<int>;
-using Size = baseSize<int>;
 
 void Window::drawBorder() {
 	SDL_SetRenderDrawColor(_Renderer, 0, 0, 0, 255);
-	int offsetx = _Camera.getOffset().x;
-	int offsety = _Camera.getOffset().y;
-	SDL_Rect border = SDL_Rect{ -offsetx, -offsety, _Size.Width, _Size.Height };
+	int offsetx = _Camera.getOffset().X;
+	int offsety = _Camera.getOffset().Y;
+	SDL_Rect border = SDL_Rect{ -offsetx, -offsety, _Size.X, _Size.Y };
 	SDL_RenderDrawRect(_Renderer, &border);
 }
 
-SDL_FPoint Window::getWindowSize() {
-	SDL_FPoint size = {};
-	size.x = _Size.Width;
-	size.y = _Size.Height;
-	return size;
+Point Window::getWindowSize() {
+	return _Size;
 }
 
 void Window::setWindowSize(int width, int height) {
-	_Size.Width = width;
-	_Size.Height = height;
+	_Size.X = width;
+	_Size.Y = height;
 	if (_Window)
 		SDL_SetWindowSize(_Window, width, height);
 }
 
-void Window::setWindowSize(SDL_FPoint size) {
-	setWindowSize(size.x, size.y);
+void Window::setWindowSize(Point size) {
+	setWindowSize(size.X, size.Y);
 }
 
 void Window::scaleWindow(float width, float height) {
-	_Scale.Width = width / _Size.Width;
-	_Scale.Height = height / _Size.Height;
-	SDL_RenderSetScale(_Renderer, _Scale.Width, _Scale.Height);
+	_Scale.X = width / _Size.X;
+	_Scale.Y = height / _Size.Y;
+	SDL_RenderSetScale(_Renderer, _Scale.X, _Scale.Y);
+}
+
+void Window::scaleWindow(FPoint scale) {
+	scaleWindow(scale.X, scale.Y);
 }
 
 void Window::zoomIn() {
@@ -45,7 +42,11 @@ void Window::zoomOut() {
 }
 
 void Window::moveCamera(float x, float y) {
-	_Camera.setOffset(SDL_FPoint{ x, y });
+	moveCamera(FPoint(x, y));
+}
+
+void Window::moveCamera(FPoint offset) {
+	_Camera.setOffset(offset);
 }
 
 void Window::stopMoveCamera() {
@@ -57,8 +58,8 @@ bool Window::createWindow(const char* title) {
 		title,
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		_Size.Width,
-		_Size.Height,
+		_Size.X,
+		_Size.Y,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
 	);
 	if (_Window == nullptr)
@@ -79,20 +80,25 @@ void Window::addMenuElement(std::unique_ptr<Drawable>& drawable) {
 	_MenuElements.push_back(std::move(drawable));
 }
 
-void Window::addTarget(std::unique_ptr<Drawable>& drawable) {
-	_Targets.push_back(std::move(drawable));
+void Window::setBorder(std::unique_ptr<Drawable>& border) {
+	_Border = std::move(border);
 }
 
-void Window::render() {
+void Window::resetCamera(Point mapsize) {
+	_Camera.setMapSize(mapsize);
+}
+
+void Window::render(Map& map) {
 	SDL_SetRenderDrawColor(_Renderer, 255, 255, 255, 255);
 	SDL_RenderClear(_Renderer);
 	SDL_RenderSetScale(_Renderer,
-		_Scale.Width * _Camera.getZoom(),
-		_Scale.Height * _Camera.getZoom());
-	drawBorder();
-	for (const auto& target : _Targets)
-		target->draw(_Renderer, _Camera.getOffset());
-	SDL_RenderSetScale(_Renderer, _Scale.Width, _Scale.Height);
+		_Scale.X * _Camera.getZoom(),
+		_Scale.Y * _Camera.getZoom());
+	if (_Border)
+		_Border->draw(_Renderer, !_Camera.getOffset());
+	for (const auto& object : map)
+		object->draw(_Renderer, !_Camera.getOffset());
+	SDL_RenderSetScale(_Renderer, _Scale.X, _Scale.Y);
 	for (const auto& element : _MenuElements)
 		element->draw(_Renderer);
 	SDL_RenderPresent(_Renderer);

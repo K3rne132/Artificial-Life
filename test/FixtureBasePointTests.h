@@ -1,8 +1,6 @@
 #pragma once
 #include "pch.h"
-#include <basePoint.hpp>
-using Point = basePoint<unsigned long>;
-using FPoint = basePoint<float>;
+#include "basePoint.hpp"
 
 class FixtureBasePointTests : public testing::Test {
 protected:
