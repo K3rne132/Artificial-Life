@@ -3,10 +3,10 @@
 
 class Shape : public Drawable {
 protected:
-	SDL_FRect _Rect;
-	SDL_Color _Color;
+	SDL_FRect Rect_;
+	SDL_Color Color_;
 
 public:
-	Shape() : _Rect(SDL_FRect()), _Color(SDL_Color()) {}
-	Shape(SDL_FRect rect, SDL_Color color) : _Rect(rect), _Color(color) {}
+	Shape() : Rect_(SDL_FRect()), Color_(SDL_Color()) {}
+	Shape(SDL_FRect rect, SDL_Color color) : Rect_(rect), Color_(color) {}
 };

@@ -10,9 +10,9 @@ void Controls::getMousePos(FPoint& mouse) {
 void Controls::mouseButtonDown(int button) {
 	switch (button) {
 	case SDL_BUTTON_LEFT:
-		if (!_MiddleButtonPressed) {
-			_MiddleButtonPressed = true;
-			getMousePos(_MouseBase);
+		if (!MiddleButtonPressed_) {
+			MiddleButtonPressed_ = true;
+			getMousePos(MouseBase_);
 		}
 		break;
 	}
@@ -21,17 +21,17 @@ void Controls::mouseButtonDown(int button) {
 void Controls::mouseButtonUp(Window& window, int button) {
 	switch (button) {
 	case SDL_BUTTON_LEFT:
-		_MiddleButtonPressed = false;
+		MiddleButtonPressed_ = false;
 		window.stopMoveCamera();
 	}
 }
 
 void Controls::mouseMotion(Window& window) {
-	if (_MiddleButtonPressed) {
-		getMousePos(_MouseOffset);
-		FPoint asd = _MouseBase + _MouseOffset;
-		window.moveCamera(_MouseBase - _MouseOffset);
-		window.moveCamera(_MouseBase - _MouseOffset);
+	if (MiddleButtonPressed_) {
+		getMousePos(MouseOffset_);
+		FPoint asd = MouseBase_ + MouseOffset_;
+		window.moveCamera(MouseBase_ - MouseOffset_);
+		window.moveCamera(MouseBase_ - MouseOffset_);
 	}
 }
 

@@ -6,20 +6,20 @@
 
 class Simulation {
 private:
-	Window& _Window;
-	SimulationSettings _Settings;
-	Map& _Map;
-	SDL_Event _Event;
-	Controls _Controls;
-	bool _Quit;
+	Window& Window_;
+	SimulationSettings Settings_;
+	Map& Map_;
+	SDL_Event Event_;
+	Controls Controls_;
+	bool Quit_;
 
 	void dispatchEvent();
 	void addMapBorder();
 	void resetCamera();
 
 public:
-	Simulation(Window& window, Map& map) : _Window(window), _Map(map),
-		_Event(), _Quit(false) {
+	Simulation(Window& window, Map& map) : Window_(window), Map_(map),
+		Event_(), Quit_(false) {
 		addMapBorder();
 		resetCamera();
 	}

@@ -6,8 +6,8 @@
 
 class Animal : public MapObject {
 private:
-	Statistics                _Statistics;
-	std::unique_ptr<Movement> _AnimalMovement;
+	Statistics                Statistics_;
+	std::unique_ptr<Movement> AnimalMovement_;
 
 public:
 	Animal() {}

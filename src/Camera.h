@@ -2,41 +2,41 @@
 #include <vector>
 #include <memory>
 #include <iostream>
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include "PointBase.hpp"
 
 class Camera {
 private:
-	float _Zoom;
-	FPoint _Size;
-	Point _MapSize;
-	FPoint _Offset;
-	FPoint _OldOffset;
+	float Zoom_;
+	FPoint Size_;
+	Point MapSize_;
+	FPoint Offset_;
+	FPoint OldOffset_;
 
 	void adjustOffset() {
 		const float MARGIN = 500.f;
-		if (_Offset.X < -MARGIN)
-			_Offset.X = -MARGIN;
-		if (_Offset.Y < -MARGIN)
-			_Offset.Y = -MARGIN;
-		if (_Offset.X + _Size.X / _Zoom > _MapSize.X + MARGIN)
-			_Offset.X = _MapSize.X - _Size.X / _Zoom + MARGIN;
-		if (_Offset.Y + _Size.Y / _Zoom > _MapSize.Y + MARGIN)
-			_Offset.Y = _MapSize.Y - _Size.Y / _Zoom + MARGIN;
+		if (Offset_.X < -MARGIN)
+			Offset_.X = -MARGIN;
+		if (Offset_.Y < -MARGIN)
+			Offset_.Y = -MARGIN;
+		if (Offset_.X + Size_.X / Zoom_ > MapSize_.X + MARGIN)
+			Offset_.X = MapSize_.X - Size_.X / Zoom_ + MARGIN;
+		if (Offset_.Y + Size_.Y / Zoom_ > MapSize_.Y + MARGIN)
+			Offset_.Y = MapSize_.Y - Size_.Y / Zoom_ + MARGIN;
 	}
 
 public:
 	Camera(float width, float height, float map_width, float map_height) :
-		_Zoom(1.f), _Size(width, height), _MapSize(map_width, map_height) {}
+		Zoom_(1.f), Size_(width, height), MapSize_(map_width, map_height) {}
 
-	float getZoom() { return _Zoom; }
+	float getZoom() { return Zoom_; }
 	void setZoom(float zoom) {
 		if (zoom < 0.5f)
-			_Zoom = 0.5f;
+			Zoom_ = 0.5f;
 		else if (zoom > 10.f)
-			_Zoom = 10.f;
+			Zoom_ = 10.f;
 		else
-			_Zoom = zoom;
+			Zoom_ = zoom;
 		//FPoint old = _Size;
 		//_Size.X = _Size.X / _Zoom;
 		//_Size.Y = _Size.X / _Zoom;
@@ -45,20 +45,20 @@ public:
 		adjustOffset();
 	}
 	FPoint getOffset() {
-		return _Offset;
+		return Offset_;
 	}
 	FPoint getCenter() {
-		return (_Offset + _Size) / 2;
+		return (Offset_ + Size_) / 2;
 	}
 	void setMapSize(Point size) {
-		_MapSize = size;
+		MapSize_ = size;
 	}
 	void setOffset(FPoint offset) {
-		_Offset = _OldOffset + offset / _Zoom;
+		Offset_ = OldOffset_ + offset / Zoom_;
 		adjustOffset();
 	}
 	void storeOffset() {
-		_OldOffset = _Offset;
+		OldOffset_ = Offset_;
 	}
 
 };

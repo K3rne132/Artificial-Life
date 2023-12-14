@@ -3,7 +3,7 @@
 
 
 TEST(MapTests, GetObjTest) {
-	auto new_obj = std::unique_ptr<MapObject>(new MapObject(1, 100));
+	auto new_obj = std::unique_ptr<MapObject>(new MapObjectDummy(1, 100));
 	auto ptr = new_obj.get();
 	Map map;
 	map.addObject(new_obj);
@@ -17,7 +17,7 @@ TEST_F(FixtureMapTests, AddSizeMapTest) {
 	size_t current_map_size = SampleMap.getSize();
 	EXPECT_EQ(FixtureMapSize, current_map_size);
 
-	auto new_obj = std::unique_ptr<MapObject>(new MapObject(1, 100));
+	auto new_obj = std::unique_ptr<MapObject>(new MapObjectDummy(1, 100));
 	SampleMap.addObject(new_obj);
 	current_map_size = SampleMap.getSize();
 	EXPECT_EQ(++FixtureMapSize, current_map_size);

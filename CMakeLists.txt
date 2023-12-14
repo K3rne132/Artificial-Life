@@ -4,11 +4,16 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 option(BUILD_TEST "Buduje testy jednostkowe" ON)
+option(BUILD_DEPENDENCIES "Buduje zaleznosci zewnetrzne" OFF)
 
-add_subdirectory("third party/SDL")
+if (BUILD_DEPENDENCIES)
+    add_subdirectory("third party/SDL")
+endif()
 add_subdirectory(src)
 
 if (BUILD_TEST)
-    add_subdirectory("third party/googletest")
+    if (BUILD_DEPENDENCIES)
+        add_subdirectory("third party/googletest")
+    endif()
     add_subdirectory(test)
 endif()

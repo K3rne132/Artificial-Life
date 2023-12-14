@@ -2,55 +2,55 @@
 
 class Trait {
 private:
-    const float _Min, _Max;
-    float _Current;
+    const float Min_, Max_;
+    float Current_;
 
     float adjust(float value) {
-        if (value > _Max) {
-            value = _Max;
+        if (value > Max_) {
+            value = Max_;
         }
-        else if (value < _Min) {
-            value = _Min;
+        else if (value < Min_) {
+            value = Min_;
         }
         return value;
     }
 
 public:
-    Trait(float min, float max, float current) : _Min(min), _Max(max), _Current(current) {}
-    Trait(float min, float max) : _Min(min), _Max(max), _Current(min) {}
+    Trait(float min, float max, float current) : Min_(min), Max_(max), Current_(current) {}
+    Trait(float min, float max) : Min_(min), Max_(max), Current_(min) {}
 
     inline operator float() const {
-        return _Current;
+        return Current_;
     }
 
     inline Trait& operator+=(const float rhs) {
-        _Current = adjust(_Current + rhs);
+        Current_ = adjust(Current_ + rhs);
         return *this;
     }
 
     inline Trait& operator-=(const float rhs) {
-        _Current = adjust(_Current - rhs);
+        Current_ = adjust(Current_ - rhs);
         return *this;
     }
 
     inline Trait& operator=(const float rhs) {
-        _Current = adjust(rhs);
+        Current_ = adjust(rhs);
         return *this;
     }
 
     inline bool operator>(const float rhs) {
-        return _Current > rhs;
+        return Current_ > rhs;
     }
 
     inline bool operator<(const float rhs) {
-        return _Current < rhs;
+        return Current_ < rhs;
     }
 
     inline bool operator<=(const float rhs) {
-        return _Current <= rhs;
+        return Current_ <= rhs;
     }
 
     inline bool operator>=(const float rhs) {
-        return _Current >= rhs;
+        return Current_ >= rhs;
     }
 };

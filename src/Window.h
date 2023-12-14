@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include "Drawable.h"
 #include "Camera.h"
 #include "PointBase.hpp"
@@ -10,33 +10,33 @@
 class Window {
 private:
 	/* A handle to window */
-	SDL_Window* _Window;
+	SDL_Window* Window_;
 	/* A handle to renderer surface */
-	SDL_Renderer* _Renderer;
+	SDL_Renderer* Renderer_;
 	/* A base size of window in pixels / pixels
 	   It is almost constant value and do not represent actual
 	   window size */
-	Point _Size;
+	Point Size_;
 	/* A list of menu elements(overlay targets) */
-	std::vector<std::unique_ptr<Drawable>> _MenuElements;
+	std::vector<std::unique_ptr<Drawable>> MenuElements_;
 	/* A scale of current window meaning:
-	   <actual window size> =  _Scale * _Size */
-	FPoint _Scale;
+	   <actual window size> =  Scale_ * Size_ */
+	FPoint Scale_;
 	/* An object representing camera (viewport) */
-	Camera _Camera;
-	std::unique_ptr<Drawable> _Border;
+	Camera Camera_;
+	std::unique_ptr<Drawable> Border_;
 
 	void drawBorder();
 
 public:
-	Window(int width, int height) : _Window(nullptr), _Renderer(nullptr),
-		_Size(width, height), _Scale(1.f, 1.f), _Camera(width, height, 0.f, 0.f) {}
+	Window(int width, int height) : Window_(nullptr), Renderer_(nullptr),
+		Size_(width, height), Scale_(1.f, 1.f), Camera_(width, height, 0.f, 0.f) {}
 
 	~Window() {
-		if (_Renderer)
-			SDL_DestroyRenderer(_Renderer);
-		if (_Window)
-			SDL_DestroyWindow(_Window);
+		if (Renderer_)
+			SDL_DestroyRenderer(Renderer_);
+		if (Window_)
+			SDL_DestroyWindow(Window_);
 	}
 
 	Point getWindowSize();
@@ -55,6 +55,6 @@ public:
 	void resetCamera(Point mapsize);
 	void render(Map& map);
 
-	operator SDL_Renderer* () { return _Renderer; }
-	operator SDL_Window* () { return _Window; }
+	operator SDL_Renderer* () { return Renderer_; }
+	operator SDL_Window* () { return Window_; }
 };

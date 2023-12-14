@@ -5,17 +5,17 @@
 
 class Map {
 private:
-	Point _Size;
-	std::vector<std::unique_ptr<MapObject>> _Objects;
+	Point Size_;
+	std::vector<std::unique_ptr<MapObject>> Objects_;
 
 public:
-	Map() : _Size(0, 0) {}
-	Map(int width, int height) : _Size(width, height) {}
+	Map() : Size_(0, 0) {}
+	Map(int width, int height) : Size_(width, height) {}
 
 	bool addObject(std::unique_ptr<MapObject>& map_object);
 	bool removeObject(MapObject &map_object);
-	auto begin() { return _Objects.begin(); }
-	auto end() { return _Objects.end(); }
+	auto begin() { return Objects_.begin(); }
+	auto end() { return Objects_.end(); }
 	MapObject& operator[](size_t index) const;
 	Point getMapSize() const;
 	size_t getSize() const;

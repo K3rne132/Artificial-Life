@@ -3,9 +3,9 @@
 
 class Plant : MapObject {
 private:
-	float _NutritionalValue;
+	float NutritionalValue_;
 
 public:
-	Plant() : _NutritionalValue(0.f) {}
-	Plant(float nutritional_value) : _NutritionalValue(nutritional_value) {}
+	Plant() : NutritionalValue_(0.f) {}
+	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {}
 };

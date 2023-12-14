@@ -1,6 +1,6 @@
 #pragma once
 #include <cmath>
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
 template <typename T>
 class PointBase {
@@ -52,8 +52,8 @@ public:
 
 	inline PointBase operator*(const float rhs) const {
 		auto copy = *this;
-		copy.X /= rhs;
-		copy.Y /= rhs;
+		copy.X *= rhs;
+		copy.Y *= rhs;
 		return copy;
 	}
 
