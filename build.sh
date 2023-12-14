@@ -1,5 +1,5 @@
 mkdir -p build
-cmake --build build
 cd build
+cmake ..
 make
 cd ..

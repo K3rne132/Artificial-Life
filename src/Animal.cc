@@ -12,15 +12,20 @@
 
 
 
-#pragma once
-#include "PointBase.hpp"
-#include "Drawable.h"
+#include "Animal.h"
 
-class MapObject : public Drawable {
-protected:
-	Point Position_;
+bool Animal::isMoving() const {
+	if (AnimalMovement_)
+		return true;
+	return false;
+}
 
-public:
-	MapObject() : Position_(0, 0) {}
-	MapObject(int x, int y) : Position_(x, y) {}
-};
+void Animal::draw(SDL_Renderer* renderer, FPoint offset){
+	SDL_SetRenderDrawColor(renderer, 127, 187, 255, 255);
+	SDL_FRect rect = {};
+	rect.x = offset.X + Position_.X;
+	rect.y = offset.Y + Position_.Y;
+	rect.w = 10;
+	rect.h = 10;
+	SDL_RenderFillRectF(renderer, &rect);
+}

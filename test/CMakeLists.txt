@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 file(GLOB_RECURSE SOURCES
     "*.h"
     "*.hpp"
-    "*.cpp"
+    "*.cc"
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

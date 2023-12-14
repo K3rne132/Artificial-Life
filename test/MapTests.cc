@@ -1,6 +1,19 @@
+// Copyright (C) 2023  Mateusz Jurczak & Julia Parobczy
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+
+
 #include "pch.h"
 #include "FixtureMapTests.h"
-
 
 TEST(MapTests, GetObjTest) {
 	auto new_obj = std::unique_ptr<MapObject>(new MapObjectDummy(1, 100));
@@ -9,7 +22,7 @@ TEST(MapTests, GetObjTest) {
 	map.addObject(new_obj);
 	EXPECT_EQ(ptr, &map[0]);
 	ASSERT_THROW(map[1000], std::out_of_range);
-	ASSERT_NO_THROW(map[0], std::out_of_range);
+	ASSERT_NO_THROW(map[0]);
 }
 
 

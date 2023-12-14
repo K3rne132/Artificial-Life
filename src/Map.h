@@ -1,3 +1,17 @@
+// Copyright (C) 2023  Mateusz Jurczak & Julia Parobczy
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+
+
 #pragma once
 #include <vector>
 #include <memory>
@@ -14,8 +28,8 @@ public:
 
 	bool addObject(std::unique_ptr<MapObject>& map_object);
 	bool removeObject(MapObject &map_object);
-	auto begin() { return Objects_.begin(); }
-	auto end() { return Objects_.end(); }
+	inline auto begin() const { return Objects_.begin(); }
+	inline auto end() const { return Objects_.end(); }
 	MapObject& operator[](size_t index) const;
 	Point getMapSize() const;
 	size_t getSize() const;
