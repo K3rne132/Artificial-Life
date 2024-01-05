@@ -30,21 +30,17 @@ private:
 	/* A base size of window in pixels / pixels
 	   It is almost constant value and do not represent actual
 	   window size */
-	Point Size_;
+	FPoint Size_;
 	/* A list of menu elements(overlay targets) */
 	std::vector<std::unique_ptr<Drawable>> MenuElements_;
 	/* A scale of current window meaning:
 	   <actual window size> =  Scale_ * Size_ */
 	FPoint Scale_;
-	/* An object representing camera (viewport) */
-	Camera Camera_;
 	std::unique_ptr<Drawable> Border_;
 
-	void drawBorder();
-
 public:
-	Window(int width, int height) : Window_(nullptr), Renderer_(nullptr),
-		Size_(width, height), Scale_(1.f, 1.f), Camera_(width, height, 0.f, 0.f) {}
+	Window(float width, float height) : Window_(nullptr), Renderer_(nullptr),
+		Size_(width, height), Scale_(1.f, 1.f) {}
 
 	~Window() {
 		if (Renderer_)
@@ -53,21 +49,15 @@ public:
 			SDL_DestroyWindow(Window_);
 	}
 
-	Point getWindowSize() const;
+	FPoint getWindowSize() const;
 	void setWindowSize(int width, int height);
-	void setWindowSize(Point size);
+	void setWindowSize(FPoint size);
 	void scaleWindow(float width, float height);
 	void scaleWindow(FPoint scale);
-	void zoomIn();
-	void zoomOut();
-	void moveCamera(float x, float y);
-	void moveCamera(FPoint offset);
-	void stopMoveCamera();
 	bool createWindow(const char* title);
 	void addMenuElement(std::unique_ptr<Drawable>& drawable);
 	void setBorder(std::unique_ptr<Drawable>& border);
-	void resetCamera(Point mapsize);
-	void render(Map& map);
+	void render(Map& map, Camera& camera);
 
 	operator SDL_Renderer* () { return Renderer_; }
 	operator SDL_Window* () { return Window_; }

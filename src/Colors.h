@@ -13,15 +13,19 @@
 
 
 #pragma once
-#include "MapObject.h"
+#include <SDL2/SDL.h>
 
-class Plant : MapObject {
-private:
-	float NutritionalValue_;
+static SDL_Color makeColor(int r, int g, int b, int a) {
+	SDL_Color result;
+	result.r = r;
+	result.g = g;
+	result.b = b;
+	result.a = a;
+	return result;
+}
 
-public:
-	Plant() : NutritionalValue_(0.f) {}
-	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {}
-
-	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
-};
+#define WHITE makeColor(255, 255, 255, 255)
+#define BLACK makeColor(0, 0, 0, 255)
+#define RED makeColor(255, 0, 0, 255)
+#define GREEN makeColor(0, 255, 0, 255)
+#define BLUE makeColor(0, 0, 255, 255)

@@ -14,13 +14,18 @@
 
 #pragma once
 #include "PointBase.hpp"
-#include "Drawable.h"
+#include "Clickable.h"
 
-class MapObject : public Drawable {
+class MapObject : public Clickable {
 protected:
 	Point Position_;
 
 public:
 	MapObject() : Position_(0, 0) {}
 	MapObject(int x, int y) : Position_(x, y) {}
+
+	void setPosition(Point position) {
+		Position_ = position;
+	}
+	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
 };

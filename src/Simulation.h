@@ -24,6 +24,7 @@ private:
 	SimulationSettings Settings_;
 	Map& Map_;
 	SDL_Event Event_;
+	Camera Camera_;
 	Controls Controls_;
 	bool Quit_;
 
@@ -33,9 +34,15 @@ private:
 
 public:
 	Simulation(Window& window, Map& map) : Window_(window), Map_(map),
-		Event_(), Quit_(false) {
+		Event_(), Quit_(false), Controls_(Camera_) {
 		addMapBorder();
 		resetCamera();
 	}
+
+	void zoomIn();
+	void zoomOut();
+	void moveCamera(float x, float y);
+	void moveCamera(FPoint offset);
+	void stopMoveCamera();
 	void launch();
 };

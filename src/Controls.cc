@@ -13,8 +13,25 @@
 
 
 #include "Controls.h"
+#include "Simulation.h"
 
-void Controls::getMousePos(FPoint& mouse) {
+FPoint Controls::getMousePos() {
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	FPoint result;
+	result.X = static_cast<float>(x);
+	result.Y = static_cast<float>(y);
+	return result;
+}
+
+FPoint Controls::getRelativeMousePos() {
+	FPoint result = getMousePos();
+	result /= Camera_.getZoom();
+	result += Camera_.getOffset();
+	return result;
+}
+
+void Controls::storeMousePos(FPoint& mouse) {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	mouse.X = static_cast<float>(x);
@@ -23,35 +40,37 @@ void Controls::getMousePos(FPoint& mouse) {
 
 void Controls::mouseButtonDown(int button) {
 	switch (button) {
-	case SDL_BUTTON_LEFT:
+	case SDL_BUTTON_MIDDLE:
 		if (!MiddleButtonPressed_) {
 			MiddleButtonPressed_ = true;
-			getMousePos(MouseBase_);
+			storeMousePos(MouseBase_);
 		}
 		break;
 	}
 }
 
-void Controls::mouseButtonUp(Window& window, int button) {
+void Controls::mouseButtonUp(Simulation& simulation, int button) {
 	switch (button) {
-	case SDL_BUTTON_LEFT:
+	case SDL_BUTTON_MIDDLE:
 		MiddleButtonPressed_ = false;
-		window.stopMoveCamera();
+		simulation.stopMoveCamera();
 	}
 }
 
-void Controls::mouseMotion(Window& window) {
+void Controls::mouseMotion(Simulation& simulation) {
+	std::cout << getMousePos() << "\n";
+	std::cout << getRelativeMousePos() << "\n";
 	if (MiddleButtonPressed_) {
-		getMousePos(MouseOffset_);
+		storeMousePos(MouseOffset_);
 		FPoint asd = MouseBase_ + MouseOffset_;
-		window.moveCamera(MouseBase_ - MouseOffset_);
-		window.moveCamera(MouseBase_ - MouseOffset_);
+		simulation.moveCamera(MouseBase_ - MouseOffset_);
+		simulation.moveCamera(MouseBase_ - MouseOffset_);
 	}
 }
 
-void Controls::mouseWheel(Window& window, int y) {
+void Controls::mouseWheel(Simulation& simulation, int y) {
 	if (y > 0)
-		window.zoomIn();
+		simulation.zoomIn();
 	else if (y < 0)
-		window.zoomOut();
+		simulation.zoomOut();
 }

@@ -13,15 +13,21 @@
 
 
 #pragma once
-#include "MapObject.h"
+#include <memory>
+#include "Animal.h"
+#include "Colors.h"
 
-class Plant : MapObject {
-private:
-	float NutritionalValue_;
-
+class Carnivore : public Animal {
 public:
-	Plant() : NutritionalValue_(0.f) {}
-	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {}
+	static unsigned int Count;
+	static SDL_Color Color;
 
-	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
+	Carnivore() {
+		setColor(Color);
+	}
+	Carnivore(int x, int y) : Animal(x, y) {
+		setColor(Color);
+	}
 };
+
+SDL_Color Carnivore::Color = RED;

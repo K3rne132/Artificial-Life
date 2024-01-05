@@ -23,10 +23,13 @@ private:
 	Statistics                Statistics_;
 	std::unique_ptr<Movement> AnimalMovement_;
 
-public:
-	Animal() {}
-	Animal(int x, int y) : MapObject(x, y) {}
+	const static float SizeInPixels_;
 
-	bool isMoving() const;
-	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
+public:
+	Animal() {
+		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
+	}
+	Animal(int x, int y) : MapObject(x, y) {
+		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
+	}
 };

@@ -15,6 +15,7 @@
 #pragma once
 #include <cmath>
 #include <SDL2/SDL.h>
+#include <string>
 
 template <typename T>
 class PointBase {
@@ -64,6 +65,18 @@ public:
 		return copy;
 	}
 
+	inline PointBase& operator*=(const float rhs) {
+		X *= rhs;
+		Y *= rhs;
+		return *this;
+	}
+
+	inline PointBase& operator/=(const float rhs) {
+		X /= rhs;
+		Y /= rhs;
+		return *this;
+	}
+
 	inline PointBase operator*(const float rhs) const {
 		auto copy = *this;
 		copy.X *= rhs;
@@ -86,8 +99,13 @@ public:
 	}
 
 	inline float norm() const {
-		float res = sqrt(X * X + Y * Y);
+		float res = std::hypot(X, Y);
 		return res;
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const PointBase<T>& o) {
+		os << "(" << std::to_string(o.X) << "," << std::to_string(o.Y) << ")";
+		return os;
 	}
 };
 

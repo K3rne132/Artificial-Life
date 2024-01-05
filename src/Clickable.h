@@ -13,15 +13,23 @@
 
 
 #pragma once
-#include "MapObject.h"
+#include <SDL2/SDL.h>
+#include "PointBase.hpp"
+#include "Drawable.h"
 
-class Plant : MapObject {
-private:
-	float NutritionalValue_;
+class Clickable : public Drawable {
+protected:
+	FPoint Size_;
+	SDL_Color Color_;
 
 public:
-	Plant() : NutritionalValue_(0.f) {}
-	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {}
+	Clickable() : Size_(), Color_(SDL_Color()) {}
 
-	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
+	void setColor(SDL_Color color) {
+		Color_ = color;
+	}
+
+	void setSize(FPoint size) {
+		Size_ = size;
+	}
 };

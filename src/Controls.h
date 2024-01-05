@@ -14,21 +14,28 @@
 
 #pragma once
 #include <SDL2/SDL.h>
-#include "Window.h"
 #include "PointBase.hpp"
+#include "Clickable.h"
+#include "Camera.h"
+
+class Simulation;
 
 class Controls {
 private:
 	bool MiddleButtonPressed_;
 	FPoint MouseBase_, MouseOffset_;
+	Camera& Camera_;
 
-	void getMousePos(FPoint& mouse);
+	FPoint getMousePos();
+	FPoint getRelativeMousePos();
+	void storeMousePos(FPoint& mouse);
 
 public:
-	Controls() : MiddleButtonPressed_(false), MouseBase_(0, 0), MouseOffset_(0, 0) {}
+	Controls(Camera& camera) : Camera_(camera),
+		MiddleButtonPressed_(false), MouseBase_(0, 0), MouseOffset_(0, 0) {}
 
 	void mouseButtonDown(int button);
-	void mouseButtonUp(Window& window, int button);
-	void mouseMotion(Window& window);
-	void mouseWheel(Window& window, int y);
+	void mouseButtonUp(Simulation& simulation, int button);
+	void mouseMotion(Simulation& simulation);
+	void mouseWheel(Simulation& simulation, int y);
 };

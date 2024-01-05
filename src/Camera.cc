@@ -53,6 +53,10 @@ FPoint Camera::getCenter() const {
 	return (Offset_ + Size_) / 2;
 }
 
+void Camera::setCameraSize(FPoint size) {
+	Size_ = size;
+}
+
 void Camera::setMapSize(Point size) {
 	MapSize_ = size;
 }

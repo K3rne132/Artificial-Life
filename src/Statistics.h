@@ -16,11 +16,10 @@
 #include "Trait.h"
 
 class Statistics {
-private:
-	Trait t1;
-	Trait t2;
-	Trait t3;
-
 public:
-	Statistics() : t1(0.f, 1.f), t2(0.f, 1.f), t3(0.f, 1.f) {}
+	Trait Energy;
+	Trait Speed;
+	Trait Size;
+
+	Statistics() : Energy(0.f, 100.f), Speed(0.25f, 4.f), Size(0.5f, 2.f) {}
 };

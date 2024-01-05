@@ -30,13 +30,13 @@ private:
 	void adjustOffset();
 
 public:
-	Camera(float width, float height, float map_width, float map_height) :
-		Zoom_(1.f), Size_(width, height), MapSize_(map_width, map_height) {}
+	Camera() : Zoom_(1.f) {}
 
 	float getZoom() const;
 	void setZoom(float zoom);
 	FPoint getOffset() const;
 	FPoint getCenter() const;
+	void setCameraSize(FPoint size);
 	void setMapSize(Point size);
 	void setOffset(FPoint offset);
 	void storeOffset();

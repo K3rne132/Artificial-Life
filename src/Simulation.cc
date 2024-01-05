@@ -13,7 +13,8 @@
 
 
 #include "Simulation.h"
-#include "EmptyRect.h"
+#include "FilledRect.h"
+#include "Colors.h"
 
 void Simulation::dispatchEvent() {
 	switch (Event_.type) {
@@ -26,16 +27,16 @@ void Simulation::dispatchEvent() {
 		}
 		break;
 	case SDL_MOUSEWHEEL:
-		Controls_.mouseWheel(Window_, Event_.wheel.y);
+		Controls_.mouseWheel(*this, Event_.wheel.y);
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 		Controls_.mouseButtonDown(Event_.button.button);
 		break;
 	case SDL_MOUSEMOTION:
-		Controls_.mouseMotion(Window_);
+		Controls_.mouseMotion(*this);
 		break;
 	case SDL_MOUSEBUTTONUP:
-		Controls_.mouseButtonUp(Window_, Event_.button.button);
+		Controls_.mouseButtonUp(*this, Event_.button.button);
 		break;
 	}
 }
@@ -44,19 +45,40 @@ void Simulation::addMapBorder() {
 	SDL_FRect dest = {};
 	dest.w = Map_.getMapSize().X;
 	dest.h = Map_.getMapSize().Y;
-	auto border = std::unique_ptr<Drawable>(new EmptyRect(dest, SDL_Color()));
+	auto border = std::unique_ptr<Drawable>(new FilledRect(dest, WHITE));
 	Window_.setBorder(border);
 }
 
 void Simulation::resetCamera() {
-	Window_.resetCamera(Map_.getMapSize());
+	Camera_.setMapSize(Map_.getMapSize());
+	Camera_.setCameraSize(Window_.getWindowSize());
+}
+
+void Simulation::zoomIn() {
+	Camera_.setZoom(Camera_.getZoom() * 1.15f);
+}
+
+void Simulation::zoomOut() {
+	Camera_.setZoom(Camera_.getZoom() * 0.9f);
+}
+
+void Simulation::moveCamera(float x, float y) {
+	moveCamera(FPoint(x, y));
+}
+
+void Simulation::moveCamera(FPoint offset) {
+	Camera_.setOffset(offset);
+}
+
+void Simulation::stopMoveCamera() {
+	Camera_.storeOffset();
 }
 
 void Simulation::launch() {
 	while (!Quit_) {
 		while (SDL_PollEvent(&Event_)) {
 			dispatchEvent();
-			Window_.render(Map_);
+			Window_.render(Map_, Camera_);
 		}
 		SDL_Delay(16); // 60fps
 	}

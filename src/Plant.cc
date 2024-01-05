@@ -13,3 +13,13 @@
 
 
 #include "Plant.h"
+
+void Plant::draw(SDL_Renderer* renderer, FPoint offset) {
+	SDL_SetRenderDrawColor(renderer, 127, 255, 187, 255);
+	SDL_FRect rect = {};
+	rect.x = offset.X + Position_.X;
+	rect.y = offset.Y + Position_.Y;
+	rect.w = 10;
+	rect.h = 10;
+	SDL_RenderFillRectF(renderer, &rect);
+}

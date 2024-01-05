@@ -13,3 +13,13 @@
 
 
 #include "MapObject.h"
+
+void MapObject::draw(SDL_Renderer* renderer, FPoint offset) {
+	SDL_SetRenderDrawColor(renderer, Color_.r, Color_.g, Color_.b, Color_.a);
+	SDL_FRect rect;
+	rect.x = offset.X + Position_.X;
+	rect.y = offset.Y + Position_.Y;
+	rect.w = Size_.X;
+	rect.h = Size_.Y;
+	SDL_RenderFillRectF(renderer, &rect);
+}
