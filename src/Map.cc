@@ -16,14 +16,14 @@
 #include <stdexcept>
 #include "Map.h"
 
-bool Map::addObject(std::unique_ptr<MapObject> &map_object) {
+bool Map::addObject(std::unique_ptr<Drawable>& map_object) {
 	Objects_.push_back(std::move(map_object));
 	return true;
 }
 
-bool Map::removeObject(MapObject &map_object) {
+bool Map::removeObject(Drawable& map_object) {
 	auto it = std::find_if(Objects_.begin(), Objects_.end(),
-		[&map_object](const std::unique_ptr<MapObject>& ptr) {
+		[&map_object](const std::unique_ptr<Drawable>& ptr) {
 			return ptr.get() == &map_object;
 		});
 	if (it != Objects_.end()) {
@@ -33,7 +33,7 @@ bool Map::removeObject(MapObject &map_object) {
 	return false;
 }
 
-MapObject& Map::operator[](size_t index) const {
+Drawable& Map::operator[](size_t index) const {
 	if (index >= Objects_.size()) {
 		throw std::out_of_range("Index out of bounds!");
 	}

@@ -15,8 +15,10 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "PointBase.hpp"
-#include "Clickable.h"
 #include "Camera.h"
+#include "Map.h"
+#include "Menu.h"
+#include "Drawable.h"
 
 class Simulation;
 
@@ -25,17 +27,19 @@ private:
 	bool MiddleButtonPressed_;
 	FPoint MouseBase_, MouseOffset_;
 	Camera& Camera_;
+	Drawable* MouseOver_;
 
 	FPoint getMousePos();
 	FPoint getRelativeMousePos();
 	void storeMousePos(FPoint& mouse);
 
 public:
-	Controls(Camera& camera) : Camera_(camera),
+	Controls(Camera& camera) : Camera_(camera), MouseOver_(nullptr),
 		MiddleButtonPressed_(false), MouseBase_(0, 0), MouseOffset_(0, 0) {}
 
 	void mouseButtonDown(int button);
 	void mouseButtonUp(Simulation& simulation, int button);
 	void mouseMotion(Simulation& simulation);
 	void mouseWheel(Simulation& simulation, int y);
+	bool isMouseOver(Menu& menu, Map& map);
 };

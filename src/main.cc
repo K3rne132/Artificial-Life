@@ -14,7 +14,7 @@
 
 #include <iostream>
 #include "Simulation.h"
-#include "FilledRect.h"
+#include "Button.h"
 #include "Carnivore.h"
 #include "Herbivore.h"
 #undef main
@@ -30,20 +30,18 @@ int main() {
 	}
 
     Map map(3000, 3000);
-    auto anim1 = std::unique_ptr<MapObject>(new Carnivore(100, 200));
+    auto anim1 = std::unique_ptr<Drawable>(new Carnivore(FPoint(100, 200)));
     map.addObject(anim1);
-    auto anim2 = std::unique_ptr<MapObject>(new Herbivore(400, 600));
+    auto anim2 = std::unique_ptr<Drawable>(new Herbivore(FPoint(400, 600)));
     map.addObject(anim2);
-    SDL_FRect rect = {};
-    rect.x = 100;
-    rect.y = 100;
-    rect.h = 100;
-    rect.w = 100;
-    SDL_Color color = { 127, 80, 180, 255 };
-    auto elem1 = std::unique_ptr<Drawable>(new FilledRect(rect, color));
-    window.addMenuElement(elem1);
 
-	Simulation simulation(window, map);
+    Menu menu;
+    SDL_Color color = { 127, 80, 180, 255 };
+    auto elem1 = std::unique_ptr<Drawable>(
+		new Button(FPoint(100.f, 100.f), FPoint(100.f, 100.f), BLUE));
+    menu.addMenuElement(elem1);
+
+	Simulation simulation(window, map, menu);
 	simulation.launch();
 
 	SDL_Quit();

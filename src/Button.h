@@ -13,19 +13,15 @@
 
 
 #pragma once
-#include "PointBase.hpp"
-#include "Clickable.h"
+#include <memory>
+#include "Drawable.h"
 
-class MapObject : public Clickable {
-protected:
-	Point Position_;
-
+class Button : public Drawable {
 public:
-	MapObject() : Position_(0, 0) {}
-	MapObject(int x, int y) : Position_(x, y) {}
-
-	void setPosition(Point position) {
-		Position_ = position;
+	Button(FPoint xy, FPoint size, SDL_Color color) : Drawable(xy) {
+		setSize(size);
+		setColor(color);
 	}
-	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
+
+	virtual void click() override { std::cout << "BUTTON CLICKED!\n"; }
 };

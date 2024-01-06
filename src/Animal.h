@@ -14,22 +14,25 @@
 
 #pragma once
 #include <memory>
-#include "MapObject.h"
+#include <iostream>
+#include "Drawable.h"
 #include "Statistics.h"
 #include "Movement.h"
 
-class Animal : public MapObject {
+class Animal : public Drawable {
 private:
 	Statistics                Statistics_;
 	std::unique_ptr<Movement> AnimalMovement_;
 
-	const static float SizeInPixels_;
+	static float SizeInPixels_;
 
 public:
 	Animal() {
 		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
 	}
-	Animal(int x, int y) : MapObject(x, y) {
+	Animal(FPoint xy) : Drawable(xy) {
 		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
 	}
+
+	virtual void click() override { std::cout << "ANIMAL CLICKED!\n"; }
 };

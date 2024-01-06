@@ -21,11 +21,11 @@ void Simulation::dispatchEvent() {
 	case SDL_QUIT:
 		Quit_ = true;
 		break;
-	case SDL_WINDOWEVENT:
-		if (Event_.window.event == SDL_WINDOWEVENT_RESIZED) {
-			Window_.scaleWindow(Event_.window.data1, Event_.window.data2);
-		}
-		break;
+	//case SDL_WINDOWEVENT:
+	//	if (Event_.window.event == SDL_WINDOWEVENT_RESIZED) {
+	//		Window_.scaleWindow(Event_.window.data1, Event_.window.data2);
+	//	}
+	//	break;
 	case SDL_MOUSEWHEEL:
 		Controls_.mouseWheel(*this, Event_.wheel.y);
 		break;
@@ -77,8 +77,15 @@ void Simulation::stopMoveCamera() {
 void Simulation::launch() {
 	while (!Quit_) {
 		while (SDL_PollEvent(&Event_)) {
+			if (Controls_.isMouseOver(Menu_, Map_)) {
+				SDL_SetCursor(SDL_CreateSystemCursor(SDL_SystemCursor::SDL_SYSTEM_CURSOR_HAND));
+				std::cout << "Mouse is over something\n";
+			}
+			else {
+				SDL_SetCursor(SDL_CreateSystemCursor(SDL_SystemCursor::SDL_SYSTEM_CURSOR_ARROW));
+			}
 			dispatchEvent();
-			Window_.render(Map_, Camera_);
+			Window_.render(Map_, Menu_, Camera_);
 		}
 		SDL_Delay(16); // 60fps
 	}

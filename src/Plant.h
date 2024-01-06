@@ -13,9 +13,9 @@
 
 
 #pragma once
-#include "MapObject.h"
+#include "Drawable.h"
 
-class Plant : MapObject {
+class Plant : Drawable {
 private:
 	float NutritionalValue_;
 

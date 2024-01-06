@@ -17,6 +17,25 @@
 #include "PointBase.hpp"
 
 class Drawable {
+protected:
+	FPoint Size_;
+	SDL_Color Color_;
+	FPoint Position_;
+
 public:
-	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) = 0;
+	Drawable() : Color_(SDL_Color()) {}
+	Drawable(FPoint xy) : Position_(xy), Color_(SDL_Color()) {}
+	void setColor(SDL_Color color) {
+		Color_ = color;
+	}
+	void setSize(FPoint size) {
+		Size_ = size;
+	}
+	void setPosition(FPoint position) {
+		Position_ = position;
+	}
+	bool isMouseOver(FPoint mouse_pos) const;
+	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint());
+
+	virtual void click() = 0;
 };

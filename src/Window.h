@@ -20,6 +20,7 @@
 #include "Camera.h"
 #include "PointBase.hpp"
 #include "Map.h"
+#include "Menu.h"
 
 class Window {
 private:
@@ -31,8 +32,6 @@ private:
 	   It is almost constant value and do not represent actual
 	   window size */
 	FPoint Size_;
-	/* A list of menu elements(overlay targets) */
-	std::vector<std::unique_ptr<Drawable>> MenuElements_;
 	/* A scale of current window meaning:
 	   <actual window size> =  Scale_ * Size_ */
 	FPoint Scale_;
@@ -55,9 +54,8 @@ public:
 	void scaleWindow(float width, float height);
 	void scaleWindow(FPoint scale);
 	bool createWindow(const char* title);
-	void addMenuElement(std::unique_ptr<Drawable>& drawable);
 	void setBorder(std::unique_ptr<Drawable>& border);
-	void render(Map& map, Camera& camera);
+	void render(Map& map, Menu& menu, Camera& camera);
 
 	operator SDL_Renderer* () { return Renderer_; }
 	operator SDL_Window* () { return Window_; }

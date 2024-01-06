@@ -14,4 +14,4 @@
 
 #include "Animal.h"
 
-const float Animal::SizeInPixels_ = 10;
+float Animal::SizeInPixels_ = 20.f;

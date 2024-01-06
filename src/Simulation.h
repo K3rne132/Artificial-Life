@@ -17,6 +17,7 @@
 #include "Map.h"
 #include "SimulationSettings.h"
 #include "Controls.h"
+#include "Menu.h"
 
 class Simulation {
 private:
@@ -26,6 +27,7 @@ private:
 	SDL_Event Event_;
 	Camera Camera_;
 	Controls Controls_;
+	Menu& Menu_;
 	bool Quit_;
 
 	void dispatchEvent();
@@ -33,8 +35,8 @@ private:
 	void resetCamera();
 
 public:
-	Simulation(Window& window, Map& map) : Window_(window), Map_(map),
-		Event_(), Quit_(false), Controls_(Camera_) {
+	Simulation(Window& window, Map& map, Menu& menu) : Window_(window), Map_(map),
+		Menu_(menu), Event_(), Quit_(false), Controls_(Camera_) {
 		addMapBorder();
 		resetCamera();
 	}

@@ -40,6 +40,10 @@ void Controls::storeMousePos(FPoint& mouse) {
 
 void Controls::mouseButtonDown(int button) {
 	switch (button) {
+	case SDL_BUTTON_LEFT:
+		if (MouseOver_)
+			MouseOver_->click();
+		break;
 	case SDL_BUTTON_MIDDLE:
 		if (!MiddleButtonPressed_) {
 			MiddleButtonPressed_ = true;
@@ -73,4 +77,20 @@ void Controls::mouseWheel(Simulation& simulation, int y) {
 		simulation.zoomIn();
 	else if (y < 0)
 		simulation.zoomOut();
+}
+
+bool Controls::isMouseOver(Menu& menu, Map& map) {
+	for (const auto& obj : menu) {
+		if (obj->isMouseOver(getMousePos())) {
+			MouseOver_ = obj.get();
+			return true;
+		}
+	}
+	for (const auto& obj : map) {
+		if (obj->isMouseOver(getRelativeMousePos())) {
+			MouseOver_ = obj.get();
+			return true;
+		}
+	}
+	return false;
 }

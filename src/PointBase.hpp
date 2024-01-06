@@ -39,6 +39,22 @@ public:
 		return X != rhs.X || Y != rhs.Y;
 	}
 
+	inline bool operator<(const PointBase& rhs) const {
+		return (X < rhs.X && Y < rhs.Y);
+	}
+
+	inline bool operator>(const PointBase& rhs) const {
+		return (X > rhs.X && Y > rhs.Y);
+	}
+
+	inline bool operator<=(const PointBase& rhs) const {
+		return (X <= rhs.X && Y <= rhs.Y);
+	}
+
+	inline bool operator>=(const PointBase& rhs) const {
+		return (X >= rhs.X && Y >= rhs.Y);
+	}
+
 	inline PointBase& operator+=(const PointBase& rhs) {
 		X += rhs.X;
 		Y += rhs.Y;

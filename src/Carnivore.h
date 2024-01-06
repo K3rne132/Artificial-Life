@@ -18,16 +18,23 @@
 #include "Colors.h"
 
 class Carnivore : public Animal {
+private:
+	static SDL_Color Color;
+
 public:
 	static unsigned int Count;
-	static SDL_Color Color;
 
 	Carnivore() {
 		setColor(Color);
+		++Count;
 	}
-	Carnivore(int x, int y) : Animal(x, y) {
+	Carnivore(FPoint xy) : Animal(xy) {
 		setColor(Color);
+	}
+	~Carnivore() {
+		--Count;
 	}
 };
 
 SDL_Color Carnivore::Color = RED;
+unsigned int Carnivore::Count = 0;

@@ -12,14 +12,19 @@
 
 
 
-#include "MapObject.h"
+#pragma once
+#include <vector>
+#include <memory>
+#include "Drawable.h"
 
-void MapObject::draw(SDL_Renderer* renderer, FPoint offset) {
-	SDL_SetRenderDrawColor(renderer, Color_.r, Color_.g, Color_.b, Color_.a);
-	SDL_FRect rect;
-	rect.x = offset.X + Position_.X;
-	rect.y = offset.Y + Position_.Y;
-	rect.w = Size_.X;
-	rect.h = Size_.Y;
-	SDL_RenderFillRectF(renderer, &rect);
-}
+class Menu {
+private:
+	std::vector<std::unique_ptr<Drawable>> MenuElements_;
+
+public:
+	void addMenuElement(std::unique_ptr<Drawable>& menu_obj) {
+		MenuElements_.push_back(std::move(menu_obj));
+	}
+	inline auto begin() const { return MenuElements_.begin(); }
+	inline auto end() const { return MenuElements_.end(); }
+};

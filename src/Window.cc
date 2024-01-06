@@ -62,15 +62,11 @@ bool Window::createWindow(const char* title) {
 	return true;
 }
 
-void Window::addMenuElement(std::unique_ptr<Drawable>& drawable) {
-	MenuElements_.push_back(std::move(drawable));
-}
-
 void Window::setBorder(std::unique_ptr<Drawable>& border) {
 	Border_ = std::move(border);
 }
 
-void Window::render(Map& map, Camera& camera) {
+void Window::render(Map& map, Menu& menu, Camera& camera) {
 	SDL_SetRenderDrawColor(Renderer_, 0, 0, 0, 255);
 	SDL_RenderClear(Renderer_);
 	SDL_RenderSetScale(Renderer_,
@@ -81,7 +77,7 @@ void Window::render(Map& map, Camera& camera) {
 	for (const auto& object : map)
 		object->draw(Renderer_, !camera.getOffset());
 	SDL_RenderSetScale(Renderer_, Scale_.X, Scale_.Y);
-	for (const auto& element : MenuElements_)
+	for (const auto& element : menu)
 		element->draw(Renderer_);
 	SDL_RenderPresent(Renderer_);
 }

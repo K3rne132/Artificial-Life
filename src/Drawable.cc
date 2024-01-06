@@ -12,24 +12,18 @@
 
 
 
-#pragma once
-#include <SDL2/SDL.h>
-#include "PointBase.hpp"
 #include "Drawable.h"
 
-class Clickable : public Drawable {
-protected:
-	FPoint Size_;
-	SDL_Color Color_;
+bool Drawable::isMouseOver(FPoint mouse_pos) const {
+	return mouse_pos >= Position_ && mouse_pos <= Position_ + Size_;
+}
 
-public:
-	Clickable() : Size_(), Color_(SDL_Color()) {}
-
-	void setColor(SDL_Color color) {
-		Color_ = color;
-	}
-
-	void setSize(FPoint size) {
-		Size_ = size;
-	}
-};
+void Drawable::draw(SDL_Renderer* renderer, FPoint offset) {
+	SDL_SetRenderDrawColor(renderer, Color_.r, Color_.g, Color_.b, Color_.a);
+	SDL_FRect rect;
+	rect.x = offset.X + Position_.X;
+	rect.y = offset.Y + Position_.Y;
+	rect.w = Size_.X;
+	rect.h = Size_.Y;
+	SDL_RenderFillRectF(renderer, &rect);
+}

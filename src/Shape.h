@@ -23,4 +23,6 @@ protected:
 public:
 	Shape() : Rect_(SDL_FRect()), Color_(SDL_Color()) {}
 	Shape(SDL_FRect rect, SDL_Color color) : Rect_(rect), Color_(color) {}
+
+	virtual void click() override {}
 };
