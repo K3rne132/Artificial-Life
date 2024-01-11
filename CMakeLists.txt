@@ -8,6 +8,7 @@ option(BUILD_DEPENDENCIES "Buduje zaleznosci zewnetrzne" OFF)
 
 if (BUILD_DEPENDENCIES)
     add_subdirectory("third party/SDL")
+    add_subdirectory("third party/SDL_ttf")
 endif()
 add_subdirectory(src)
 

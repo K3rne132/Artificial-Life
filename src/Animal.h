@@ -18,20 +18,25 @@
 #include "Drawable.h"
 #include "Statistics.h"
 #include "Movement.h"
+#include "Simulation.h"
 
 class Animal : public Drawable {
-private:
+protected:
+	Simulation& Parent_;
 	Statistics                Statistics_;
 	std::unique_ptr<Movement> AnimalMovement_;
 
 	static float SizeInPixels_;
 
 public:
-	Animal() {
+	Animal(Simulation& parent) : Parent_(parent) {
 		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
 	}
-	Animal(FPoint xy) : Drawable(xy) {
+	Animal(FPoint xy, Simulation& parent) : Parent_(parent), Drawable(xy) {
 		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
+	}
+	virtual ~Animal() {
+		Parent_.unselect(*this);
 	}
 
 	virtual void click() override { std::cout << "ANIMAL CLICKED!\n"; }

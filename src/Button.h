@@ -15,13 +15,33 @@
 #pragma once
 #include <memory>
 #include "Drawable.h"
+#include "Colors.h"
+
+class Simulation;
+
+enum class ButtonGroup {
+	NONE,
+	MAINMENU,
+	CONTEXTMENU
+};
 
 class Button : public Drawable {
+protected:
+	Simulation& Parent_;
+	ButtonGroup Group_;
+	bool Hidden_;
+
 public:
-	Button(FPoint xy, FPoint size, SDL_Color color) : Drawable(xy) {
+	Button(FPoint xy, FPoint size, SDL_Color color, Simulation& parent) :
+		Drawable(xy), Parent_(parent), Hidden_(false), Group_(ButtonGroup::NONE) {
 		setSize(size);
 		setColor(color);
 	}
 
+	ButtonGroup getGroup() { return Group_; }
+	void setGroup(ButtonGroup group) { Group_ = group; }
+	bool isHidden() const { return Hidden_; }
+	void hide() { Hidden_ = true; }
+	void show() { Hidden_ = false; }
 	virtual void click() override { std::cout << "BUTTON CLICKED!\n"; }
 };

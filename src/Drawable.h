@@ -34,8 +34,12 @@ public:
 	void setPosition(FPoint position) {
 		Position_ = position;
 	}
-	bool isMouseOver(FPoint mouse_pos) const;
+	virtual bool isMouseOver(FPoint mouse_pos) const;
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint());
-
-	virtual void click() = 0;
+	virtual SDL_SystemCursor getCursorMouseOver() {
+		return SDL_SystemCursor::SDL_SYSTEM_CURSOR_HAND;
+	}
+	virtual void click() {}
+	virtual void whenSelected() {}
+	virtual void whenUnselected() {}
 };

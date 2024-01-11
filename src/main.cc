@@ -13,14 +13,24 @@
 
 
 #include <iostream>
+#include "Settings.h"
 #include "Simulation.h"
-#include "Button.h"
+#include "TextInput.h"
 #include "Carnivore.h"
 #include "Herbivore.h"
+#include <SDL_ttf.h>
 #undef main
 
 int main() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+		return 1;
+	}
+	if (TTF_Init() != 0) {
+		SDL_Quit();
+		return 1;
+	}
+	if (!Settings::loadFonts()) {
+		std::cerr << "Could not load fonts!";
 		return 1;
 	}
 	Window window(1280, 720);
@@ -30,18 +40,21 @@ int main() {
 	}
 
     Map map(3000, 3000);
-    auto anim1 = std::unique_ptr<Drawable>(new Carnivore(FPoint(100, 200)));
+	Menu menu;
+	Simulation simulation(window, map, menu);
+
+    auto anim1 = std::unique_ptr<Drawable>(new Carnivore(FPoint(100, 200), simulation));
     map.addObject(anim1);
-    auto anim2 = std::unique_ptr<Drawable>(new Herbivore(FPoint(400, 600)));
+    auto anim2 = std::unique_ptr<Drawable>(new Herbivore(FPoint(400, 600), simulation));
     map.addObject(anim2);
 
-    Menu menu;
-    SDL_Color color = { 127, 80, 180, 255 };
-    auto elem1 = std::unique_ptr<Drawable>(
-		new Button(FPoint(100.f, 100.f), FPoint(100.f, 100.f), BLUE));
-    menu.addMenuElement(elem1);
-
-	Simulation simulation(window, map, menu);
+    auto elem1 = std::unique_ptr<Button>(
+		new Button(FPoint(100.f, 100.f), FPoint(100.f, 100.f), BLUE, simulation));
+	auto elem2 = std::unique_ptr<Button>(
+		new TextInput(FPoint(100.f, 200.f), simulation, "random text input"));
+    menu.addMainMenuElement(elem1);
+    menu.addMainMenuElement(elem2);
+	
 	simulation.launch();
 
 	SDL_Quit();

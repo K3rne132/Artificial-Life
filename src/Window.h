@@ -20,7 +20,8 @@
 #include "Camera.h"
 #include "PointBase.hpp"
 #include "Map.h"
-#include "Menu.h"
+
+class Menu;
 
 class Window {
 private:

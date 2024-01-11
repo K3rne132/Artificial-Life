@@ -15,14 +15,19 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "Drawable.h"
+#include "Button.h"
 
 class Menu {
 private:
-	std::vector<std::unique_ptr<Drawable>> MenuElements_;
+	std::vector<std::unique_ptr<Button>> MenuElements_;
 
 public:
-	void addMenuElement(std::unique_ptr<Drawable>& menu_obj) {
+	void addMainMenuElement(std::unique_ptr<Button>& menu_obj) {
+		menu_obj->setGroup(ButtonGroup::MAINMENU);
+		MenuElements_.push_back(std::move(menu_obj));
+	}
+	void addContextMenuElement(std::unique_ptr<Button>& menu_obj) {
+		menu_obj->setGroup(ButtonGroup::CONTEXTMENU);
 		MenuElements_.push_back(std::move(menu_obj));
 	}
 	inline auto begin() const { return MenuElements_.begin(); }

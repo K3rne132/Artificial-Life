@@ -14,6 +14,7 @@
 
 #include "Controls.h"
 #include "Simulation.h"
+#include "TextInput.h"
 
 FPoint Controls::getMousePos() {
 	int x, y;
@@ -43,9 +44,15 @@ void Controls::mouseButtonDown(int button) {
 	case SDL_BUTTON_LEFT:
 		if (MouseOver_)
 			MouseOver_->click();
+		else
+			Parent_.unselectAll();
+		break;
+	case SDL_BUTTON_RIGHT:
+		Parent_.unselectAll();
 		break;
 	case SDL_BUTTON_MIDDLE:
 		if (!MiddleButtonPressed_) {
+			setSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
 			MiddleButtonPressed_ = true;
 			storeMousePos(MouseBase_);
 		}
@@ -53,35 +60,55 @@ void Controls::mouseButtonDown(int button) {
 	}
 }
 
-void Controls::mouseButtonUp(Simulation& simulation, int button) {
+void Controls::mouseButtonUp(int button) {
 	switch (button) {
 	case SDL_BUTTON_MIDDLE:
 		MiddleButtonPressed_ = false;
-		simulation.stopMoveCamera();
+		Parent_.stopMoveCamera();
 	}
 }
 
-void Controls::mouseMotion(Simulation& simulation) {
+void Controls::mouseMotion() {
 	std::cout << getMousePos() << "\n";
 	std::cout << getRelativeMousePos() << "\n";
 	if (MiddleButtonPressed_) {
 		storeMousePos(MouseOffset_);
 		FPoint asd = MouseBase_ + MouseOffset_;
-		simulation.moveCamera(MouseBase_ - MouseOffset_);
-		simulation.moveCamera(MouseBase_ - MouseOffset_);
+		Parent_.moveCamera(MouseBase_ - MouseOffset_);
+		Parent_.moveCamera(MouseBase_ - MouseOffset_);
+	}
+	else if (isMouseOver(Parent_.Menu_, Parent_.Map_)) {
+		updateCursor();
+		std::cout << "Mouse is over something\n";
+	}
+	else {
+		setSystemCursor();
 	}
 }
 
-void Controls::mouseWheel(Simulation& simulation, int y) {
+void Controls::mouseWheel(int y) {
 	if (y > 0)
-		simulation.zoomIn();
+		Parent_.zoomIn();
 	else if (y < 0)
-		simulation.zoomOut();
+		Parent_.zoomOut();
+}
+
+void Controls::keyPressed(int key) {
+	switch (key) {
+		case SDLK_BACKSPACE:
+			if (Parent_.TextInputSelected_)
+				Parent_.TextInputSelected_->deleteLetter();
+	}
+}
+
+void Controls::textInput(const char* letter) {
+	if (Parent_.TextInputSelected_)
+		Parent_.TextInputSelected_->appLetters(letter);
 }
 
 bool Controls::isMouseOver(Menu& menu, Map& map) {
 	for (const auto& obj : menu) {
-		if (obj->isMouseOver(getMousePos())) {
+		if (!obj->isHidden() && obj->isMouseOver(getMousePos())) {
 			MouseOver_ = obj.get();
 			return true;
 		}
@@ -92,5 +119,19 @@ bool Controls::isMouseOver(Menu& menu, Map& map) {
 			return true;
 		}
 	}
+	MouseOver_ = nullptr;
 	return false;
+}
+
+void Controls::setSystemCursor(SDL_SystemCursor type) {
+	SDL_Cursor* system = SDL_CreateSystemCursor(type);
+	if (Cursor_)
+		SDL_FreeCursor(Cursor_);
+	Cursor_ = system;
+	SDL_SetCursor(system);
+}
+
+void Controls::updateCursor() {
+	if (MouseOver_)
+		setSystemCursor(MouseOver_->getCursorMouseOver());
 }

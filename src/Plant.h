@@ -24,4 +24,5 @@ public:
 	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {}
 
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
+	virtual bool isMouseOver(FPoint mouse_pos) const override { return false; }
 };

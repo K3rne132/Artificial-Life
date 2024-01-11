@@ -13,6 +13,7 @@
 
 
 #include "Window.h"
+#include "Menu.h"
 
 FPoint Window::getWindowSize() const {
 	return Size_;
@@ -48,14 +49,14 @@ bool Window::createWindow(const char* title) {
 		Size_.Y,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
 	);
-	if (Window_ == nullptr)
+	if (!Window_)
 		return false;
 	Renderer_ = SDL_CreateRenderer(
 		Window_,
 		-1,
 		SDL_RENDERER_ACCELERATED
 	);
-	if (Renderer_ == nullptr) {
+	if (!Renderer_) {
 		SDL_DestroyWindow(Window_);
 		return false;
 	}
@@ -77,7 +78,9 @@ void Window::render(Map& map, Menu& menu, Camera& camera) {
 	for (const auto& object : map)
 		object->draw(Renderer_, !camera.getOffset());
 	SDL_RenderSetScale(Renderer_, Scale_.X, Scale_.Y);
-	for (const auto& element : menu)
-		element->draw(Renderer_);
+	for (const auto& element : menu) {
+		if (!element->isHidden())
+			element->draw(Renderer_);
+	}
 	SDL_RenderPresent(Renderer_);
 }

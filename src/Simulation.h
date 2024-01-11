@@ -15,20 +15,25 @@
 #pragma once
 #include "Window.h"
 #include "Map.h"
-#include "SimulationSettings.h"
+#include "Settings.h"
 #include "Controls.h"
 #include "Menu.h"
+
+class TextInput;
+class Animal;
 
 class Simulation {
 private:
 	Window& Window_;
-	SimulationSettings Settings_;
 	Map& Map_;
 	SDL_Event Event_;
 	Camera Camera_;
 	Controls Controls_;
 	Menu& Menu_;
 	bool Quit_;
+	Button* ButtonSelected_;
+	TextInput* TextInputSelected_;
+	Animal* AnimalSelected_;
 
 	void dispatchEvent();
 	void addMapBorder();
@@ -36,15 +41,32 @@ private:
 
 public:
 	Simulation(Window& window, Map& map, Menu& menu) : Window_(window), Map_(map),
-		Menu_(menu), Event_(), Quit_(false), Controls_(Camera_) {
+		Menu_(menu), Event_(), Controls_(Camera_, *this), ButtonSelected_(nullptr),
+		Quit_(false), TextInputSelected_(nullptr), AnimalSelected_(nullptr) {
+		Settings::loadFonts();
 		addMapBorder();
 		resetCamera();
 	}
 
+	inline Window& getWindow() { return Window_; }
 	void zoomIn();
 	void zoomOut();
 	void moveCamera(float x, float y);
 	void moveCamera(FPoint offset);
 	void stopMoveCamera();
 	void launch();
+	bool addMapObject(std::unique_ptr<Drawable>& map_object);
+	void hideMainMenu();
+	void showMainMenu();
+	void hideContextMenu();
+	void showContextMenu();
+	void select(Button& button);
+	void select(TextInput& input);
+	void select(Animal& animal);
+	void unselect(Button& button);
+	void unselect(TextInput& input);
+	void unselect(Animal& animal);
+	void unselectAll();
+
+	friend Controls;
 };

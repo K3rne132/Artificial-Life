@@ -15,17 +15,8 @@
 #pragma once
 #include <SDL2/SDL.h>
 
-static SDL_Color makeColor(int r, int g, int b, int a) {
-	SDL_Color result;
-	result.r = r;
-	result.g = g;
-	result.b = b;
-	result.a = a;
-	return result;
-}
-
-#define WHITE makeColor(255, 255, 255, 255)
-#define BLACK makeColor(0, 0, 0, 255)
-#define RED makeColor(255, 0, 0, 255)
-#define GREEN makeColor(0, 255, 0, 255)
-#define BLUE makeColor(0, 0, 255, 255)
+#define BLACK {0, 0, 0, 255}
+#define WHITE {255, 255, 255, 255}
+#define RED {255, 0, 0, 255}
+#define GREEN {0, 255, 0, 255}
+#define BLUE {0, 0, 255, 255}

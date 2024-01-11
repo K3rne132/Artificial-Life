@@ -15,6 +15,8 @@
 #include "Simulation.h"
 #include "FilledRect.h"
 #include "Colors.h"
+#include "TextInput.h"
+#include "Animal.h"
 
 void Simulation::dispatchEvent() {
 	switch (Event_.type) {
@@ -27,16 +29,22 @@ void Simulation::dispatchEvent() {
 	//	}
 	//	break;
 	case SDL_MOUSEWHEEL:
-		Controls_.mouseWheel(*this, Event_.wheel.y);
+		Controls_.mouseWheel(Event_.wheel.y);
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 		Controls_.mouseButtonDown(Event_.button.button);
 		break;
 	case SDL_MOUSEMOTION:
-		Controls_.mouseMotion(*this);
+		Controls_.mouseMotion();
 		break;
 	case SDL_MOUSEBUTTONUP:
-		Controls_.mouseButtonUp(*this, Event_.button.button);
+		Controls_.mouseButtonUp(Event_.button.button);
+		break;
+	case SDL_KEYDOWN:
+		Controls_.keyPressed(Event_.key.keysym.sym);
+		break;
+	case SDL_TEXTINPUT:
+		Controls_.textInput(Event_.text.text);
 		break;
 	}
 }
@@ -77,16 +85,86 @@ void Simulation::stopMoveCamera() {
 void Simulation::launch() {
 	while (!Quit_) {
 		while (SDL_PollEvent(&Event_)) {
-			if (Controls_.isMouseOver(Menu_, Map_)) {
-				SDL_SetCursor(SDL_CreateSystemCursor(SDL_SystemCursor::SDL_SYSTEM_CURSOR_HAND));
-				std::cout << "Mouse is over something\n";
-			}
-			else {
-				SDL_SetCursor(SDL_CreateSystemCursor(SDL_SystemCursor::SDL_SYSTEM_CURSOR_ARROW));
-			}
 			dispatchEvent();
 			Window_.render(Map_, Menu_, Camera_);
 		}
 		SDL_Delay(16); // 60fps
 	}
+}
+
+bool Simulation::addMapObject(std::unique_ptr<Drawable>& map_object) {
+	return Map_.addObject(std::move(map_object));
+}
+
+void Simulation::hideMainMenu() {
+	for (auto& elem : Menu_) {
+		if (elem->getGroup() == ButtonGroup::MAINMENU)
+			elem->hide();
+	}
+}
+
+void Simulation::showMainMenu() {
+	for (auto& elem : Menu_) {
+		if (elem->getGroup() == ButtonGroup::MAINMENU)
+			elem->show();
+	}
+}
+void Simulation::hideContextMenu() {
+	for (auto& elem : Menu_) {
+		if (elem->getGroup() == ButtonGroup::CONTEXTMENU)
+			elem->hide();
+	}
+}
+
+void Simulation::showContextMenu() {
+	for (auto& elem : Menu_) {
+		if (elem->getGroup() == ButtonGroup::CONTEXTMENU)
+			elem->show();
+	}
+}
+
+void Simulation::select(Button& button) {
+	button.whenSelected();
+	ButtonSelected_ = &button;
+}
+
+void Simulation::select(TextInput& input) {
+	input.whenSelected();
+	TextInputSelected_ = &input;
+}
+
+void Simulation::select(Animal& animal) {
+	animal.whenSelected();
+	AnimalSelected_ = &animal;
+}
+
+void Simulation::unselect(Button& button) {
+	if (ButtonSelected_ == &button) {
+		ButtonSelected_ = nullptr;
+		ButtonSelected_->whenUnselected();
+	}
+}
+void Simulation::unselect(TextInput& input) {
+	if (TextInputSelected_ == &input) {
+		TextInputSelected_ = nullptr;
+		TextInputSelected_->whenUnselected();
+	}
+}
+void Simulation::unselect(Animal& animal) {
+	if (AnimalSelected_ == &animal) {
+		AnimalSelected_ = nullptr;
+		AnimalSelected_->whenUnselected();
+	}
+}
+
+void Simulation::unselectAll() {
+	if (ButtonSelected_)
+		ButtonSelected_->whenUnselected();
+	ButtonSelected_ = nullptr;
+	if (TextInputSelected_)
+		TextInputSelected_->whenUnselected();
+	TextInputSelected_ = nullptr;
+	if (AnimalSelected_)
+		AnimalSelected_->whenUnselected();
+	AnimalSelected_ = nullptr;
 }

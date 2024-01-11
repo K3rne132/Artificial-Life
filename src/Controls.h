@@ -28,18 +28,25 @@ private:
 	FPoint MouseBase_, MouseOffset_;
 	Camera& Camera_;
 	Drawable* MouseOver_;
+	SDL_Cursor* Cursor_;
+	Simulation& Parent_;
 
 	FPoint getMousePos();
 	FPoint getRelativeMousePos();
 	void storeMousePos(FPoint& mouse);
 
 public:
-	Controls(Camera& camera) : Camera_(camera), MouseOver_(nullptr),
-		MiddleButtonPressed_(false), MouseBase_(0, 0), MouseOffset_(0, 0) {}
+	Controls(Camera& camera, Simulation& parent) : Camera_(camera),
+		MouseOver_(nullptr), Cursor_(nullptr), MiddleButtonPressed_(false),
+		MouseBase_(0, 0), MouseOffset_(0, 0), Parent_(parent) {}
 
 	void mouseButtonDown(int button);
-	void mouseButtonUp(Simulation& simulation, int button);
-	void mouseMotion(Simulation& simulation);
-	void mouseWheel(Simulation& simulation, int y);
+	void mouseButtonUp(int button);
+	void mouseMotion();
+	void mouseWheel(int y);
+	void keyPressed(int key);
+	void textInput(const char* letters);
+	void setSystemCursor(SDL_SystemCursor type = SDL_SYSTEM_CURSOR_ARROW);
+	void updateCursor();
 	bool isMouseOver(Menu& menu, Map& map);
 };

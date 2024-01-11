@@ -24,11 +24,11 @@ private:
 public:
 	static unsigned int Count;
 
-	Carnivore() {
+	Carnivore(Simulation& parent) : Animal(parent) {
 		setColor(Color);
 		++Count;
 	}
-	Carnivore(FPoint xy) : Animal(xy) {
+	Carnivore(FPoint xy, Simulation& parent) : Animal(xy, parent) {
 		setColor(Color);
 	}
 	~Carnivore() {
