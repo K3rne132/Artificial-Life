@@ -17,6 +17,8 @@
 
 const SDL_Color BLACK{ 0, 0, 0, 255 };
 const SDL_Color WHITE{ 255, 255, 255, 255 };
-const SDL_Color RED{ 255, 0, 0, 255 };
-const SDL_Color GREEN{ 0, 255, 0, 255 };
-const SDL_Color BLUE{ 0, 0, 255, 255 };
+const SDL_Color RED{ 255, 27, 65 };
+const SDL_Color GREEN{ 47, 254, 84, 255 };
+const SDL_Color BLUE{ 42, 75, 255, 255 };
+const SDL_Color YELLOW{ 255, 255, 0, 255 };
+const SDL_Color ECRU{ 227, 215, 201, 255 };

@@ -14,12 +14,13 @@
 
 #pragma once
 #include <chrono>
-#include "Window.h"
-#include "Map.h"
-#include "Settings.h"
 #include "Controls.h"
 #include "Menu.h"
 
+class Window;
+class Menu;
+class Map;
+class Controls;
 class TextInput;
 class Animal;
 
@@ -36,6 +37,9 @@ private:
 	TextInput* TextInputSelected_;
 	Animal*    AnimalSelected_;
 	float      Speed_;
+	long long  PlantGeneration_;
+	long long  TimeElapsedPlant_;
+	bool       MainMenuHidden_;
 
 	bool synchronize(long long time_diff);
 	void dispatchEvent();
@@ -46,7 +50,8 @@ public:
 	Simulation(Window& window, Map& map, Menu& menu) : Window_(window),
 		Map_(map), Menu_(menu), Event_(), Controls_(Camera_, *this),
 		ButtonSelected_(nullptr), Quit_(false), TextInputSelected_(nullptr),
-		AnimalSelected_(nullptr), Speed_(1.f) {
+		AnimalSelected_(nullptr), Speed_(1.f), MainMenuHidden_(false),
+		PlantGeneration_(500), TimeElapsedPlant_(0) {
 		Settings::loadFonts();
 		addMapBorder();
 		resetCamera();
@@ -54,15 +59,24 @@ public:
 
 	inline Window& getWindow() { return Window_; }
 	inline Map& getMap() { return Map_; }
-	float getSpeed() { return Speed_; }
+	inline Menu& getMenu() { return Menu_; }
+	inline Camera& getCamera() { return Camera_; }
+	float& getSpeed() { return Speed_; }
+	void updateMap();
 	void zoomIn();
 	void zoomOut();
+	void speedUp();
+	void speedDown();
+	void generatePlant(long long milliseconds);
 	void moveCamera(float x, float y);
 	void moveCamera(FPoint offset);
 	void stopMoveCamera();
 	void launch();
 	bool addMapObject(std::unique_ptr<Drawable>& map_object);
-	void bindAnimalStatistics(Animal& animal) { Menu_.bindStatistics(animal); }
+	void removeSelectedAnimal();
+	void highlightSelectedAnimal();
+	void bindAnimalStatistics(Animal& animal);
+	void toggleMainMenu();
 	void hideMainMenu();
 	void showMainMenu();
 	void hideAnimalMenu();

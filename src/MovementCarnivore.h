@@ -14,26 +14,8 @@
 
 #pragma once
 #include "Movement.h"
-#include "Herbivore.h"
 
 class MovementCarnivore : public Movement {
 public:
-	virtual float move(Map& map, Animal& animal, float time_scale) override {
-		FPoint animal_center = animal.getPosition() - animal.getSize() / 2;
-		Nearest nearest = getNearest(map, animal_center);
-		Statistics stats = getStatistics(animal);
-		if (nearest.Herbivore_) {
-			FPoint diff = nearest.Herbivore_->getPosition() - animal.getPosition();
-			float distance = Animal::BaseSpeed_ * stats.Speed / stats.Size * time_scale;
-			if (nearest.HDistance_ > distance) {
-				float scale = distance / nearest.HDistance_;
-				animal.shiftPosition(diff * scale);
-				return diff.norm() * scale * stats.Speed / 10.f;
-			}
-			distance = nearest.HDistance_ * time_scale;
-			animal.shiftPosition(diff);
-			return diff.norm() * stats.Speed / 10.f;
-		}
-		return 0.f;
-	}
+	virtual float move(Map& map, Animal& animal, float time_scale) override;
 };

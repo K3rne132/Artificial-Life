@@ -16,6 +16,7 @@
 #include "Carnivore.h"
 #include "Herbivore.h"
 #include "Plant.h"
+#include "Random.h"
 
 Statistics& Movement::getStatistics(Animal& animal) const {
 	return animal.Statistics_;
@@ -52,4 +53,29 @@ Nearest Movement::getNearest(Map& map, FPoint from) const {
 		}
 	}
 	return result;
+}
+
+FPoint Movement::randomizeDirection(float distance) {
+	if (Direction_ == NONE || Distance_ > 100.f) {
+		Direction_ = getRandomFloat(2 * M_PI);
+		Distance_ = 0.f;
+	}
+	Distance_ += distance;
+	float tg = std::tan(Direction_);
+	float x = distance / std::sqrt(1 + 1 / std::pow(tg, 2));
+	float y = distance / std::sqrt(1 + std::pow(tg, 2));
+	if (Direction_ < M_PI / 2)
+		y = -y;
+	else if (Direction_ > 3 * M_PI / 2) {
+		x = -x;
+		y = -y;
+	}
+	else if (Direction_ > M_PI) {
+		x = -x;
+	}
+	return FPoint(x, y);
+}
+
+bool Movement::isRandom() {
+	return std::abs(Direction_ - NONE) > 0.1f;
 }

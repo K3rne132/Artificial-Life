@@ -16,11 +16,10 @@
 #include <vector>
 #include <memory>
 #include <SDL2/SDL.h>
-#include "Drawable.h"
-#include "Camera.h"
 #include "PointBase.hpp"
-#include "Map.h"
+#include "Drawable.h"
 
+class Simulation;
 class Menu;
 
 class Window {
@@ -56,7 +55,7 @@ public:
 	void scaleWindow(FPoint scale);
 	bool createWindow(const char* title);
 	void setBorder(std::unique_ptr<Drawable>& border);
-	void render(Map& map, Menu& menu, Camera& camera);
+	void render(Simulation& simulation);
 
 	operator SDL_Renderer* () { return Renderer_; }
 	operator SDL_Window* () { return Window_; }

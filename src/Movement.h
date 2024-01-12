@@ -13,6 +13,7 @@
 
 
 #pragma once
+#include <cmath>
 #include <limits>
 #include "Map.h"
 
@@ -41,11 +42,17 @@ struct Nearest {
 
 class Movement {
 protected:
-	static const int SIGHT = 600.f;
+	float Direction_;
+	float Distance_;
+	inline static const int NONE = 1000;
+	inline static const int SIGHT = 300.f;
 
 	Nearest getNearest(Map& map, FPoint from) const;
 	Statistics& getStatistics(Animal& animal) const;
+	FPoint randomizeDirection(float distance);
+	bool isRandom();
 
 public:
+	Movement() : Direction_(NONE), Distance_(0.f) {}
 	virtual float move(Map& map, Animal& animal, float time_scale) = 0;
 };

@@ -43,6 +43,7 @@ public:
 
 	void bindValue(T* value, int precision = 2) {
 		Value_ = value;
+		Precision_ = precision;
 		updateValue();
 	}
 
@@ -53,3 +54,6 @@ public:
 		}
 	}
 };
+
+using FTextValue  = TextValue<float>;
+using UITextValue = TextValue<unsigned int>;

@@ -27,20 +27,46 @@
 
 using json = nlohmann::json;
 
+bool Map::addRandomizedAnimal(std::unique_ptr<Drawable>& animal) {
+	Animal* anim = dynamic_cast<Animal*>(animal.get());
+	if (!anim)
+		return false;
+	addObject(animal);
+	anim->Statistics_.Energy = 100.f;
+	anim->Statistics_.Size = getRandomFloat(0.5f, 2.f);
+	anim->Statistics_.Speed = getRandomFloat(0.25f, 4.f);
+	return true;
+}
+
+bool Map::addAnimal(FPoint xy, Simulation& simulation, float energy,
+	float speed, float size, AnimalSpecies specie) {
+	std::unique_ptr<Drawable> animal;
+	if (specie == AnimalSpecies::CARNIVORE)
+		animal = std::unique_ptr<Drawable>(new Carnivore(xy, simulation));
+	else
+		animal = std::unique_ptr<Drawable>(new Herbivore(xy, simulation));
+	Animal* anim = dynamic_cast<Animal*>(animal.get());
+	anim->Statistics_.Energy = energy;
+	anim->Statistics_.Size = size;
+	anim->Statistics_.Speed = speed;
+	return addObject(animal);
+}
+
 bool Map::addObject(std::unique_ptr<Drawable>& map_object) {
 	Objects_.push_back(std::move(map_object));
 	return true;
 }
 
-DrawableVector::const_iterator Map::removeObject(Drawable& map_object) {
+bool Map::removeObject(Drawable& map_object) {
 	auto it = std::find_if(Objects_.begin(), Objects_.end(),
 		[&map_object](const std::unique_ptr<Drawable>& ptr) {
 			return ptr.get() == &map_object;
 		});
 	if (it != Objects_.end()) {
-		return Objects_.erase(it);
+		Objects_.erase(it);
+		return true;
 	}
-	return Objects_.end();
+	return false;
 }
 
 Drawable& Map::operator[](size_t index) const {
@@ -75,24 +101,16 @@ bool Map::readFromFile(const std::string& filename, Simulation& simulation) {
 		int pointX = carni[i].at("position").at("X");
 		int pointY = carni[i].at("position").at("Y");
 		FPoint point(pointX, pointY);
-		auto carnivore = std::unique_ptr<Drawable>(new Carnivore(point, simulation));
-		Animal* anim = dynamic_cast<Animal*>(carnivore.get());
-		addObject(carnivore);
-		anim->Statistics_.Energy = carni[i].at("energy");
-		anim->Statistics_.Size = carni[i].at("size");
-		anim->Statistics_.Speed = carni[i].at("speed");
+		addAnimal(point, simulation, carni[i].at("energy"), carni[i].at("speed"),
+			carni[i].at("size"), AnimalSpecies::CARNIVORE);
 	}
 
 	for (int i = 0; i < herbi.size(); i++) {
 		int pointX = herbi[i].at("position").at("X");
 		int pointY = herbi[i].at("position").at("Y");
 		FPoint point(pointX, pointY);
-		auto herbivore = std::unique_ptr<Drawable>(new Herbivore(point, simulation));
-		Animal* anim = dynamic_cast<Animal*>(herbivore.get());
-		addObject(herbivore);
-		anim->Statistics_.Energy = herbi[i].at("energy");
-		anim->Statistics_.Size = herbi[i].at("size");
-		anim->Statistics_.Speed = herbi[i].at("speed");
+		addAnimal(point, simulation, herbi[i].at("energy"), herbi[i].at("speed"),
+			herbi[i].at("size"), AnimalSpecies::HERBIVORE);
 	}
 
 	for (int i = 0; i < plant.size(); i++) {
@@ -100,9 +118,7 @@ bool Map::readFromFile(const std::string& filename, Simulation& simulation) {
 		int pointY = plant[i].at("position").at("Y");
 		FPoint point(pointX, pointY);
 		auto plant1 = std::unique_ptr<Drawable>(new Plant(point));
-		Plant* pl = dynamic_cast<Plant*>(plant1.get());
 		addObject(plant1);
-		pl->NutritionalValue_ = plant[i].at("nutritionalValue");
 	}
 
 	inFile.close();
@@ -110,7 +126,6 @@ bool Map::readFromFile(const std::string& filename, Simulation& simulation) {
 }
 
 bool Map::writeToFile(const std::string& filename) {
-
 	std::ofstream outFile(filename);
 
 	if (!outFile.is_open()) {
@@ -150,7 +165,6 @@ bool Map::writeToFile(const std::string& filename) {
 		}
 		else if (plant) {
 			object_data["plants"] += {
-				{"nutritionalValue", plant->getNutritionalValue()},
 				{"position", {
 					{"X", plant->getPosition().X},
 					{"Y", plant->getPosition().Y}
@@ -168,33 +182,24 @@ bool Map::writeToFile(const std::string& filename) {
 bool Map::generate(int carnivores, int herbivores, int plants, int height, int width,
 	Simulation& simulation) {
 	Size_ = Point(width, height);
+	simulation.updateMap();
 
 	for (int i = 0; i < carnivores; i++) {
-		FPoint point(getRandom(0, width), getRandom(0, height));
+		FPoint point(getRandomInt(width), getRandomInt(height));
 		auto carnivore = std::unique_ptr<Drawable>(new Carnivore(point, simulation));
-		Animal* anim = dynamic_cast<Animal*>(carnivore.get());
-		addObject(carnivore);
-		anim->Statistics_.Energy = getRandom(0, 100)/1.f;
-		anim->Statistics_.Size = getRandom(25, 400)/100.f;
-		anim->Statistics_.Speed = getRandom(5, 20)/10.f;
+		addRandomizedAnimal(carnivore);
 	}
 
 	for (int i = 0; i < herbivores; i++) {
-		FPoint point(getRandom(0, width), getRandom(0, height));
+		FPoint point(getRandomInt(width), getRandomInt(height));
 		auto herbivore = std::unique_ptr<Drawable>(new Herbivore(point, simulation));
-		Animal* anim = dynamic_cast<Animal*>(herbivore.get());
-		addObject(herbivore);
-		anim->Statistics_.Energy = getRandom(0, 100) / 1.f;
-		anim->Statistics_.Size = getRandom(25, 400) / 100.f;
-		anim->Statistics_.Speed = getRandom(5, 20) / 10.f;
+		addRandomizedAnimal(herbivore);
 	}
 
 	for (int i = 0; i < plants; i++) {
-		FPoint point(getRandom(0, width), getRandom(0, height));
+		FPoint point(getRandomInt(width), getRandomInt(height));
 		auto plant = std::unique_ptr<Drawable>(new Plant(point));
-		Plant* pl = dynamic_cast<Plant*>(plant.get());
 		addObject(plant);
-		pl->NutritionalValue_ = getRandom(0, 5) / 1.f;
 	}
 	return true;
 }

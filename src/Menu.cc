@@ -13,13 +13,18 @@
 
 
 #include "Menu.h"
-#include "TextValue.h"
 #include "TextInput.h"
+#include "TextButton.h"
 #include "Animal.h"
 #include "Simulation.h"
 #include "Carnivore.h"
 #include "Herbivore.h"
 #include "Plant.h"
+
+void Menu::addIndependentMenuElement(std::unique_ptr<Button>& menu_obj) {
+	menu_obj->setGroup(ButtonGroup::NONE);
+	MenuElements_.push_back(std::move(menu_obj));
+}
 
 void Menu::addMainMenuElement(std::unique_ptr<Button>& menu_obj) {
 	menu_obj->setGroup(ButtonGroup::MAINMENU);
@@ -33,31 +38,40 @@ void Menu::addAnimalMenuElement(std::unique_ptr<Button>& menu_obj) {
 }
 
 void Menu::createAnimalInterface(Simulation& simulation) {
-	Energy_ = new TextValue<float>(FPoint(150.f, 50.f), simulation, "Energia: ");
-	Speed_ = new TextValue<float>(FPoint(500.f, 50.f), simulation, "Szybkosc: ");
-	Size_ = new TextValue<float>(FPoint(850.f, 50.f), simulation, "Rozmiar: ");
+	auto remove = new TextButton(FPoint(950.f, 25.f), FPoint(100.f, 42.f),
+		simulation, " USUN", [&simulation]() {simulation.removeSelectedAnimal(); }, RED);
+	Energy_ = new FTextValue(FPoint(125.f, 25.f), simulation, "Energia: ");
+	Speed_ = new FTextValue(FPoint(400.f, 25.f), simulation, "Szybkosc: ");
+	Size_ = new FTextValue(FPoint(675.f, 25.f), simulation, "Rozmiar: ");
+	addAnimalMenuElement(std::unique_ptr<Button>(remove));
 	addAnimalMenuElement(std::unique_ptr<Button>(Energy_));
 	addAnimalMenuElement(std::unique_ptr<Button>(Speed_));
 	addAnimalMenuElement(std::unique_ptr<Button>(Size_));
 }
 
 void Menu::createMainInterface(Simulation& simulation) {
-	auto elem1 = std::unique_ptr<Button>(
-		new Button(FPoint(400.f, 100.f), FPoint(100.f, 100.f), BLUE, simulation));
-	auto elem2 = std::unique_ptr<Button>(
-		new TextInput(FPoint(400.f, 200.f), simulation, "random text input"));
-	addMainMenuElement(elem1);
-	addMainMenuElement(elem2);
-
-	auto carnivore_count = new TextValue<unsigned int>(
-		FPoint(50.f, 550.f), simulation, "Miesozercow: ");
+	auto toggle_menu = new TextButton(FPoint(10.f, 10.f), FPoint(238.f, 42.f),
+		simulation, " Pokaz/Ukryj", [&simulation]() { simulation.toggleMainMenu(); });
+	auto speed_down = new TextButton(FPoint(10.f, 250.f), FPoint(42.f, 42.f),
+		simulation, " <<", [&simulation]() { simulation.speedDown(); });
+	auto speed_up = new TextButton(FPoint(310.f, 250.f), FPoint(42.f, 42.f),
+		simulation, " >>", [&simulation]() { simulation.speedUp(); });
+	auto simulation_speed = new FTextValue(
+		FPoint(60.f, 250.f), simulation, "Predkosc: ");
+	simulation_speed->bindValue(&simulation.getSpeed(), 1);
+	auto carnivore_count = new UITextValue(
+		FPoint(10.f, 350.f), simulation, "Miesozercow: ");
 	carnivore_count->bindValue(&Carnivore::Count);
-	auto herbivore_count = new TextValue<unsigned int>(
-		FPoint(50.f, 600.f), simulation, "Roslinozercow: ");
+	auto herbivore_count = new UITextValue(
+		FPoint(10.f, 390.f), simulation, "Roslinozercow: ");
 	herbivore_count->bindValue(&Herbivore::Count);
-	auto plant_count = new TextValue<unsigned int>(
-		FPoint(50.f, 650.f), simulation, "Roslin: ");
+	auto plant_count = new UITextValue(
+		FPoint(10.f, 430.f), simulation, "Roslin: ");
 	plant_count->bindValue(&Plant::Count);
+	addIndependentMenuElement(std::unique_ptr<Button>(toggle_menu));
+	addMainMenuElement(std::unique_ptr<Button>(speed_down));
+	addMainMenuElement(std::unique_ptr<Button>(speed_up));
+	addMainMenuElement(std::unique_ptr<Button>(simulation_speed));
 	addMainMenuElement(std::unique_ptr<Button>(carnivore_count));
 	addMainMenuElement(std::unique_ptr<Button>(herbivore_count));
 	addMainMenuElement(std::unique_ptr<Button>(plant_count));

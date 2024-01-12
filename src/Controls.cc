@@ -13,6 +13,9 @@
 
 
 #include "Controls.h"
+#include "Menu.h"
+#include "Map.h"
+#include "Drawable.h"
 #include "Simulation.h"
 #include "TextInput.h"
 
@@ -113,12 +116,20 @@ bool Controls::isMouseOver(Menu& menu, Map& map) {
 			return true;
 		}
 	}
-	for (const auto& obj : map) {
-		if (obj->isMouseOver(getRelativeMousePos())) {
-			MouseOver_ = obj.get();
+	auto it = map.rbegin();
+	while (it != map.rend()) {
+		if (it->get()->isMouseOver(getRelativeMousePos())) {
+			MouseOver_ = it->get();
 			return true;
 		}
+		it++;
 	}
+	//for (const auto& obj : map) {
+	//	if (obj->isMouseOver(getRelativeMousePos())) {
+	//		MouseOver_ = obj.get();
+	//		return true;
+	//	}
+	//}
 	MouseOver_ = nullptr;
 	return false;
 }

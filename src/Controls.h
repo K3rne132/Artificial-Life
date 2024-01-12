@@ -16,10 +16,10 @@
 #include <SDL2/SDL.h>
 #include "PointBase.hpp"
 #include "Camera.h"
-#include "Map.h"
-#include "Menu.h"
-#include "Drawable.h"
 
+class Map;
+class Drawable;
+class Menu;
 class Simulation;
 
 class Controls {

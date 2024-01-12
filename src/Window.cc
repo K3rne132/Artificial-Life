@@ -13,7 +13,10 @@
 
 
 #include "Window.h"
+#include "Simulation.h"
+#include "Map.h"
 #include "Menu.h"
+#include "Camera.h"
 
 FPoint Window::getWindowSize() const {
 	return Size_;
@@ -67,8 +70,11 @@ void Window::setBorder(std::unique_ptr<Drawable>& border) {
 	Border_ = std::move(border);
 }
 
-void Window::render(Map& map, Menu& menu, Camera& camera) {
-	SDL_SetRenderDrawColor(Renderer_, 0, 0, 0, 255);
+void Window::render(Simulation& simulation) {
+	auto& map = simulation.getMap();
+	auto& menu = simulation.getMenu();
+	auto& camera = simulation.getCamera();
+	SDL_SetRenderDrawColor(Renderer_, 128, 128, 128, 255);
 	SDL_RenderClear(Renderer_);
 	SDL_RenderSetScale(Renderer_,
 		Scale_.X * camera.getZoom(),
@@ -77,6 +83,7 @@ void Window::render(Map& map, Menu& menu, Camera& camera) {
 		Border_->draw(Renderer_, !camera.getOffset());
 	for (const auto& object : map)
 		object->draw(Renderer_, !camera.getOffset());
+	simulation.highlightSelectedAnimal();
 	SDL_RenderSetScale(Renderer_, Scale_.X, Scale_.Y);
 	for (const auto& element : menu) {
 		if (!element->isHidden())

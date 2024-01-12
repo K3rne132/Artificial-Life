@@ -18,6 +18,7 @@
 #include "Settings.h"
 #include "Simulation.h"
 #include "EmptyRect.h"
+#include "Window.h"
 
 class TextInput : public Text {
 private:
@@ -51,6 +52,8 @@ public:
 		Selected_(false) {
 		if (text)
 			ModableText_ = text;
+		if (text)
+			makeText(Settings::FontMain, text, parent.getWindow());
 	}
 	~TextInput() {
 		Parent_.unselect(*this);
@@ -90,7 +93,7 @@ public:
 		return SDL_SystemCursor::SDL_SYSTEM_CURSOR_IBEAM;
 	}
 
-	virtual void click() {
+	virtual void click() override {
 		Parent_.select(*this);
 	}
 

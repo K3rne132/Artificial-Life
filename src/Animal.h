@@ -16,75 +16,49 @@
 #include <memory>
 #include <iostream>
 #include "Drawable.h"
-#include "Statistics.h"
 #include "Movement.h"
+#include "Statistics.h"
 #include "Simulation.h"
+#include "Map.h"
 
-class Map;
-
-enum class AnimalSpecies {
-	CARNIVORE,
-	HERBIVORE
-};
+class Menu;
 
 class Animal : public Drawable {
 protected:
 	Simulation&               Parent_;
 	Statistics                Statistics_;
 	std::unique_ptr<Movement> AnimalMovement_;
-
-	inline static float SizeInPixels_ = 20.f;
+	
+	inline static const float LIFE_SPAN = 10.f;
+	inline static const float SIZE_DIFF = 0.1f;
+	inline static const float SPEED_DIFF = 0.2f;
 
 public:
-	inline static float BaseSpeed_ = 100.f;
+	inline static const float SIZE = 20.f;
+	inline static const float BASE_SPEED = 10.f;
 
 	Animal(Simulation& parent) : Parent_(parent) {
-		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
+		setSize(FPoint(SIZE, SIZE) * Statistics_.Size);
 	}
 	Animal(FPoint xy, Simulation& parent) : Parent_(parent), Drawable(xy) {
-		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
+		setSize(FPoint(SIZE, SIZE) * Statistics_.Size);
 	}
 	virtual ~Animal() {
 		Parent_.unselect(*this);
 	}
-	bool shoulDie() {
-		return Statistics_.Energy < 0.01f;
-	}
-	void shiftPosition(FPoint offset) {
-		Position_ += offset;
-	}
-	virtual bool move(long long milliseconds) {
-		if (AnimalMovement_) {
-			float energy_usage = AnimalMovement_->move(
-				Parent_.getMap(), *this, milliseconds / 1000.f);
-			Statistics_.Energy -= energy_usage;
-		}
-		return true;
-	}
-	virtual void click() override {
-		Parent_.select(*this);
-	}
-	virtual void whenSelected() {
-		Parent_.bindAnimalStatistics(*this);
-		Parent_.showAnimalMenu();
-	}
-	virtual void whenUnselected() {
-		Parent_.hideAnimalMenu();
-	}
-	virtual void draw(SDL_Renderer* renderer, FPoint offset) override {
-		SDL_SetRenderDrawColor(renderer, Color_.r, Color_.g, Color_.b, Color_.a);
-		SDL_FRect rect;
-		rect.x = offset.X + Position_.X;
-		rect.y = offset.Y + Position_.Y;
-		rect.w = Size_.X * Statistics_.Size;
-		rect.h = Size_.Y * Statistics_.Size;
-		SDL_RenderFillRectF(renderer, &rect);
-	}
+
+	FPoint getRealSize();
+	bool shoulDie();
+	void shiftPosition(FPoint offset);
+	void eat(Drawable& object);
+	void reproduce();
+	virtual bool move(long long milliseconds);
+	virtual void click() override;
+	virtual void whenSelected();
+	virtual void whenUnselected();
+	virtual void draw(SDL_Renderer* renderer, FPoint offset) override;
+	virtual bool isMouseOver(FPoint mouse_pos) const;
 	virtual AnimalSpecies getSpecies() const = 0;
-	bool isMouseOver(FPoint mouse_pos) const {
-		return mouse_pos >= Position_ &&
-			mouse_pos <= Position_ + Size_ * Statistics_.Size;
-	}
 
 	friend Map;
 	friend Movement;

@@ -12,15 +12,26 @@
 
 
 
+#pragma once
 #include <random>
 
-int getRandom(int min, int max) {
+static int getRandomInt(int min, int max) {
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(min, max);
 	return dist(rng);
 }
 
-int getRandom(int max) {
-	return getRandom(0, max);
+static int getRandomInt(int max) {
+	return getRandomInt(0, max);
+}
+
+static float getRandomFloat(float min, float max) {
+	int diff = max - min;
+	int rand = getRandomInt(diff * 1000);
+	return static_cast<float>(rand) / 1000.f + min;
+}
+
+static float getRandomFloat(float max) {
+	return getRandomFloat(0, max);
 }

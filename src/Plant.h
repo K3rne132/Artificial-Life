@@ -15,31 +15,22 @@
 #pragma once
 #include <iostream>
 #include "Drawable.h"
+#include "Colors.h"
 
 class Map;
 
 class Plant : public Drawable {
 private:
-	float NutritionalValue_;
+	inline static SDL_Color Color = BLUE;
+	inline static float SizeInPixels_ = 5.f;
 
 public:
 	inline static unsigned int Count = 0;
 
-	Plant() : NutritionalValue_(0.f) { ++Count; }
-	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {
-		++Count;
-	}
-	Plant(FPoint xy) : Drawable(xy) {
-		++Count;
-	}
+	Plant() { ++Count; }
+	Plant(FPoint xy) : Drawable(xy) { ++Count; }
 	~Plant() { --Count; }
 
-	float getNutritionalValue() const {
-		return NutritionalValue_;
-	}
-	virtual void click() override { std::cout << "PLANT CLICKED!\n"; }
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
 	virtual bool isMouseOver(FPoint mouse_pos) const override { return false; }
-	
-	friend Map;
 };

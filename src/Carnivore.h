@@ -31,7 +31,8 @@ public:
 		++Count;
 	}
 	Carnivore(FPoint xy, Simulation& parent) : Animal(xy, parent) {
-		Statistics_.Speed = 4.f;
+		Statistics_.Speed = 1.f;
+		Statistics_.Size = 0.5f;
 		AnimalMovement_ = std::unique_ptr<Movement>(new MovementCarnivore());
 		setColor(Color);
 		++Count;

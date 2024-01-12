@@ -21,19 +21,31 @@ class Simulation;
 
 using DrawableVector = std::vector<std::unique_ptr<Drawable>>;
 
+enum class AnimalSpecies {
+	CARNIVORE,
+	HERBIVORE
+};
+
 class Map {
 private:
 	Point Size_;
 	DrawableVector Objects_;
 
+	bool addRandomizedAnimal(std::unique_ptr<Drawable>& animal);
+
 public:
 	Map() : Size_(0, 0) {}
 	Map(int width, int height) : Size_(width, height) {}
 
+	bool addAnimal(FPoint xy, Simulation& simulation, float energy,
+		float speed, float size, AnimalSpecies specie);
 	bool addObject(std::unique_ptr<Drawable>& map_object);
-	DrawableVector::const_iterator removeObject(Drawable& map_object);
-	inline auto begin() const { return Objects_.begin(); }
-	inline auto end() const { return Objects_.end(); }
+	bool removeObject(Drawable& map_object);
+	inline const auto begin() const { return Objects_.begin(); }
+	inline const auto rbegin() const { return Objects_.rbegin(); }
+	inline const auto end() const { return Objects_.end(); }
+	inline const auto rend() const { return Objects_.rend(); }
+	inline const size_t getObjectsCount() const { return Objects_.size(); }
 	Drawable& operator[](size_t index) const;
 	Point getMapSize() const;
 	size_t getSize() const;

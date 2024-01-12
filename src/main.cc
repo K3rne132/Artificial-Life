@@ -13,13 +13,11 @@
 
 
 #include <iostream>
-#include "Settings.h"
 #include "Simulation.h"
-#include "TextInput.h"
-#include "TextValue.h"
 #include "Carnivore.h"
 #include "Herbivore.h"
-#include <SDL_ttf.h>
+#include "Window.h"
+
 #undef main
 
 int main() {
@@ -40,9 +38,10 @@ int main() {
 		return 1;
 	}
 
-    Map map(3000, 3000);
+    Map map;
 	Menu menu;
 	Simulation simulation(window, map, menu);
+	map.generate(10, 100, 100, 1000, 1000, simulation);
 
     auto anim1 = std::unique_ptr<Drawable>(new Carnivore(FPoint(100, 200), simulation));
     map.addObject(anim1);

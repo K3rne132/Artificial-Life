@@ -12,28 +12,26 @@
 
 
 
+#include <chrono>
 #include "Simulation.h"
 #include "FilledRect.h"
 #include "Colors.h"
 #include "TextInput.h"
 #include "Animal.h"
-#include <chrono>
+#include "Window.h"
+#include "Plant.h"
+#include "Random.h"
 
 
 bool Simulation::synchronize(long long time_diff) {
 	//std::cout << time_diff << std::endl;
-	auto it = Map_.begin();
-	while (it != Map_.end()) {
-		Animal* animal = dynamic_cast<Animal*>(it->get());
+	for (size_t i = 0; i < Map_.getObjectsCount(); ++i) {
+		Animal* animal = dynamic_cast<Animal*>(&Map_[i]);
 		if (animal) {
 			animal->move(time_diff);
 			if (animal->shoulDie())
-				it = Map_.removeObject(*animal);
-			else
-				it++;
+				Map_.removeObject(*animal);
 		}
-		else
-			it++;
 	}
 	return true;
 }
@@ -82,12 +80,40 @@ void Simulation::resetCamera() {
 	Camera_.setCameraSize(Window_.getWindowSize());
 }
 
+void Simulation::updateMap() {
+	addMapBorder();
+	resetCamera();
+}
+
 void Simulation::zoomIn() {
 	Camera_.setZoom(Camera_.getZoom() * 1.15f);
 }
 
 void Simulation::zoomOut() {
 	Camera_.setZoom(Camera_.getZoom() * 0.9f);
+}
+
+void Simulation::speedUp() {
+	Speed_ += 0.5f;
+	if (Speed_ >= 10.f)
+		Speed_ = 10.f;
+}
+
+void Simulation::speedDown() {
+	Speed_ -= 0.5f;
+	if (Speed_ <= 0.f)
+		Speed_ = 0.f;
+}
+
+void Simulation::generatePlant(long long milliseconds) {
+	TimeElapsedPlant_ += milliseconds;
+	while (TimeElapsedPlant_ > PlantGeneration_) {
+		float x = getRandomFloat(Map_.getMapSize().X);
+		float y = getRandomFloat(Map_.getMapSize().Y);
+		auto plant = std::unique_ptr<Drawable>(new Plant(FPoint(x, y)));
+		Map_.addObject(plant);
+		TimeElapsedPlant_ -= PlantGeneration_;
+	}
 }
 
 void Simulation::moveCamera(float x, float y) {
@@ -107,18 +133,53 @@ void Simulation::launch() {
 	while (!Quit_) {
 		auto now = std::chrono::steady_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - begin);
-		synchronize(diff.count() * Speed_);
+		long long ms_elapsed = diff.count() * Speed_;
+		synchronize(ms_elapsed);
+		generatePlant(ms_elapsed);
 		begin = now;
 		while (SDL_PollEvent(&Event_)) {
 			dispatchEvent();
 		}
-		Window_.render(Map_, Menu_, Camera_);
+		Window_.render(*this);
+		highlightSelectedAnimal();
 		SDL_Delay(16); // 60fps
 	}
 }
 
 bool Simulation::addMapObject(std::unique_ptr<Drawable>& map_object) {
 	return Map_.addObject(std::move(map_object));
+}
+
+void Simulation::removeSelectedAnimal() {
+	if (AnimalSelected_)
+		Map_.removeObject(*AnimalSelected_);
+}
+
+void Simulation::highlightSelectedAnimal() {
+	if (AnimalSelected_) {
+		SDL_FRect rect;
+		rect.x = AnimalSelected_->getPosition().X;
+		rect.y = AnimalSelected_->getPosition().Y;
+		rect.w = AnimalSelected_->getRealSize().X;
+		rect.h = AnimalSelected_->getRealSize().Y;
+		EmptyRect highlight = EmptyRect(rect, BLACK);
+		highlight.draw(Window_, !Camera_.getOffset());
+	}
+}
+
+void Simulation::bindAnimalStatistics(Animal& animal) {
+	Menu_.bindStatistics(animal);
+}
+
+void Simulation::toggleMainMenu() {
+	if (MainMenuHidden_) {
+		showMainMenu();
+		MainMenuHidden_ = false;
+	}
+	else {
+		hideMainMenu();
+		MainMenuHidden_ = true;
+	}
 }
 
 void Simulation::hideMainMenu() {

@@ -16,8 +16,10 @@
 #include "Movement.h"
 
 class MovementHerbivore : public Movement {
+private:
+	bool goEat(Nearest& n, Animal& animal);
+	bool goRun(Nearest& n, Animal& animal);
+
 public:
-	virtual float move(Map& map, Animal& animal, float time_scale) override {
-		return 0.f;
-	}
+	virtual float move(Map& map, Animal& animal, float time_scale) override;
 };

@@ -15,11 +15,11 @@
 
 
 void Plant::draw(SDL_Renderer* renderer, FPoint offset) {
-	SDL_SetRenderDrawColor(renderer, 127, 255, 187, 255);
-	SDL_FRect rect = {};
+	SDL_SetRenderDrawColor(renderer, Color.r, Color.g, Color.b, Color.a);
+	SDL_FRect rect;
 	rect.x = offset.X + Position_.X;
 	rect.y = offset.Y + Position_.Y;
-	rect.w = 10;
-	rect.h = 10;
+	rect.w = SizeInPixels_;
+	rect.h = SizeInPixels_;
 	SDL_RenderFillRectF(renderer, &rect);
 }
