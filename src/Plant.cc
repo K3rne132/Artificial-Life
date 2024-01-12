@@ -19,7 +19,7 @@ void Plant::draw(SDL_Renderer* renderer, FPoint offset) {
 	SDL_FRect rect;
 	rect.x = offset.X + Position_.X;
 	rect.y = offset.Y + Position_.Y;
-	rect.w = SizeInPixels_;
-	rect.h = SizeInPixels_;
+	rect.w = SIZE;
+	rect.h = SIZE;
 	SDL_RenderFillRectF(renderer, &rect);
 }

@@ -22,7 +22,7 @@ class Map;
 class Plant : public Drawable {
 private:
 	inline static SDL_Color Color = BLUE;
-	inline static float SizeInPixels_ = 5.f;
+	inline static const float SIZE = 5.f;
 
 public:
 	inline static unsigned int Count = 0;

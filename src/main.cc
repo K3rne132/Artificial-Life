@@ -17,6 +17,7 @@
 #include "Carnivore.h"
 #include "Herbivore.h"
 #include "Window.h"
+#include "Random.h"
 
 #undef main
 
@@ -28,10 +29,10 @@ enum class Command {
 };
 
 void printHelp() {
-	std::cout << "Artificial Life Simulation"
+	std::cout << "Artificial Life Simulation\n"
 		"Opcje:\n"
 		"\t <> - uruchamia program z wartosciami losowymi\n"
-		"\t -t <nazwa_pliku> - wczytuje mape z pliku json\n"
+		"\t -f <nazwa_pliku> - wczytuje mape z pliku json\n"
 		"\t <miesozercy> <roslinozercy> <rosliny> <szerokosc_mapy> <wysokosc_mapy>\n"
 		"\t\t- przypisuje kolejne wartosci do generatora mapy\n";
 }
@@ -45,18 +46,23 @@ Command parseInput(int argc, char** argv) {
 		}
 	}
 	if (argc == 6) {
-		for (int i = 0; i < 6; ++i) {
+		for (int i = 1; i < 6; ++i) {
 			if (!std::atoi(argv[i])) {
 				std::cerr << "Wartosci musza byc liczba calkowita wieksza od 0\n";
 				return Command::HELP;
 			}
 		}
+		return Command::SET_PARAMS;
 	}
 	return Command::HELP;
 }
 
 int main(int argc, char** argv) {
 	Command cmd = parseInput(argc, argv);
+	if (cmd == Command::HELP) {
+		printHelp();
+		return 1;
+	}
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		return 1;
 	}
@@ -77,7 +83,34 @@ int main(int argc, char** argv) {
     Map map;
 	Menu menu;
 	Simulation simulation(window, map, menu);
-	map.generate(10, 100, 100, 1000, 1000, simulation);
+	switch (cmd) {
+	case Command::RANDOM:
+		if (!map.generate(
+			getRandomInt(10, 100),
+			getRandomInt(10, 100),
+			getRandomInt(10, 100),
+			1000, 1000, simulation))
+			return 1;
+		break;
+	case Command::SET_PARAMS:
+		if (!map.generate(
+			std::atoi(argv[1]),
+			std::atoi(argv[2]),
+			std::atoi(argv[3]),
+			std::atoi(argv[4]),
+			std::atoi(argv[5]),
+			simulation))
+			return 1;
+		break;
+	case Command::READ_FILE:
+		if (!map.readFromFile(argv[2], simulation))
+			return 1;
+		break;
+	default:
+		printHelp();
+		return 1;
+	}
+	
 	
 	menu.createMainInterface(simulation);
 	menu.createAnimalInterface(simulation);

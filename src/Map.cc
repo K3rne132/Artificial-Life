@@ -93,6 +93,11 @@ bool Map::readFromFile(const std::string& filename, Simulation& simulation) {
 
 	json jsonData = json::parse(inFile);
 
+	auto width = jsonData.at("width");
+	auto height = jsonData.at("height");
+	Size_ = Point(width, height);
+	simulation.updateMap();
+
 	auto herbi = jsonData.at("herbivores");
 	auto carni = jsonData.at("carnivores");
 	auto plant = jsonData.at("plants");
@@ -139,6 +144,9 @@ bool Map::writeToFile(const std::string& filename) {
 		{"height", Size_.X},
 		{"width", Size_.Y}
 	};
+	object_data["herbivores"] = {};
+	object_data["carnivores"] = {};
+	object_data["plants"] = {};
 	json animal_object;
 	for (const auto& obj : Objects_) {
 		obj->getPosition();
