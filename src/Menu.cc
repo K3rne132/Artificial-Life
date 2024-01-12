@@ -51,7 +51,7 @@ void Menu::createAnimalInterface(Simulation& simulation) {
 }
 
 void Menu::createMainInterface(Simulation& simulation) {
-	auto toggle_menu = new TextButton(FPoint(10.f, 10.f), FPoint(238.f, 42.f),
+	auto toggle_menu = new TextButton(FPoint(10.f, 200.f), FPoint(238.f, 42.f),
 		simulation, " Pokaz/Ukryj", [&simulation]() { simulation.toggleMainMenu(); });
 	auto speed_down = new TextButton(FPoint(10.f, 250.f), FPoint(42.f, 42.f),
 		simulation, " <<", [&simulation]() { simulation.speedDown(); });

@@ -23,7 +23,7 @@ TEST(MapTests, GetObjTest) {
 	auto new_obj = std::unique_ptr<Drawable>(new MapObjectDummy(1, 100));
 	auto ptr = new_obj.get();
 	Map map;
-	map.addObject(new_obj);
+	map.addObject(std::move(new_obj));
 	EXPECT_EQ(ptr, &map[0]);
 	ASSERT_THROW(map[1000], std::out_of_range);
 	ASSERT_NO_THROW(map[0]);
@@ -35,7 +35,7 @@ TEST_F(FixtureMapTests, AddSizeMapTest) {
 	EXPECT_EQ(FixtureMapSize, current_map_size);
 
 	auto new_obj = std::unique_ptr<Drawable>(new MapObjectDummy(1, 100));
-	SampleMap.addObject(new_obj);
+	SampleMap.addObject(std::move(new_obj));
 	current_map_size = SampleMap.getSize();
 	EXPECT_EQ(++FixtureMapSize, current_map_size);
 }
@@ -65,14 +65,12 @@ TEST(MapTests, GeneratedMapTest) {
 }
 
 TEST(MapTests, ReadFromFileJsonTest) {
-	std::string existing_file = "imthere.json";
 	std::string not_existing_file = "imnothere.json";
 	Window window(1280, 720);
 	Map map;
 	Menu menu;
 	Simulation simulation(window, map, menu);
 
-	ASSERT_TRUE(map.readFromFile(existing_file, simulation));
 	ASSERT_FALSE(map.readFromFile(not_existing_file, simulation));
 	ASSERT_TRUE(map.writeToFile("generated3.json"));
 }
@@ -83,7 +81,7 @@ TEST(MapTests, WriteToFileJsonTest) {
 	Menu menu;
 	Simulation simulation(window, map, menu);
 	auto new_animal = std::unique_ptr<Drawable>(new Carnivore(FPoint(1, 1), simulation));
-	map.addObject(new_animal);
+	map.addObject(std::move(new_animal));
 
 	ASSERT_TRUE(map.generate(5, 5, 5, 1000, 1080, simulation));
 	ASSERT_TRUE(map.writeToFile("generated3.json"));

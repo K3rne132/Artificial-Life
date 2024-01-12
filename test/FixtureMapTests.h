@@ -24,7 +24,7 @@ protected:
 	void SetUp() override {
 		for (int i = 0; i < FixtureMapSize; i++) {
 			auto obj = std::unique_ptr<Drawable>(new MapObjectDummy(i, i));
-			SampleMap.addObject(obj);
+			SampleMap.addObject(std::move(obj));
 		}
 	}
 
