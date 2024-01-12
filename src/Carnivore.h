@@ -19,10 +19,10 @@
 
 class Carnivore : public Animal {
 private:
-	static SDL_Color Color;
+	inline static SDL_Color Color = RED;
 
 public:
-	static unsigned int Count;
+	inline static unsigned int Count = 0;
 
 	Carnivore() {
 		setColor(Color);
@@ -34,7 +34,5 @@ public:
 	~Carnivore() {
 		--Count;
 	}
+	virtual AnimalSpecies getSpecies() const override { return AnimalSpecies::CARNIVORE; }
 };
-
-SDL_Color Carnivore::Color = RED;
-unsigned int Carnivore::Count = 0;

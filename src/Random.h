@@ -11,15 +11,16 @@
 // GNU General Public License for more details.
 
 
-#include "Plant.h"
 
+#include <random>
 
-void Plant::draw(SDL_Renderer* renderer, FPoint offset) {
-	SDL_SetRenderDrawColor(renderer, 127, 255, 187, 255);
-	SDL_FRect rect = {};
-	rect.x = offset.X + Position_.X;
-	rect.y = offset.Y + Position_.Y;
-	rect.w = 10;
-	rect.h = 10;
-	SDL_RenderFillRectF(renderer, &rect);
+int getRandom(int min, int max) {
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> dist(min, max);
+	return dist(rng);
+}
+
+int getRandom(int max) {
+	return getRandom(0, max);
 }

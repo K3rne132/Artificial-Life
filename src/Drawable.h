@@ -34,6 +34,15 @@ public:
 	void setPosition(FPoint position) {
 		Position_ = position;
 	}
+	SDL_Color getColor() const {
+		return Color_;
+	}
+	FPoint getSize() const {
+		return Size_;
+	}
+	FPoint getPosition() const {
+		return Position_;
+	}
 	bool isMouseOver(FPoint mouse_pos) const;
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint());
 

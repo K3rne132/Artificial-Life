@@ -13,10 +13,11 @@
 
 
 #pragma once
-#include <MapObject.h>
+#include <Drawable.h>
 
-class MapObjectDummy : public MapObject {
+class MapObjectDummy : public Drawable {
 public:
-	MapObjectDummy(int x, int y) : MapObject(x, y) {}
+	MapObjectDummy(int x, int y) : Drawable(FPoint(x, y)) {}
 	void draw(SDL_Renderer* renderer, FPoint offset) override  {}
+	void click() override {}
 };

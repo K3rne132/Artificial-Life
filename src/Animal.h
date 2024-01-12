@@ -19,6 +19,13 @@
 #include "Statistics.h"
 #include "Movement.h"
 
+class Map;
+
+enum class AnimalSpecies {
+	CARNIVORE,
+	HERBIVORE
+};
+
 class Animal : public Drawable {
 private:
 	Statistics                Statistics_;
@@ -33,6 +40,19 @@ public:
 	Animal(FPoint xy) : Drawable(xy) {
 		setSize(FPoint(SizeInPixels_, SizeInPixels_) * Statistics_.Size);
 	}
+	Trait getEnergy() const {
+		return Statistics_.Energy;
+	}
 
+	Trait getSize() const {
+		return Statistics_.Size;
+	}
+
+	Trait getSpeed() const {
+		return Statistics_.Speed;
+	}
 	virtual void click() override { std::cout << "ANIMAL CLICKED!\n"; }
+	virtual AnimalSpecies getSpecies() const = 0;
+
+	friend Map;
 };

@@ -33,4 +33,7 @@ public:
 	Drawable& operator[](size_t index) const;
 	Point getMapSize() const;
 	size_t getSize() const;
+	bool readFromFile(const std::string& filename);
+	bool writeToFile(const std::string& filename);
+	bool generate(int carnivores, int herbivores, int food, int height, int width);
 };

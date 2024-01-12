@@ -19,10 +19,10 @@
 
 class Herbivore : public Animal {
 private:
-	static SDL_Color Color;
+	inline static SDL_Color Color = GREEN;
 
 public:
-	static unsigned int Count;
+	inline static unsigned int Count = 0;
 
 	Herbivore() {
 		setColor(Color);
@@ -34,7 +34,6 @@ public:
 	~Herbivore() {
 		--Count;
 	}
-};
 
-SDL_Color Herbivore::Color = GREEN;
-unsigned int Herbivore::Count = 0;
+	virtual AnimalSpecies getSpecies() const override { return AnimalSpecies::HERBIVORE; }
+};

@@ -14,14 +14,24 @@
 
 #pragma once
 #include "Drawable.h"
+#include <iostream>
 
-class Plant : Drawable {
+class Map;
+
+class Plant : public Drawable {
 private:
 	float NutritionalValue_;
 
 public:
 	Plant() : NutritionalValue_(0.f) {}
 	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {}
+	Plant(FPoint xy) : Drawable(xy) {}
 
+	float getNutritionalValue() const {
+		return NutritionalValue_;
+	}
+	virtual void click() override { std::cout << "PLANT CLICKED!\n"; }
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
+
+	friend Map;
 };
