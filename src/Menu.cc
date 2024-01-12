@@ -51,7 +51,13 @@ void Menu::createAnimalInterface(Simulation& simulation) {
 }
 
 void Menu::createMainInterface(Simulation& simulation) {
-	auto toggle_menu = new TextButton(FPoint(10.f, 10.f), FPoint(238.f, 42.f),
+	FilePath_ = new TextInput(FPoint(10.f, 500.f), simulation, "mapa.json");
+	auto write_file = new TextButton(FPoint(10.f, 540.f), FPoint(150.f, 42.f),
+		simulation, " Zapisz", [&]() {
+			if (simulation.getMap().writeToFile("data/maps/" + FilePath_->getInput()))
+				std::cout << "Zapisano w: data/maps/" + FilePath_->getInput() + "\n";
+		});
+	auto toggle_menu = new TextButton(FPoint(10.f, 110.f), FPoint(238.f, 42.f),
 		simulation, " Pokaz/Ukryj", [&simulation]() { simulation.toggleMainMenu(); });
 	auto speed_down = new TextButton(FPoint(10.f, 250.f), FPoint(42.f, 42.f),
 		simulation, " <<", [&simulation]() { simulation.speedDown(); });
@@ -69,6 +75,8 @@ void Menu::createMainInterface(Simulation& simulation) {
 	auto plant_count = new UITextValue(
 		FPoint(10.f, 430.f), simulation, "Roslin: ");
 	plant_count->bindValue(&Plant::Count);
+	addMainMenuElement(std::unique_ptr<Button>(FilePath_));
+	addMainMenuElement(std::unique_ptr<Button>(write_file));
 	addIndependentMenuElement(std::unique_ptr<Button>(toggle_menu));
 	addMainMenuElement(std::unique_ptr<Button>(speed_down));
 	addMainMenuElement(std::unique_ptr<Button>(speed_up));

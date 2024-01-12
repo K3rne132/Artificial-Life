@@ -63,13 +63,18 @@ float MovementHerbivore::move(Map& map, Animal& animal, float time_scale) {
 	}
 	else if (goRun(nearest, animal)) {
 		Direction_ = NONE;
+		if (nearest.Plant_) {
+			FPoint diff = nearest.Plant_->getPosition() - animal.getPosition();
+			if (diff.norm() < Animal::SIZE) {
+				animal.eat(*nearest.Plant_);
+				return 0.f;
+			}
+		}
 		FPoint diff = nearest.Carnivore_->getPosition() - animal.getPosition();
 		float distance = Animal::BASE_SPEED * stats.Speed / stats.Size * time_scale;
 		float scale = distance / nearest.CDistance_;
 		animal.shiftPosition(!diff * scale);
 		return diff.norm() * scale * stats.Speed;
-		//animal.shiftPosition(!diff);
-		//return diff.norm() * stats.Speed / 10.f;
 	}
 	else { // if no edible animals randomize path
 		float distance = Animal::BASE_SPEED * stats.Speed / stats.Size * time_scale;

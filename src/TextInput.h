@@ -19,6 +19,7 @@
 #include "Simulation.h"
 #include "EmptyRect.h"
 #include "Window.h"
+#include "FilledRect.h"
 
 class TextInput : public Text {
 private:
@@ -74,15 +75,17 @@ public:
 	std::string getInput() { return ModableText_; }
 
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override {
-		Text::draw(renderer, offset);
-		SDL_FRect rect;
+		SDL_FRect rect = {};
 		rect.x = Position_.X;
 		rect.y = Position_.Y;
 		FPoint min = getMinSize();
 		rect.w = min.X;
 		rect.h = min.Y;
+		FilledRect background(rect, WHITE);
+		background.draw(renderer, offset);
 		EmptyRect border(rect, BLACK);
 		border.draw(renderer, offset);
+		Text::draw(renderer, offset);
 	}
 
 	virtual bool isMouseOver(FPoint mouse_pos) const override {

@@ -29,6 +29,7 @@ Ponadto, do projektu dodano skrypty upraszczające proces budowania i uruchamian
 - **runtests.sh** (uruchamia testy jednostkowe)
 - **apt-install/gtest-install.sh** (instaluje gtest z repozytorium)
 - **apt-install/sdl2-install.sh** (instaluje SDL2 z repozytorium)
+- **apt-install/sdl2-ttf-install.sh** (instaluje SDL2 ttf z repozytorium)
 
 ### Windows
 W przypadku systemów Windows zalecane jest wykorzystanie zawartych w katalogu **third party** źródeł, a następnie dołączeniu ich do projektu. W tym celu należy uruchomić następujące polecenia:

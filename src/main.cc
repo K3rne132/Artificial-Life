@@ -20,7 +20,43 @@
 
 #undef main
 
-int main() {
+enum class Command {
+	HELP,
+	RANDOM,
+	READ_FILE,
+	SET_PARAMS
+};
+
+void printHelp() {
+	std::cout << "Artificial Life Simulation"
+		"Opcje:\n"
+		"\t <> - uruchamia program z wartosciami losowymi\n"
+		"\t -t <nazwa_pliku> - wczytuje mape z pliku json\n"
+		"\t <miesozercy> <roslinozercy> <rosliny> <szerokosc_mapy> <wysokosc_mapy>\n"
+		"\t\t- przypisuje kolejne wartosci do generatora mapy\n";
+}
+
+Command parseInput(int argc, char** argv) {
+	if (argc == 1)
+		return Command::RANDOM;
+	if (argc == 3) {
+		if (!std::strcmp(argv[1], "-f")) {
+			return Command::READ_FILE;
+		}
+	}
+	if (argc == 6) {
+		for (int i = 0; i < 6; ++i) {
+			if (!std::atoi(argv[i])) {
+				std::cerr << "Wartosci musza byc liczba calkowita wieksza od 0\n";
+				return Command::HELP;
+			}
+		}
+	}
+	return Command::HELP;
+}
+
+int main(int argc, char** argv) {
+	Command cmd = parseInput(argc, argv);
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		return 1;
 	}
@@ -42,11 +78,6 @@ int main() {
 	Menu menu;
 	Simulation simulation(window, map, menu);
 	map.generate(10, 100, 100, 1000, 1000, simulation);
-
-    auto anim1 = std::unique_ptr<Drawable>(new Carnivore(FPoint(100, 200), simulation));
-    map.addObject(std::move(anim1));
-    auto anim2 = std::unique_ptr<Drawable>(new Herbivore(FPoint(400, 600), simulation));
-    map.addObject(std::move(anim2));
 	
 	menu.createMainInterface(simulation);
 	menu.createAnimalInterface(simulation);

@@ -19,6 +19,7 @@
 
 template <typename T>
 class TextValue;
+class TextInput;
 class Animal;
 class Simulation;
 
@@ -27,6 +28,9 @@ using ButtonVector = std::vector<std::unique_ptr<Button>>;
 class Menu {
 private:
 	ButtonVector MenuElements_;
+
+	// Main interface elements
+	TextInput* FilePath_;
 
 	// Animal interface elements
 	TextValue<float>* Energy_;
