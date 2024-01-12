@@ -111,7 +111,7 @@ void Simulation::generatePlant(long long milliseconds) {
 		float x = getRandomFloat(Map_.getMapSize().X);
 		float y = getRandomFloat(Map_.getMapSize().Y);
 		auto plant = std::unique_ptr<Drawable>(new Plant(FPoint(x, y)));
-		Map_.addObject(plant);
+		Map_.addObject(std::move(plant));
 		TimeElapsedPlant_ -= PlantGeneration_;
 	}
 }

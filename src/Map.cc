@@ -27,11 +27,11 @@
 
 using json = nlohmann::json;
 
-bool Map::addRandomizedAnimal(std::unique_ptr<Drawable>& animal) {
+bool Map::addRandomizedAnimal(std::unique_ptr<Drawable> animal) {
 	Animal* anim = dynamic_cast<Animal*>(animal.get());
 	if (!anim)
 		return false;
-	addObject(animal);
+	addObject(std::move(animal));
 	anim->Statistics_.Energy = 100.f;
 	anim->Statistics_.Size = getRandomFloat(0.5f, 2.f);
 	anim->Statistics_.Speed = getRandomFloat(0.25f, 4.f);
@@ -49,10 +49,10 @@ bool Map::addAnimal(FPoint xy, Simulation& simulation, float energy,
 	anim->Statistics_.Energy = energy;
 	anim->Statistics_.Size = size;
 	anim->Statistics_.Speed = speed;
-	return addObject(animal);
+	return addObject(std::move(animal));
 }
 
-bool Map::addObject(std::unique_ptr<Drawable>& map_object) {
+bool Map::addObject(std::unique_ptr<Drawable> map_object) {
 	Objects_.push_back(std::move(map_object));
 	return true;
 }
@@ -118,7 +118,7 @@ bool Map::readFromFile(const std::string& filename, Simulation& simulation) {
 		int pointY = plant[i].at("position").at("Y");
 		FPoint point(pointX, pointY);
 		auto plant1 = std::unique_ptr<Drawable>(new Plant(point));
-		addObject(plant1);
+		addObject(std::move(plant1));
 	}
 
 	inFile.close();
@@ -187,19 +187,19 @@ bool Map::generate(int carnivores, int herbivores, int plants, int height, int w
 	for (int i = 0; i < carnivores; i++) {
 		FPoint point(getRandomInt(width), getRandomInt(height));
 		auto carnivore = std::unique_ptr<Drawable>(new Carnivore(point, simulation));
-		addRandomizedAnimal(carnivore);
+		addRandomizedAnimal(std::move(carnivore));
 	}
 
 	for (int i = 0; i < herbivores; i++) {
 		FPoint point(getRandomInt(width), getRandomInt(height));
 		auto herbivore = std::unique_ptr<Drawable>(new Herbivore(point, simulation));
-		addRandomizedAnimal(herbivore);
+		addRandomizedAnimal(std::move(herbivore));
 	}
 
 	for (int i = 0; i < plants; i++) {
 		FPoint point(getRandomInt(width), getRandomInt(height));
 		auto plant = std::unique_ptr<Drawable>(new Plant(point));
-		addObject(plant);
+		addObject(std::move(plant));
 	}
 	return true;
 }

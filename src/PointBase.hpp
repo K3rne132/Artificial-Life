@@ -120,7 +120,7 @@ public:
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const PointBase<T>& o) {
-		os << "(" << std::to_string(o.X) << "," << std::to_string(o.Y) << ")";
+		//os << "(" << std::to_string(o.X) << "," << std::to_string(o.Y) << ")";
 		return os;
 	}
 };

@@ -13,7 +13,7 @@
 
 
 #pragma once
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "Button.h"
 #include "Settings.h"
 #include "Simulation.h"

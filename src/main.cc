@@ -44,9 +44,9 @@ int main() {
 	map.generate(10, 100, 100, 1000, 1000, simulation);
 
     auto anim1 = std::unique_ptr<Drawable>(new Carnivore(FPoint(100, 200), simulation));
-    map.addObject(anim1);
+    map.addObject(std::move(anim1));
     auto anim2 = std::unique_ptr<Drawable>(new Herbivore(FPoint(400, 600), simulation));
-    map.addObject(anim2);
+    map.addObject(std::move(anim2));
 	
 	menu.createMainInterface(simulation);
 	menu.createAnimalInterface(simulation);

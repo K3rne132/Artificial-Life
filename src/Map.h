@@ -31,7 +31,7 @@ private:
 	Point Size_;
 	DrawableVector Objects_;
 
-	bool addRandomizedAnimal(std::unique_ptr<Drawable>& animal);
+	bool addRandomizedAnimal(std::unique_ptr<Drawable> animal);
 
 public:
 	Map() : Size_(0, 0) {}
@@ -39,7 +39,7 @@ public:
 
 	bool addAnimal(FPoint xy, Simulation& simulation, float energy,
 		float speed, float size, AnimalSpecies specie);
-	bool addObject(std::unique_ptr<Drawable>& map_object);
+	bool addObject(std::unique_ptr<Drawable> map_object);
 	bool removeObject(Drawable& map_object);
 	inline const auto begin() const { return Objects_.begin(); }
 	inline const auto rbegin() const { return Objects_.rbegin(); }
