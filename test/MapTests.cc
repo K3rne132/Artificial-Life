@@ -17,6 +17,7 @@
 #include "Carnivore.h"
 #include "pch.h"
 #include "FixtureMapTests.h"
+#include "Window.h"
 
 TEST(MapTests, GetObjTest) {
 	auto new_obj = std::unique_ptr<Drawable>(new MapObjectDummy(1, 100));
@@ -53,33 +54,37 @@ TEST_F(FixtureMapTests, RemoveObjTest) {
 	EXPECT_EQ(expected_map_size, current_map_size);
 }
 
-TEST(MapTests, ReadFromFileJsonTest) {
-	std::string existing_file = "testowy.json";
-	std::string not_existing_file = "imnothere.json";
+TEST(MapTests, GeneratedMapTest) {
+	std::string filename = "generated3.json";
+	Window window(1280, 720);
 	Map map;
-	ASSERT_TRUE(map.readFromFile(existing_file));
-	ASSERT_FALSE(map.readFromFile(not_existing_file));
+	Menu menu;
+	Simulation simulation(window, map, menu);
+
+	ASSERT_TRUE(map.generate(20, 20, 20, 1000, 1000, simulation));
+}
+
+TEST(MapTests, ReadFromFileJsonTest) {
+	std::string existing_file = "imthere.json";
+	std::string not_existing_file = "imnothere.json";
+	Window window(1280, 720);
+	Map map;
+	Menu menu;
+	Simulation simulation(window, map, menu);
+
+	ASSERT_TRUE(map.readFromFile(existing_file, simulation));
+	ASSERT_FALSE(map.readFromFile(not_existing_file, simulation));
 	ASSERT_TRUE(map.writeToFile("generated3.json"));
 }
 
 TEST(MapTests, WriteToFileJsonTest) {
-	std::string output_file = "json_output.json";
-	auto new_animal = std::unique_ptr<Drawable>(new Carnivore(FPoint(1, 1)));
-	auto new_animal2 = std::unique_ptr<Drawable>(new Herbivore(FPoint(3 ,200)));
-	auto new_animal3 = std::unique_ptr<Drawable>(new Herbivore(FPoint(3, 200)));
-	auto new_plant = std::unique_ptr<Drawable>(new Plant());
+	Window window(1280, 720);
 	Map map;
+	Menu menu;
+	Simulation simulation(window, map, menu);
+	auto new_animal = std::unique_ptr<Drawable>(new Carnivore(FPoint(1, 1), simulation));
 	map.addObject(new_animal);
-	map.addObject(new_animal2);
-	map.addObject(new_animal3);
-	map.addObject(new_plant);
-	ASSERT_TRUE(map.writeToFile(output_file));
-}
 
-TEST(MapTests, GeneratedMapTest) {
-	std::string filename = "generated2.json";
-	Map map;
-	map.generate(20, 20, 20, 1920, 1080);
-	map.writeToFile(filename);
-	ASSERT_TRUE(map.generate(20, 20, 20, 1920, 1080));
+	ASSERT_TRUE(map.generate(5, 5, 5, 1000, 1080, simulation));
+	ASSERT_TRUE(map.writeToFile("generated3.json"));
 }
