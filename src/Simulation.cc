@@ -17,6 +17,26 @@
 #include "Colors.h"
 #include "TextInput.h"
 #include "Animal.h"
+#include <chrono>
+
+
+bool Simulation::synchronize(long long time_diff) {
+	//std::cout << time_diff << std::endl;
+	auto it = Map_.begin();
+	while (it != Map_.end()) {
+		Animal* animal = dynamic_cast<Animal*>(it->get());
+		if (animal) {
+			animal->move(time_diff);
+			if (animal->shoulDie())
+				it = Map_.removeObject(*animal);
+			else
+				it++;
+		}
+		else
+			it++;
+	}
+	return true;
+}
 
 void Simulation::dispatchEvent() {
 	switch (Event_.type) {
@@ -83,11 +103,16 @@ void Simulation::stopMoveCamera() {
 }
 
 void Simulation::launch() {
+	auto begin = std::chrono::steady_clock::now();
 	while (!Quit_) {
+		auto now = std::chrono::steady_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - begin);
+		synchronize(diff.count() * Speed_);
+		begin = now;
 		while (SDL_PollEvent(&Event_)) {
 			dispatchEvent();
-			Window_.render(Map_, Menu_, Camera_);
 		}
+		Window_.render(Map_, Menu_, Camera_);
 		SDL_Delay(16); // 60fps
 	}
 }
@@ -109,51 +134,54 @@ void Simulation::showMainMenu() {
 			elem->show();
 	}
 }
-void Simulation::hideContextMenu() {
+void Simulation::hideAnimalMenu() {
 	for (auto& elem : Menu_) {
-		if (elem->getGroup() == ButtonGroup::CONTEXTMENU)
+		if (elem->getGroup() == ButtonGroup::ANIMALMENU)
 			elem->hide();
 	}
 }
 
-void Simulation::showContextMenu() {
+void Simulation::showAnimalMenu() {
 	for (auto& elem : Menu_) {
-		if (elem->getGroup() == ButtonGroup::CONTEXTMENU)
+		if (elem->getGroup() == ButtonGroup::ANIMALMENU)
 			elem->show();
 	}
 }
 
 void Simulation::select(Button& button) {
+	unselectAll();
 	button.whenSelected();
 	ButtonSelected_ = &button;
 }
 
 void Simulation::select(TextInput& input) {
+	unselectAll();
 	input.whenSelected();
 	TextInputSelected_ = &input;
 }
 
 void Simulation::select(Animal& animal) {
+	unselectAll();
 	animal.whenSelected();
 	AnimalSelected_ = &animal;
 }
 
 void Simulation::unselect(Button& button) {
 	if (ButtonSelected_ == &button) {
-		ButtonSelected_ = nullptr;
 		ButtonSelected_->whenUnselected();
+		ButtonSelected_ = nullptr;
 	}
 }
 void Simulation::unselect(TextInput& input) {
 	if (TextInputSelected_ == &input) {
-		TextInputSelected_ = nullptr;
 		TextInputSelected_->whenUnselected();
+		TextInputSelected_ = nullptr;
 	}
 }
 void Simulation::unselect(Animal& animal) {
 	if (AnimalSelected_ == &animal) {
-		AnimalSelected_ = nullptr;
 		AnimalSelected_->whenUnselected();
+		AnimalSelected_ = nullptr;
 	}
 }
 

@@ -16,25 +16,24 @@
 #include <memory>
 #include "Animal.h"
 #include "Colors.h"
+#include "MovementHerbivore.h"
 
 class Herbivore : public Animal {
 private:
-	static SDL_Color Color;
+	inline static SDL_Color Color = GREEN;
 
 public:
-	static unsigned int Count;
+	inline static unsigned int Count = 0;
 
 	Herbivore(Simulation& parent) : Animal(parent) {
+		AnimalMovement_ = std::unique_ptr<Movement>(new MovementHerbivore());
 		setColor(Color);
 		++Count;
 	}
 	Herbivore(FPoint xy, Simulation& parent) : Animal(xy, parent) {
+		AnimalMovement_ = std::unique_ptr<Movement>(new MovementHerbivore());
 		setColor(Color);
+		++Count;
 	}
-	~Herbivore() {
-		--Count;
-	}
+	~Herbivore() { --Count; }
 };
-
-SDL_Color Herbivore::Color = GREEN;
-unsigned int Herbivore::Count = 0;

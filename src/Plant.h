@@ -15,13 +15,18 @@
 #pragma once
 #include "Drawable.h"
 
-class Plant : Drawable {
+class Plant : public Drawable {
 private:
 	float NutritionalValue_;
 
 public:
-	Plant() : NutritionalValue_(0.f) {}
-	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {}
+	inline static unsigned int Count = 0;
+
+	Plant() : NutritionalValue_(0.f) { ++Count; }
+	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {
+		++Count;
+	}
+	~Plant() { --Count; }
 
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
 	virtual bool isMouseOver(FPoint mouse_pos) const override { return false; }

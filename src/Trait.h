@@ -25,6 +25,10 @@ public:
     Trait(float min, float max, float current) : Min_(min), Max_(max), Current_(current) {}
     Trait(float min, float max) : Min_(min), Max_(max), Current_(min) {}
 
+    float* getCurrent() {
+        return &Current_;
+    }
+
     inline operator float() const {
         return Current_;
     }

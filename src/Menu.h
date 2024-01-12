@@ -17,19 +17,30 @@
 #include <memory>
 #include "Button.h"
 
+template<typename T>
+class TextValue;
+class Animal;
+class Simulation;
+
+using ButtonVector = std::vector<std::unique_ptr<Button>>;
+
 class Menu {
 private:
-	std::vector<std::unique_ptr<Button>> MenuElements_;
+	ButtonVector MenuElements_;
+
+	// Animal interface elements
+	TextValue<float>* Energy_;
+	TextValue<float>* Speed_;
+	TextValue<float>* Size_;
 
 public:
-	void addMainMenuElement(std::unique_ptr<Button>& menu_obj) {
-		menu_obj->setGroup(ButtonGroup::MAINMENU);
-		MenuElements_.push_back(std::move(menu_obj));
-	}
-	void addContextMenuElement(std::unique_ptr<Button>& menu_obj) {
-		menu_obj->setGroup(ButtonGroup::CONTEXTMENU);
-		MenuElements_.push_back(std::move(menu_obj));
-	}
+	Menu() : Energy_(nullptr), Speed_(nullptr), Size_(nullptr) {}
+
 	inline auto begin() const { return MenuElements_.begin(); }
 	inline auto end() const { return MenuElements_.end(); }
+	void addMainMenuElement(std::unique_ptr<Button>& menu_obj);
+	void addAnimalMenuElement(std::unique_ptr<Button>& menu_obj);
+	void createAnimalInterface(Simulation& simulation);
+	void createMainInterface(Simulation& simulation);
+	void bindStatistics(Animal& animal);
 };

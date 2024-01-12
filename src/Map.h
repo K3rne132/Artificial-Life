@@ -17,17 +17,19 @@
 #include <memory>
 #include "Drawable.h"
 
+using DrawableVector = std::vector<std::unique_ptr<Drawable>>;
+
 class Map {
 private:
 	Point Size_;
-	std::vector<std::unique_ptr<Drawable>> Objects_;
+	DrawableVector Objects_;
 
 public:
 	Map() : Size_(0, 0) {}
 	Map(int width, int height) : Size_(width, height) {}
 
 	bool addObject(std::unique_ptr<Drawable>& map_object);
-	bool removeObject(Drawable& map_object);
+	DrawableVector::const_iterator removeObject(Drawable& map_object);
 	inline auto begin() const { return Objects_.begin(); }
 	inline auto end() const { return Objects_.end(); }
 	Drawable& operator[](size_t index) const;

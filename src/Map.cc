@@ -21,16 +21,15 @@ bool Map::addObject(std::unique_ptr<Drawable>& map_object) {
 	return true;
 }
 
-bool Map::removeObject(Drawable& map_object) {
+DrawableVector::const_iterator Map::removeObject(Drawable& map_object) {
 	auto it = std::find_if(Objects_.begin(), Objects_.end(),
 		[&map_object](const std::unique_ptr<Drawable>& ptr) {
 			return ptr.get() == &map_object;
 		});
 	if (it != Objects_.end()) {
-		Objects_.erase(it);
-		return true;
+		return Objects_.erase(it);
 	}
-	return false;
+	return Objects_.end();
 }
 
 Drawable& Map::operator[](size_t index) const {

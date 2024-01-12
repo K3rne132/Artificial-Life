@@ -17,12 +17,17 @@
 #include "Text.h"
 #include "Settings.h"
 #include "Simulation.h"
+#include "EmptyRect.h"
 
 class TextInput : public Text {
 private:
 	static const char PROMPT = '_';
+	static const int MIN_WIDTH = 300.f;
+	static const int MIN_HEIGHT = 30.f;
+
 	bool Selected_;
 	std::string ModableText_;
+
 	void updateText() {
 		std::string printed;
 		if (Selected_)
@@ -30,6 +35,14 @@ private:
 		else
 			printed = ModableText_;
 		makeText(Settings::FontMain, printed, Parent_.getWindow());
+	}
+	FPoint getMinSize() const {
+		FPoint min = FPoint(MIN_WIDTH, MIN_HEIGHT);
+		if (Size_.X > min.X)
+			min.X = Size_.X;
+		if (Size_.Y > min.Y)
+			min.Y = Size_.Y;
+		return min;
 	}
 
 public:
@@ -59,11 +72,18 @@ public:
 
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override {
 		Text::draw(renderer, offset);
-		//
+		SDL_FRect rect;
+		rect.x = Position_.X;
+		rect.y = Position_.Y;
+		FPoint min = getMinSize();
+		rect.w = min.X;
+		rect.h = min.Y;
+		EmptyRect border(rect, BLACK);
+		border.draw(renderer, offset);
 	}
 
 	virtual bool isMouseOver(FPoint mouse_pos) const override {
-		return Drawable::isMouseOver(mouse_pos);
+		return mouse_pos >= Position_ && mouse_pos <= Position_ + getMinSize();
 	}
 
 	virtual SDL_SystemCursor getCursorMouseOver() override {

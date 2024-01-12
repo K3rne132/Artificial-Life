@@ -14,10 +14,11 @@
 
 #pragma once
 #include <SDL.h>
-#include "Font.h"
+#include "Settings.h"
 #include "Window.h"
 #include "Button.h"
 #include "Colors.h"
+#include "Simulation.h"
 
 class Text : public Button {
 protected:

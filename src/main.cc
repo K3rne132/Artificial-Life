@@ -16,6 +16,7 @@
 #include "Settings.h"
 #include "Simulation.h"
 #include "TextInput.h"
+#include "TextValue.h"
 #include "Carnivore.h"
 #include "Herbivore.h"
 #include <SDL_ttf.h>
@@ -47,14 +48,10 @@ int main() {
     map.addObject(anim1);
     auto anim2 = std::unique_ptr<Drawable>(new Herbivore(FPoint(400, 600), simulation));
     map.addObject(anim2);
-
-    auto elem1 = std::unique_ptr<Button>(
-		new Button(FPoint(100.f, 100.f), FPoint(100.f, 100.f), BLUE, simulation));
-	auto elem2 = std::unique_ptr<Button>(
-		new TextInput(FPoint(100.f, 200.f), simulation, "random text input"));
-    menu.addMainMenuElement(elem1);
-    menu.addMainMenuElement(elem2);
 	
+	menu.createMainInterface(simulation);
+	menu.createAnimalInterface(simulation);
+
 	simulation.launch();
 
 	SDL_Quit();

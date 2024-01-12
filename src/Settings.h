@@ -20,7 +20,7 @@ public:
 	static Font FontMain;
 
 	static bool loadFonts() {
-		FontMain.load("data/fonts/PixCon.ttf", 24);
+		FontMain.load("data/fonts/PixCon.ttf", 20);
 		if (!FontMain)
 			return false;
 		return true;

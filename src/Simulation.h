@@ -13,6 +13,7 @@
 
 
 #pragma once
+#include <chrono>
 #include "Window.h"
 #include "Map.h"
 #include "Settings.h"
@@ -24,31 +25,36 @@ class Animal;
 
 class Simulation {
 private:
-	Window& Window_;
-	Map& Map_;
-	SDL_Event Event_;
-	Camera Camera_;
-	Controls Controls_;
-	Menu& Menu_;
-	bool Quit_;
-	Button* ButtonSelected_;
+	Window&    Window_;
+	Map&       Map_;
+	SDL_Event  Event_;
+	Camera     Camera_;
+	Controls   Controls_;
+	Menu&      Menu_;
+	bool       Quit_;
+	Button*    ButtonSelected_;
 	TextInput* TextInputSelected_;
-	Animal* AnimalSelected_;
+	Animal*    AnimalSelected_;
+	float      Speed_;
 
+	bool synchronize(long long time_diff);
 	void dispatchEvent();
 	void addMapBorder();
 	void resetCamera();
 
 public:
-	Simulation(Window& window, Map& map, Menu& menu) : Window_(window), Map_(map),
-		Menu_(menu), Event_(), Controls_(Camera_, *this), ButtonSelected_(nullptr),
-		Quit_(false), TextInputSelected_(nullptr), AnimalSelected_(nullptr) {
+	Simulation(Window& window, Map& map, Menu& menu) : Window_(window),
+		Map_(map), Menu_(menu), Event_(), Controls_(Camera_, *this),
+		ButtonSelected_(nullptr), Quit_(false), TextInputSelected_(nullptr),
+		AnimalSelected_(nullptr), Speed_(1.f) {
 		Settings::loadFonts();
 		addMapBorder();
 		resetCamera();
 	}
 
 	inline Window& getWindow() { return Window_; }
+	inline Map& getMap() { return Map_; }
+	float getSpeed() { return Speed_; }
 	void zoomIn();
 	void zoomOut();
 	void moveCamera(float x, float y);
@@ -56,10 +62,11 @@ public:
 	void stopMoveCamera();
 	void launch();
 	bool addMapObject(std::unique_ptr<Drawable>& map_object);
+	void bindAnimalStatistics(Animal& animal) { Menu_.bindStatistics(animal); }
 	void hideMainMenu();
 	void showMainMenu();
-	void hideContextMenu();
-	void showContextMenu();
+	void hideAnimalMenu();
+	void showAnimalMenu();
 	void select(Button& button);
 	void select(TextInput& input);
 	void select(Animal& animal);

@@ -25,14 +25,21 @@ protected:
 public:
 	Drawable() : Color_(SDL_Color()) {}
 	Drawable(FPoint xy) : Position_(xy), Color_(SDL_Color()) {}
+	virtual ~Drawable() {}
 	void setColor(SDL_Color color) {
 		Color_ = color;
 	}
 	void setSize(FPoint size) {
 		Size_ = size;
 	}
+	FPoint  getSize() const {
+		return Size_;
+	}
 	void setPosition(FPoint position) {
 		Position_ = position;
+	}
+	FPoint getPosition() const {
+		return Position_;
 	}
 	virtual bool isMouseOver(FPoint mouse_pos) const;
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint());

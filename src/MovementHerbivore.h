@@ -12,6 +12,12 @@
 
 
 
-#include "Animal.h"
+#pragma once
+#include "Movement.h"
 
-float Animal::SizeInPixels_ = 20.f;
+class MovementHerbivore : public Movement {
+public:
+	virtual float move(Map& map, Animal& animal, float time_scale) override {
+		return 0.f;
+	}
+};

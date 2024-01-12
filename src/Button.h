@@ -22,7 +22,7 @@ class Simulation;
 enum class ButtonGroup {
 	NONE,
 	MAINMENU,
-	CONTEXTMENU
+	ANIMALMENU
 };
 
 class Button : public Drawable {
@@ -43,5 +43,4 @@ public:
 	bool isHidden() const { return Hidden_; }
 	void hide() { Hidden_ = true; }
 	void show() { Hidden_ = false; }
-	virtual void click() override { std::cout << "BUTTON CLICKED!\n"; }
 };

@@ -21,5 +21,6 @@ public:
 	Trait Speed;
 	Trait Size;
 
-	Statistics() : Energy(0.f, 100.f), Speed(0.25f, 4.f), Size(0.5f, 2.f) {}
+	Statistics() : Energy(0.f, 100.f, 100.f),
+		Speed(0.25f, 4.f, 1.f), Size(0.5f, 2.f, 1.f) {}
 };
