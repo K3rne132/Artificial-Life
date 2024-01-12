@@ -114,14 +114,10 @@ public:
 		return copy;
 	}
 
+	// Returns distance from this point to (0, 0) - length
 	inline float norm() const {
 		float res = std::hypot(X, Y);
 		return res;
-	}
-
-	friend std::ostream& operator<<(std::ostream& os, const PointBase<T>& o) {
-		//os << "(" << std::to_string(o.X) << "," << std::to_string(o.Y) << ")";
-		return os;
 	}
 };
 

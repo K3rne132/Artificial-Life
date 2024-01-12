@@ -38,14 +38,21 @@ private:
 	TextValue<float>* Size_;
 
 public:
-	Menu() : Energy_(nullptr), Speed_(nullptr), Size_(nullptr) {}
+	Menu() : FilePath_(nullptr), Energy_(nullptr), Speed_(nullptr),
+		Size_(nullptr) {}
 
 	inline auto begin() const { return MenuElements_.begin(); }
 	inline auto end() const { return MenuElements_.end(); }
+	// Add element to menu without assigning to group (group NONE)
 	void addIndependentMenuElement(std::unique_ptr<Button> menu_obj);
+	// Add element to menu and assign to MAINMENU group
 	void addMainMenuElement(std::unique_ptr<Button> menu_obj);
+	// Add element to menu and assign to ANIMALMENU group
 	void addAnimalMenuElement(std::unique_ptr<Button> menu_obj);
+	// Executes a sequence of commands to create a animal menu
 	void createAnimalInterface(Simulation& simulation);
+	// Executes a sequence of commands to create a main menu
 	void createMainInterface(Simulation& simulation);
+	// Bind animal statistics to be displayed
 	void bindStatistics(Animal& animal);
 };

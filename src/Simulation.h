@@ -58,29 +58,59 @@ public:
 		resetCamera();
 	}
 
+	// Returns handle to Window
 	inline Window& getWindow() { return Window_; }
+	// Returns handle to Map
 	inline Map& getMap() { return Map_; }
+	// Returns handle to Menu
 	inline Menu& getMenu() { return Menu_; }
+	// Returns handle to Camera
 	inline Camera& getCamera() { return Camera_; }
+	// Returns reference to simulation speed
 	float& getSpeed() { return Speed_; }
+	/*
+	* Adds border depending on new map size and resets camera
+	* to point to the map origin
+	*/
 	void updateMap();
+	// Zoom in by camera
 	void zoomIn();
+	// Zoom out by camera
 	void zoomOut();
+	// Speeds up the simulation to 10.f
 	void speedUp();
+	// Slows down the simulation to 0.f
 	void speedDown();
+	/*
+	* Generates new plant in random place after PlantGeneration_ time
+	* (milliseconds are aggregating)
+	*/
 	void generatePlant(long long milliseconds);
+	// Moves camera by offset
 	void moveCamera(float x, float y);
+	// Moves camera by offset
 	void moveCamera(FPoint offset);
+	// Stop moving camera (store offset after shifting map)
 	void stopMoveCamera();
+	// Launch simulation
 	void launch();
+	// Adds object to map
 	bool addMapObject(std::unique_ptr<Drawable>& map_object);
+	// Delete selected animal (performed by button)
 	void removeSelectedAnimal();
+	// Highlight selected animal by drawing border around object
 	void highlightSelectedAnimal();
+	// Binds animal statistics to be shown
 	void bindAnimalStatistics(Animal& animal);
+	// Shows/hides main menu
 	void toggleMainMenu();
+	// Hides main menu
 	void hideMainMenu();
+	// Shows main menu
 	void showMainMenu();
+	// Hides animal menu
 	void hideAnimalMenu();
+	// Shows animal menu
 	void showAnimalMenu();
 	void select(Button& button);
 	void select(TextInput& input);

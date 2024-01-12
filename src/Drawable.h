@@ -27,30 +27,42 @@ public:
 	Drawable(FPoint xy) : Position_(xy), Color_(SDL_Color()) {}
 	virtual ~Drawable() {}
 
+	// Sets main color
 	void setColor(SDL_Color color) {
 		Color_ = color;
 	}
+	// Return main color
 	SDL_Color getColor() const {
 		return Color_;
 	}
+	// Updates size
 	void setSize(FPoint size) {
 		Size_ = size;
 	}
+	// Return width and height
 	FPoint  getSize() const {
 		return Size_;
 	}
+	// Updated position
 	void setPosition(FPoint position) {
 		Position_ = position;
 	}
+	// Return top-left position
 	FPoint getPosition() const {
 		return Position_;
 	}
+	// Checks whether the cursor is over object
 	virtual bool isMouseOver(FPoint mouse_pos) const;
+	// Draws object (can be shifted by offset)
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint());
+	// Return which system cursor will be displayed on hover
 	virtual SDL_SystemCursor getCursorMouseOver() {
 		return SDL_SystemCursor::SDL_SYSTEM_CURSOR_HAND;
 	}
+	// Perform actions when clicked
 	virtual void click() {}
+	// Perform actions when selected
 	virtual void whenSelected() {}
+	// Perform actions when unselected
 	virtual void whenUnselected() {}
 };

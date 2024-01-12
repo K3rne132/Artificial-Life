@@ -25,7 +25,7 @@
 
 bool Simulation::synchronize(long long time_diff) {
 	//std::cout << time_diff << std::endl;
-	for (size_t i = 0; i < Map_.getObjectsCount(); ++i) {
+	for (size_t i = 0; i < Map_.getSize(); ++i) {
 		Animal* animal = dynamic_cast<Animal*>(&Map_[i]);
 		if (animal) {
 			animal->move(time_diff);

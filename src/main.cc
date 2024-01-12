@@ -28,6 +28,7 @@ enum class Command {
 	SET_PARAMS
 };
 
+// Prints a help page
 void printHelp() {
 	std::cout << "Artificial Life Simulation\n"
 		"Opcje:\n"
@@ -37,11 +38,12 @@ void printHelp() {
 		"\t\t- przypisuje kolejne wartosci do generatora mapy\n";
 }
 
+// Checks arguments from command line and then assigns tasks
 Command parseInput(int argc, char** argv) {
 	if (argc == 1)
 		return Command::RANDOM;
 	if (argc == 3) {
-		if (!std::strcmp(argv[1], "-f")) {
+		if (!strcmp(argv[1], "-f")) {
 			return Command::READ_FILE;
 		}
 	}

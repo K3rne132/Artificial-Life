@@ -12,6 +12,8 @@
 
 
 
+
+
 #pragma once
 #include <memory>
 #include <iostream>
@@ -34,7 +36,12 @@ protected:
 	inline static const float SPEED_DIFF = 0.2f;
 
 public:
+	// base size for all animals (can be changed by Size in Statistics_)
 	inline static const float SIZE = 20.f;
+	/*
+	* base speed for all animals, determines how fast they can move per
+	* unit of time (pixels / second)
+	*/ 
 	inline static const float BASE_SPEED = 10.f;
 
 	Animal(Simulation& parent) : Parent_(parent) {
@@ -47,11 +54,20 @@ public:
 		Parent_.unselect(*this);
 	}
 
+	// Returns animal size after applying Size statistic
 	FPoint getRealSize();
+	// Check whether animal has energy close to 0.f
 	bool shoulDie();
+	// Changes animal position by passing offset (Position += offset)
 	void shiftPosition(FPoint offset);
+	/*
+	* Destroys edible object and restores energy (may call reproduce if
+	* animal has more than 50.f energy
+	*/
 	void eat(Drawable& object);
+	// Creates new animal of the same species with similiar statistics
 	void reproduce();
+	// Call present Movement to perform move
 	virtual bool move(long long milliseconds);
 	virtual void click() override;
 	virtual void whenSelected();

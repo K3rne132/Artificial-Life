@@ -42,13 +42,22 @@ public:
 		MouseBase_(0, 0), MouseOffset_(0, 0), Parent_(parent),
 		CurrentCursor_(SDL_SYSTEM_CURSOR_ARROW) {}
 
+	// Do actions when one of mouse buttons (button) is pressed
 	void mouseButtonDown(int button);
+	// Do actions when one of mouse buttons (button) is released
 	void mouseButtonUp(int button);
+	// Do actions when mouse is moving
 	void mouseMotion();
+	// Do actions when mouse scroll is triggered in y direction
 	void mouseWheel(int y);
+	// Do actions when one of keyboard keys is pressed
 	void keyPressed(int key);
+	// Do actions when text is typed from keyboard
 	void textInput(const char* letters);
+	// Updates cursor depending on type (arrow, hand, etc.)
 	void setSystemCursor(SDL_SystemCursor type = SDL_SYSTEM_CURSOR_ARROW);
+	// Checks if cursor is over MouseOver objects and sets system cursor
 	void updateCursor();
+	// Checks whether the cursor is over any object
 	bool isMouseOver(Menu& menu, Map& map);
 };

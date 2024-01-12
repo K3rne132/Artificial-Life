@@ -48,13 +48,21 @@ public:
 			SDL_DestroyWindow(Window_);
 	}
 
+	// Returns window current width and height
 	FPoint getWindowSize() const;
+	// Sets window current size (passed to SDL)
 	void setWindowSize(int width, int height);
+	// Sets window current size (passed to SDL)
 	void setWindowSize(FPoint size);
+	// Performs scaling window (w_width / width, w_height / height)
 	void scaleWindow(float width, float height);
+	// Performs scaling window (w_width / scale.X, w_height / scale.Y)
 	void scaleWindow(FPoint scale);
+	// Creates window with specified title
 	bool createWindow(const char* title);
+	// Create visual border depending on map size
 	void setBorder(std::unique_ptr<Drawable>& border);
+	// Renders every object in Map and Menu
 	void render(Simulation& simulation);
 
 	operator SDL_Renderer* () { return Renderer_; }

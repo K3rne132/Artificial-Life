@@ -32,12 +32,18 @@ private:
 public:
 	Camera() : Zoom_(1.f) {}
 
+	// Return current zoom
 	float getZoom() const;
+	// Sets current zoom
 	void setZoom(float zoom);
+	// Returns difference between origin and present camera position
 	FPoint getOffset() const;
-	FPoint getCenter() const;
+	// Sets camera view in pixels
 	void setCameraSize(FPoint size);
+	// Updates max camera range
 	void setMapSize(Point size);
+	// Updates difference between origin and present camera position
 	void setOffset(FPoint offset);
+	// Stores temporary offset (used in map shifing)
 	void storeOffset();
 };

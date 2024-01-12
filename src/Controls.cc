@@ -121,12 +121,6 @@ bool Controls::isMouseOver(Menu& menu, Map& map) {
 		}
 		it++;
 	}
-	//for (const auto& obj : map) {
-	//	if (obj->isMouseOver(getRelativeMousePos())) {
-	//		MouseOver_ = obj.get();
-	//		return true;
-	//	}
-	//}
 	MouseOver_ = nullptr;
 	return false;
 }

@@ -49,10 +49,6 @@ FPoint Camera::getOffset() const {
 	return Offset_;
 }
 
-FPoint Camera::getCenter() const {
-	return (Offset_ + Size_) / 2;
-}
-
 void Camera::setCameraSize(FPoint size) {
 	Size_ = size;
 }

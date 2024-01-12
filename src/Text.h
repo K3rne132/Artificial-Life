@@ -30,6 +30,7 @@ public:
 		SDL_DestroyTexture(Texture_);
 	}
 
+	// Create texture from given text (need to be drawn)
 	bool makeText(Font& font, std::string text, SDL_Renderer* renderer);
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
 	virtual bool isMouseOver(FPoint mouse_pos) const override { return false; }

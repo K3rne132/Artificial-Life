@@ -15,6 +15,7 @@
 #pragma once
 #include <random>
 
+// Returns random int in range(min, max)
 static int getRandomInt(int min, int max) {
 	std::random_device dev;
 	std::mt19937 rng(dev());
@@ -22,16 +23,19 @@ static int getRandomInt(int min, int max) {
 	return dist(rng);
 }
 
+// Returns random int in range(0, max)
 static int getRandomInt(int max) {
 	return getRandomInt(0, max);
 }
 
+// Returns random float in range(min, max)
 static float getRandomFloat(float min, float max) {
 	int diff = max - min;
 	int rand = getRandomInt(diff * 1000);
 	return static_cast<float>(rand) / 1000.f + min;
 }
 
+// Returns random float in range(0.f, max)
 static float getRandomFloat(float max) {
 	return getRandomFloat(0, max);
 }

@@ -37,20 +37,31 @@ public:
 	Map() : Size_(0, 0) {}
 	Map(int width, int height) : Size_(width, height) {}
 
+	// Add animal to map with specified position and statistics
 	bool addAnimal(FPoint xy, Simulation& simulation, float energy,
 		float speed, float size, AnimalSpecies specie);
+	// Add created object (representing animal of plant) to map objects
 	bool addObject(std::unique_ptr<Drawable> map_object);
+	// Remove object from map objects
 	bool removeObject(Drawable& map_object);
 	inline const auto begin() const { return Objects_.begin(); }
 	inline const auto rbegin() const { return Objects_.rbegin(); }
 	inline const auto end() const { return Objects_.end(); }
 	inline const auto rend() const { return Objects_.rend(); }
-	inline const size_t getObjectsCount() const { return Objects_.size(); }
+	/*
+	* Return object from map vector with specified index (may throw
+	* std::out_of_range exception)
+	*/
 	Drawable& operator[](size_t index) const;
+	// Returns map width and height
 	Point getMapSize() const;
+	// Return map objects count
 	size_t getSize() const;
+	// Read map from json file
 	bool readFromFile(const std::string& filename, Simulation& simulation);
+	// Store map data to json file
 	bool writeToFile(const std::string& filename);
+	// Generate map with specified values
 	bool generate(int carnivores, int herbivores, int food, int height, int width,
 		Simulation& simulation);
 };

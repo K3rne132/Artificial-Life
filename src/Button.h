@@ -38,9 +38,17 @@ public:
 		setColor(color);
 	}
 
+	// Return current assigned group of button
 	ButtonGroup getGroup() { return Group_; }
+	/*
+	* Set group for button(all buttons in the same group
+	* will be treated in the same way
+	*/
 	void setGroup(ButtonGroup group) { Group_ = group; }
+	// Check whether button is rendered
 	bool isHidden() const { return Hidden_; }
+	// Mark to do not render button
 	void hide() { Hidden_ = true; }
+	// Mark to render button
 	void show() { Hidden_ = false; }
 };

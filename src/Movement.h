@@ -54,5 +54,6 @@ protected:
 
 public:
 	Movement() : Direction_(NONE), Distance_(0.f) {}
+	// Performs animal move in time_scale delta time
 	virtual float move(Map& map, Animal& animal, float time_scale) = 0;
 };
