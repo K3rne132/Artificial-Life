@@ -22,8 +22,7 @@ TEST(PointBaseTests, AssignOperatorTest) {
 
 	p1 = p2;
 
-	EXPECT_EQ(p1.X, p2.X);
-	EXPECT_EQ(p1.Y, p2.Y);
+	EXPECT_EQ(Point(p1.X, p1.Y), Point(p2.X, p2.Y));
 }
 
 TEST(PointBaseTests, EqOperatorTest) {
@@ -44,6 +43,50 @@ TEST(PointBaseTests, IneqOperatorTest) {
 	EXPECT_TRUE(p1 != p4);
 }
 
+TEST(PointBaseTests, LessOperatorTest) {
+	Point p1(2, 3);
+	Point p2(1, 6);
+	Point p3(-1, -10);
+	Point p4(-1, -10);
+
+	EXPECT_TRUE(p3 < p1);
+	EXPECT_FALSE(p1 < p2);
+	EXPECT_FALSE(p4 < p3);
+}
+
+TEST(PointBaseTests, GreatOperatorTest) {
+	Point p1(2, 3);
+	Point p2(1, 1);
+	Point p3(-1, 10);
+	Point p4(-1, -10);
+
+	EXPECT_TRUE(p1 > p2);
+	EXPECT_FALSE(p3 > p1);
+	EXPECT_TRUE(p1 > p4);
+}
+
+TEST(PointBaseTests, GreatEqOperatorTest) {
+	Point p1(4, 3);
+	Point p2(1, 3);
+	Point p3(0, 0);
+	Point p4(0, 0);
+
+	EXPECT_TRUE(p1 >= p2);
+	EXPECT_TRUE(p3 >= p4);
+	EXPECT_FALSE(p4 >= p2);
+}
+
+TEST(PointBaseTests, LessEqOperatorTest) {
+	Point p1(-5, 0);
+	Point p2(-5, 3);
+	Point p3(-2, 3);
+	Point p4(-2, 3);
+
+	EXPECT_TRUE(p1 <= p2);
+	EXPECT_TRUE(p3 <= p4);
+	EXPECT_FALSE(p4 <= p2);
+}
+
 TEST(PointBaseTests, PlusEqOperatorTest) {
 	Point p1(1, 9);
 	Point p2(5, 8);
@@ -53,8 +96,8 @@ TEST(PointBaseTests, PlusEqOperatorTest) {
 
 	p2 += p1;
 
-	EXPECT_EQ(x_res, p2.X);
-	EXPECT_EQ(y_res, p2.Y);
+	EXPECT_EQ(Point(x_res, y_res), Point(p2.X, p2.Y));
+	EXPECT_EQ(p1, Point(1, 9));
 }
 
 TEST(PointBaseTests, MinEqOperatorTest) {
@@ -66,8 +109,8 @@ TEST(PointBaseTests, MinEqOperatorTest) {
 
 	p2 -= p1;
 
-	EXPECT_EQ(x_res, p2.X);
-	EXPECT_EQ(y_res, p2.Y);
+	EXPECT_EQ(Point(x_res, y_res), Point(p2.X, p2.Y));
+	EXPECT_EQ(p1, Point(1, 9));
 }
 
 TEST(PointBaseTests, PlusOperatorTest) {
@@ -79,8 +122,7 @@ TEST(PointBaseTests, PlusOperatorTest) {
 
 	Point res = p1 + p2;
 
-	EXPECT_EQ(x_res, res.X);
-	EXPECT_EQ(y_res, res.Y);
+	EXPECT_EQ(Point(x_res, y_res), Point(res.X, res.Y));
 }
 
 TEST(PointBaseTests, MinusOperatorTest) {
@@ -92,8 +134,31 @@ TEST(PointBaseTests, MinusOperatorTest) {
 
 	Point res = p1 - p2;
 
-	EXPECT_EQ(x_res, res.X);
-	EXPECT_EQ(y_res, res.Y);
+	EXPECT_EQ(Point(x_res, y_res), Point(res.X, res.Y));
+}
+
+TEST(PointBaseTests, MultEqOperatorTest) {
+	Point p1(-10, 2);
+	int scalar = 2;
+
+	int x_res = p1.X * scalar;
+	int y_res = p1.Y * scalar;
+
+	p1 *= scalar;
+
+	EXPECT_EQ(Point(x_res, y_res), Point(p1.X, p1.Y));
+}
+
+TEST(PointBaseTests, DivEqOperator) {
+	Point p1(25, -10);
+	float scalar = 2.5;
+
+	float x_res = p1.X / scalar;
+	float y_res = p1.Y / scalar;
+
+	p1 /= scalar;
+
+	EXPECT_EQ(Point(x_res, y_res), Point(p1.X, p1.Y));
 }
 
 TEST(PointBaseTests, MultOperatorTest) {
@@ -105,8 +170,7 @@ TEST(PointBaseTests, MultOperatorTest) {
 
 	Point res = p1 * scalar;
 
-	EXPECT_EQ(x_res, res.X);
-	EXPECT_EQ(y_res, res.Y);
+	EXPECT_EQ(Point(x_res, y_res), Point(res.X, res.Y));
 }
 
 TEST(PointBaseTests, DivOperatorTest) {
@@ -118,8 +182,7 @@ TEST(PointBaseTests, DivOperatorTest) {
 
 	Point res = p1 / scalar;
 
-	EXPECT_EQ(x_res, res.X);
-	EXPECT_EQ(y_res, res.Y);
+	EXPECT_EQ(Point(x_res, y_res), Point(res.X, res.Y));
 }
 
 TEST(PointBaseTests, OppOperatorTest) {
@@ -130,8 +193,8 @@ TEST(PointBaseTests, OppOperatorTest) {
 
 	Point res = !p1;
 
-	EXPECT_EQ(x_res, res.X);
-	EXPECT_EQ(y_res, res.Y);
+	EXPECT_EQ(Point(x_res, y_res), Point(res.X, res.Y));
+	EXPECT_EQ(p1, Point(2, -3));
 }
 
 TEST(PointBaseTests, NormTest) {

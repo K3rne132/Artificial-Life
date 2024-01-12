@@ -17,6 +17,8 @@
 #include <memory>
 #include "Drawable.h"
 
+class Simulation;
+
 using DrawableVector = std::vector<std::unique_ptr<Drawable>>;
 
 class Map {
@@ -35,4 +37,8 @@ public:
 	Drawable& operator[](size_t index) const;
 	Point getMapSize() const;
 	size_t getSize() const;
+	bool readFromFile(const std::string& filename, Simulation& simulation);
+	bool writeToFile(const std::string& filename);
+	bool generate(int carnivores, int herbivores, int food, int height, int width,
+		Simulation& simulation);
 };

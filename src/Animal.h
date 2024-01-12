@@ -20,6 +20,13 @@
 #include "Movement.h"
 #include "Simulation.h"
 
+class Map;
+
+enum class AnimalSpecies {
+	CARNIVORE,
+	HERBIVORE
+};
+
 class Animal : public Drawable {
 protected:
 	Simulation&               Parent_;
@@ -73,11 +80,13 @@ public:
 		rect.h = Size_.Y * Statistics_.Size;
 		SDL_RenderFillRectF(renderer, &rect);
 	}
+	virtual AnimalSpecies getSpecies() const = 0;
 	bool isMouseOver(FPoint mouse_pos) const {
 		return mouse_pos >= Position_ &&
 			mouse_pos <= Position_ + Size_ * Statistics_.Size;
 	}
 
+	friend Map;
 	friend Movement;
 	friend Menu;
 };

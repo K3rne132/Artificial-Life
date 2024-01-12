@@ -23,7 +23,7 @@ protected:
 	Map SampleMap;
 	void SetUp() override {
 		for (int i = 0; i < FixtureMapSize; i++) {
-			auto obj = std::unique_ptr<MapObject>(new MapObjectDummy(i, i));
+			auto obj = std::unique_ptr<Drawable>(new MapObjectDummy(i, i));
 			SampleMap.addObject(obj);
 		}
 	}

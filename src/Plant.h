@@ -13,7 +13,10 @@
 
 
 #pragma once
+#include <iostream>
 #include "Drawable.h"
+
+class Map;
 
 class Plant : public Drawable {
 private:
@@ -26,8 +29,17 @@ public:
 	Plant(float nutritional_value) : NutritionalValue_(nutritional_value) {
 		++Count;
 	}
+	Plant(FPoint xy) : Drawable(xy) {
+		++Count;
+	}
 	~Plant() { --Count; }
 
+	float getNutritionalValue() const {
+		return NutritionalValue_;
+	}
+	virtual void click() override { std::cout << "PLANT CLICKED!\n"; }
 	virtual void draw(SDL_Renderer* renderer, FPoint offset = FPoint()) override;
 	virtual bool isMouseOver(FPoint mouse_pos) const override { return false; }
+	
+	friend Map;
 };

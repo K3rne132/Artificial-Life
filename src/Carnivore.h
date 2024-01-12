@@ -37,4 +37,5 @@ public:
 		++Count;
 	}
 	~Carnivore() { --Count; }
+	virtual AnimalSpecies getSpecies() const override { return AnimalSpecies::CARNIVORE; }
 };
