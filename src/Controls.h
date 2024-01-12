@@ -28,6 +28,7 @@ private:
 	FPoint MouseBase_, MouseOffset_;
 	Camera& Camera_;
 	Drawable* MouseOver_;
+	SDL_SystemCursor CurrentCursor_;
 	SDL_Cursor* Cursor_;
 	Simulation& Parent_;
 
@@ -38,7 +39,8 @@ private:
 public:
 	Controls(Camera& camera, Simulation& parent) : Camera_(camera),
 		MouseOver_(nullptr), Cursor_(nullptr), MiddleButtonPressed_(false),
-		MouseBase_(0, 0), MouseOffset_(0, 0), Parent_(parent) {}
+		MouseBase_(0, 0), MouseOffset_(0, 0), Parent_(parent),
+		CurrentCursor_(SDL_SYSTEM_CURSOR_ARROW) {}
 
 	void mouseButtonDown(int button);
 	void mouseButtonUp(int button);

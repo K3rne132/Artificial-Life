@@ -13,6 +13,7 @@
 
 
 #include "Menu.h"
+#include "TextValue.hpp"
 #include "TextInput.h"
 #include "TextButton.h"
 #include "Animal.h"
@@ -21,17 +22,17 @@
 #include "Herbivore.h"
 #include "Plant.h"
 
-void Menu::addIndependentMenuElement(std::unique_ptr<Button>& menu_obj) {
+void Menu::addIndependentMenuElement(std::unique_ptr<Button> menu_obj) {
 	menu_obj->setGroup(ButtonGroup::NONE);
 	MenuElements_.push_back(std::move(menu_obj));
 }
 
-void Menu::addMainMenuElement(std::unique_ptr<Button>& menu_obj) {
+void Menu::addMainMenuElement(std::unique_ptr<Button> menu_obj) {
 	menu_obj->setGroup(ButtonGroup::MAINMENU);
 	MenuElements_.push_back(std::move(menu_obj));
 }
 
-void Menu::addAnimalMenuElement(std::unique_ptr<Button>& menu_obj) {
+void Menu::addAnimalMenuElement(std::unique_ptr<Button> menu_obj) {
 	menu_obj->setGroup(ButtonGroup::ANIMALMENU);
 	menu_obj->hide();
 	MenuElements_.push_back(std::move(menu_obj));

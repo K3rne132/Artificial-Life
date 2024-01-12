@@ -16,8 +16,9 @@
 #include <vector>
 #include <memory>
 #include "Button.h"
-#include "TextValue.hpp"
 
+template <typename T>
+class TextValue;
 class Animal;
 class Simulation;
 
@@ -28,18 +29,18 @@ private:
 	ButtonVector MenuElements_;
 
 	// Animal interface elements
-	FTextValue* Energy_;
-	FTextValue* Speed_;
-	FTextValue* Size_;
+	TextValue<float>* Energy_;
+	TextValue<float>* Speed_;
+	TextValue<float>* Size_;
 
 public:
 	Menu() : Energy_(nullptr), Speed_(nullptr), Size_(nullptr) {}
 
 	inline auto begin() const { return MenuElements_.begin(); }
 	inline auto end() const { return MenuElements_.end(); }
-	void addIndependentMenuElement(std::unique_ptr<Button>& menu_obj);
-	void addMainMenuElement(std::unique_ptr<Button>& menu_obj);
-	void addAnimalMenuElement(std::unique_ptr<Button>& menu_obj);
+	void addIndependentMenuElement(std::unique_ptr<Button> menu_obj);
+	void addMainMenuElement(std::unique_ptr<Button> menu_obj);
+	void addAnimalMenuElement(std::unique_ptr<Button> menu_obj);
 	void createAnimalInterface(Simulation& simulation);
 	void createMainInterface(Simulation& simulation);
 	void bindStatistics(Animal& animal);

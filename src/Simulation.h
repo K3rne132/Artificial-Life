@@ -16,6 +16,7 @@
 #include <chrono>
 #include "Controls.h"
 #include "Menu.h"
+#include "Settings.h"
 
 class Window;
 class Menu;

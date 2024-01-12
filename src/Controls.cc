@@ -72,8 +72,6 @@ void Controls::mouseButtonUp(int button) {
 }
 
 void Controls::mouseMotion() {
-	std::cout << getMousePos() << "\n";
-	std::cout << getRelativeMousePos() << "\n";
 	if (MiddleButtonPressed_) {
 		storeMousePos(MouseOffset_);
 		FPoint asd = MouseBase_ + MouseOffset_;
@@ -82,7 +80,6 @@ void Controls::mouseMotion() {
 	}
 	else if (isMouseOver(Parent_.Menu_, Parent_.Map_)) {
 		updateCursor();
-		std::cout << "Mouse is over something\n";
 	}
 	else {
 		setSystemCursor();
@@ -135,10 +132,13 @@ bool Controls::isMouseOver(Menu& menu, Map& map) {
 }
 
 void Controls::setSystemCursor(SDL_SystemCursor type) {
+	if (type == CurrentCursor_)
+		return;
 	SDL_Cursor* system = SDL_CreateSystemCursor(type);
 	if (Cursor_)
 		SDL_FreeCursor(Cursor_);
 	Cursor_ = system;
+	CurrentCursor_ = type;
 	SDL_SetCursor(system);
 }
 

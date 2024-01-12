@@ -18,6 +18,7 @@
 #include "Text.h"
 #include "Settings.h"
 #include "Simulation.h"
+#include "Window.h"
 
 template <typename T>
 class TextValue : public Text {
@@ -55,5 +56,6 @@ public:
 	}
 };
 
-using FTextValue  = TextValue<float>;
+using FTextValue = TextValue<float>;
 using UITextValue = TextValue<unsigned int>;
+
