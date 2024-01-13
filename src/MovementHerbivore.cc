@@ -21,7 +21,7 @@ bool MovementHerbivore::goEat(Nearest& n, Animal& animal) {
 		if (!n.Carnivore_)
 			return true;
 		else if (n.Carnivore_) {
-			if (n.Carnivore_->getRealSize() < animal.getRealSize() * 1.1f)
+			if (n.Carnivore_->getRealSize() < animal.getRealSize() * 1.05f)
 				return true;
 			else if (n.PDistance_ < n.CDistance_)
 				return true;
@@ -34,7 +34,7 @@ bool MovementHerbivore::goEat(Nearest& n, Animal& animal) {
 
 bool MovementHerbivore::goRun(Nearest& n, Animal& animal) {
 	if (n.Carnivore_) {
-		if (n.Carnivore_->getRealSize() > animal.getRealSize() * 1.1f)
+		if (n.Carnivore_->getRealSize() > animal.getRealSize() * 1.05f)
 			return true;
 	}
 	return false;

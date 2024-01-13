@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 			getRandomInt(10, 100),
 			getRandomInt(10, 100),
 			getRandomInt(10, 100),
-			1000, 1000, simulation))
+			3000, 3000, simulation))
 			return 1;
 		break;
 	case Command::SET_PARAMS:

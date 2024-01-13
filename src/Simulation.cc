@@ -95,8 +95,8 @@ void Simulation::zoomOut() {
 
 void Simulation::speedUp() {
 	Speed_ += 0.5f;
-	if (Speed_ >= 10.f)
-		Speed_ = 10.f;
+	if (Speed_ >= 50.f)
+		Speed_ = 50.f;
 }
 
 void Simulation::speedDown() {

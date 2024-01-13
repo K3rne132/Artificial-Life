@@ -30,7 +30,7 @@ static int getRandomInt(int max) {
 
 // Returns random float in range(min, max)
 static float getRandomFloat(float min, float max) {
-	int diff = max - min;
+	float diff = max - min;
 	int rand = getRandomInt(diff * 1000);
 	return static_cast<float>(rand) / 1000.f + min;
 }

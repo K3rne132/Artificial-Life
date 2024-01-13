@@ -37,11 +37,11 @@ void Animal::shiftPosition(FPoint offset) {
 		Position_.Y = map_size.Y - real_size.Y;
 }
 void Animal::eat(Drawable& object) {
-	reproduce();
-	Statistics_.Energy = 100.f;
+	if (!reproduce())
+		Statistics_.Energy = 100.f;
 	Parent_.getMap().removeObject(object);
 }
-void Animal::reproduce() {
+bool Animal::reproduce() {
 	if (Statistics_.Energy > 50.f) {
 		float size = Statistics_.Size + getRandomFloat(-SIZE_DIFF, SIZE_DIFF);
 		float speed = Statistics_.Speed + getRandomFloat(-SPEED_DIFF, SPEED_DIFF);
@@ -49,7 +49,9 @@ void Animal::reproduce() {
 		float y = Position_.Y + getRandomFloat(-20.f, 20.f);
 		Parent_.getMap().addAnimal(FPoint(x, y),
 			Parent_, 50.f, speed, size, getSpecies());
+		return true;
 	}
+	return false;
 }
 bool Animal::move(long long milliseconds) {
 	if (AnimalMovement_) {

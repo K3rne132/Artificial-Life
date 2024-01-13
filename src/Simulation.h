@@ -52,7 +52,7 @@ public:
 		Map_(map), Menu_(menu), Event_(), Controls_(Camera_, *this),
 		ButtonSelected_(nullptr), Quit_(false), TextInputSelected_(nullptr),
 		AnimalSelected_(nullptr), Speed_(1.f), MainMenuHidden_(false),
-		PlantGeneration_(500), TimeElapsedPlant_(0) {
+		PlantGeneration_(100), TimeElapsedPlant_(0) {
 		Settings::loadFonts();
 		addMapBorder();
 		resetCamera();

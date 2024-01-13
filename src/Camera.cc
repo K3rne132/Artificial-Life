@@ -31,8 +31,8 @@ float Camera::getZoom() const {
 }
 
 void Camera::setZoom(float zoom) {
-	if (zoom < 0.5f)
-		Zoom_ = 0.5f;
+	if (zoom < 0.2f)
+		Zoom_ = 0.2f;
 	else if (zoom > 10.f)
 		Zoom_ = 10.f;
 	else

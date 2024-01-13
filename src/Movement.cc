@@ -46,7 +46,7 @@ Nearest Movement::getNearest(Map& map, FPoint from) const {
 		Plant* plant = dynamic_cast<Plant*>(obj.get());
 		if (plant) {
 			float distance = (from - plant->getPosition()).norm();
-			if (distance < SIGHT && distance < result.HDistance_) {
+			if (distance < SIGHT && distance < result.PDistance_) {
 				result.Plant_ = plant;
 				result.PDistance_ = distance;
 			}

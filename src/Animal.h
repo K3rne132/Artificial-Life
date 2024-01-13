@@ -66,7 +66,7 @@ public:
 	*/
 	void eat(Drawable& object);
 	// Creates new animal of the same species with similiar statistics
-	void reproduce();
+	bool reproduce();
 	// Call present Movement to perform move
 	virtual bool move(long long milliseconds);
 	virtual void click() override;
