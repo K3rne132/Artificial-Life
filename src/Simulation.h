@@ -61,6 +61,9 @@ public:
 		addMapBorder();
 		resetCamera();
 	}
+	~Simulation() {
+		unselectAll();
+	}
 
 	// Returns handle to Window
 	inline Window& getWindow() { return Window_; }

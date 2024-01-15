@@ -16,7 +16,8 @@
 #include "Herbivore.h"
 
 float MovementCarnivore::move(Map& map, Animal& animal, float time_scale) {
-	FPoint animal_center = animal.getCenter() - animal.getSize() / 2;
+	FPoint animal_center = animal.getCenter();
+	Nearest_ = getNearest(map, animal_center);
 	Statistics stats = getStatistics(animal);
 	if (Nearest_.Herbivore_ && // if found edible animal in sight
 		Nearest_.Herbivore_->getRealSize() < animal.getRealSize() * 1.1f) {

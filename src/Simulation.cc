@@ -13,8 +13,6 @@
 
 
 #include <chrono>
-#include <future>
-#include <thread>
 #include "Simulation.h"
 #include "FilledRect.h"
 #include "Colors.h"
@@ -27,10 +25,12 @@
 void Simulation::generatePlant(long long milliseconds) {
 	TimeElapsedPlant_ += milliseconds;
 	while (TimeElapsedPlant_ > PlantGeneration_) {
-		float x = getRandomFloat(Map_.getMapSize().X);
-		float y = getRandomFloat(Map_.getMapSize().Y);
-		auto plant = std::unique_ptr<Drawable>(new Plant(FPoint(x, y)));
-		Map_.addObject(std::move(plant));
+		if (Plant::Count < 2048) {
+			float x = getRandomFloat(Map_.getMapSize().X);
+			float y = getRandomFloat(Map_.getMapSize().Y);
+			auto plant = std::unique_ptr<Drawable>(new Plant(FPoint(x, y)));
+			Map_.addObject(std::move(plant));
+		}
 		TimeElapsedPlant_ -= PlantGeneration_;
 	}
 }
@@ -54,7 +54,7 @@ void Simulation::moveAnimals(long long milliseconds) {
 
 void Simulation::synchronize(long long milliseconds) {
 	if (Speed_ > 0.001f) {
-		updateAnimals();
+		//updateAnimals();
 		moveAnimals(milliseconds);
 		generatePlant(milliseconds);
 	}

@@ -44,6 +44,7 @@ bool MovementHerbivore::goRun(Nearest& n, Animal& animal) {
 
 float MovementHerbivore::move(Map& map, Animal& animal, float time_scale) {
 	FPoint animal_center = animal.getCenter();
+	Nearest_ = getNearest(map, animal_center);
 	Statistics stats = getStatistics(animal);
 	if (goEat(Nearest_, animal)) {
 		Direction_ = NONE;
