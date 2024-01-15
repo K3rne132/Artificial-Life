@@ -47,6 +47,7 @@ protected:
 	inline static const int NONE = 1000;
 	inline static const int SIGHT = 300.f;
 
+	Nearest Nearest_;
 	Nearest getNearest(Map& map, FPoint from) const;
 	Statistics& getStatistics(Animal& animal) const;
 	FPoint randomizeDirection(float distance);
@@ -56,4 +57,6 @@ public:
 	Movement() : Direction_(NONE), Distance_(0.f) {}
 	// Performs animal move in time_scale delta time
 	virtual float move(Map& map, Animal& animal, float time_scale) = 0;
+	void updateNearest(Map& map, FPoint from);
+	void removeNearest(Drawable& drawable);
 };

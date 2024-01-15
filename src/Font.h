@@ -33,9 +33,7 @@ public:
 	// Loads font from file with specified font size
 	bool load(const char* path, int size) {
 		Font_ = TTF_OpenFont(path, size);
-		if (!Font_)
-			return false;
-		return true;
+		return Font_;
 	}
 
 	operator TTF_Font*() {

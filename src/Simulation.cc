@@ -13,6 +13,8 @@
 
 
 #include <chrono>
+#include <future>
+#include <thread>
 #include "Simulation.h"
 #include "FilledRect.h"
 #include "Colors.h"
@@ -22,18 +24,40 @@
 #include "Plant.h"
 #include "Random.h"
 
+void Simulation::generatePlant(long long milliseconds) {
+	TimeElapsedPlant_ += milliseconds;
+	while (TimeElapsedPlant_ > PlantGeneration_) {
+		float x = getRandomFloat(Map_.getMapSize().X);
+		float y = getRandomFloat(Map_.getMapSize().Y);
+		auto plant = std::unique_ptr<Drawable>(new Plant(FPoint(x, y)));
+		Map_.addObject(std::move(plant));
+		TimeElapsedPlant_ -= PlantGeneration_;
+	}
+}
 
-bool Simulation::synchronize(long long time_diff) {
-	//std::cout << time_diff << std::endl;
+void Simulation::updateAnimals() {
+	for (size_t i = 0; i < Map_.getSize(); ++i) {
+		Animal* anim = dynamic_cast<Animal*>(&Map_[i]);
+		if (anim)
+			anim->updateNearest();
+	}
+}
+
+void Simulation::moveAnimals(long long milliseconds) {
 	for (size_t i = 0; i < Map_.getSize(); ++i) {
 		Animal* animal = dynamic_cast<Animal*>(&Map_[i]);
 		if (animal) {
-			animal->move(time_diff);
-			if (animal->shoulDie())
-				Map_.removeObject(*animal);
+			animal->move(milliseconds);
 		}
 	}
-	return true;
+}
+
+void Simulation::synchronize(long long milliseconds) {
+	if (Speed_ > 0.001f) {
+		updateAnimals();
+		moveAnimals(milliseconds);
+		generatePlant(milliseconds);
+	}
 }
 
 void Simulation::dispatchEvent() {
@@ -94,26 +118,45 @@ void Simulation::zoomOut() {
 }
 
 void Simulation::speedUp() {
-	Speed_ += 0.5f;
+	if (Speed_ < 1.f)
+		Speed_ += 0.1f;
+	else if (Speed_ < 5.f)
+		Speed_ += 0.5f;
+	else if (Speed_ < 10.f)
+		Speed_ += 1.f;
+	else if (Speed_ < 20.f)
+		Speed_ += 2.f;
+	else
+		Speed_ += 5.f;
 	if (Speed_ >= 50.f)
 		Speed_ = 50.f;
 }
 
 void Simulation::speedDown() {
-	Speed_ -= 0.5f;
+	if (Speed_ < 1.5f)
+		Speed_ -= 0.1f;
+	else if (Speed_ < 5.5f)
+		Speed_ -= 0.5f;
+	else if (Speed_ < 11.f)
+		Speed_ -= 1.f;
+	else if (Speed_ < 22.f)
+		Speed_ -= 2.f;
+	else
+		Speed_ -= 5.f;
 	if (Speed_ <= 0.f)
 		Speed_ = 0.f;
 }
 
-void Simulation::generatePlant(long long milliseconds) {
-	TimeElapsedPlant_ += milliseconds;
-	while (TimeElapsedPlant_ > PlantGeneration_) {
-		float x = getRandomFloat(Map_.getMapSize().X);
-		float y = getRandomFloat(Map_.getMapSize().Y);
-		auto plant = std::unique_ptr<Drawable>(new Plant(FPoint(x, y)));
-		Map_.addObject(std::move(plant));
-		TimeElapsedPlant_ -= PlantGeneration_;
-	}
+void Simulation::pause() {
+	if (Speed_ > 0.001f)
+		StoredSpeed_ = Speed_;
+	Speed_ = 0.f;
+}
+
+void Simulation::resume() {
+	if (Speed_ > 0.001f)
+		return;
+	Speed_ = StoredSpeed_;
 }
 
 void Simulation::moveCamera(float x, float y) {
@@ -131,16 +174,15 @@ void Simulation::stopMoveCamera() {
 void Simulation::launch() {
 	auto begin = std::chrono::steady_clock::now();
 	while (!Quit_) {
-		auto now = std::chrono::steady_clock::now();
-		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - begin);
-		long long ms_elapsed = diff.count() * Speed_;
-		synchronize(ms_elapsed);
-		generatePlant(ms_elapsed);
-		begin = now;
 		while (SDL_PollEvent(&Event_)) {
 			dispatchEvent();
 		}
 		Window_.render(*this);
+		auto now = std::chrono::steady_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - begin);
+		long long ms_elapsed = diff.count() * Speed_;
+		synchronize(ms_elapsed);
+		begin = now;
 		highlightSelectedAnimal();
 		SDL_Delay(16); // 60fps
 	}

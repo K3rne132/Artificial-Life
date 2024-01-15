@@ -15,14 +15,28 @@
 #include "Animal.h"
 #include "Simulation.h"
 #include "Random.h"
+#include "Plant.h"
 
-FPoint Animal::getRealSize() {
+FPoint Animal::getRealSize() const {
 	return Size_ * Statistics_.Size;
 }
 
-bool Animal::shoulDie() {
-	return Statistics_.Energy < 0.01f;
+float Animal::getRealWidth() const {
+	return SIZE * Statistics_.Size;
 }
+
+bool Animal::shoulDie() {
+	bool die = Statistics_.Energy < 0.01f;
+	if (die) {
+		for (auto& obj : Parent_.getMap()) {
+			Animal* anim = dynamic_cast<Animal*>(obj.get());
+			if (anim)
+				anim->AnimalMovement_->removeNearest(*this);
+		}
+	}
+	return die;
+}
+
 void Animal::shiftPosition(FPoint offset) {
 	Point map_size = Parent_.getMap().getMapSize();
 	FPoint real_size = getRealSize();
@@ -36,11 +50,29 @@ void Animal::shiftPosition(FPoint offset) {
 	else if (Position_.Y > map_size.Y - real_size.Y)
 		Position_.Y = map_size.Y - real_size.Y;
 }
+
+void Animal::updateNearest() {
+	if (AnimalMovement_)
+		AnimalMovement_->updateNearest(Parent_.getMap(), getCenter());
+}
+
 void Animal::eat(Drawable& object) {
 	if (!reproduce())
 		Statistics_.Energy = 100.f;
 	Parent_.getMap().removeObject(object);
 }
+
+void Animal::eat(Plant& plant) {
+	if (!reproduce())
+		Statistics_.Energy = 100.f;
+	for (auto& obj : Parent_.getMap()) {
+		Animal* anim = dynamic_cast<Animal*>(obj.get());
+		if (anim)
+			anim->AnimalMovement_->removeNearest(plant);
+	}
+	Parent_.getMap().removeObject(plant);
+}
+
 bool Animal::reproduce() {
 	if (Statistics_.Energy > 50.f) {
 		float size = Statistics_.Size + getRandomFloat(-SIZE_DIFF, SIZE_DIFF);
@@ -53,24 +85,31 @@ bool Animal::reproduce() {
 	}
 	return false;
 }
+
 bool Animal::move(long long milliseconds) {
 	if (AnimalMovement_) {
 		float energy_usage = AnimalMovement_->move(
 			Parent_.getMap(), *this, milliseconds / 1000.f);
 		Statistics_.Energy -= energy_usage / LIFE_SPAN;
+		if (shoulDie())
+			Parent_.getMap().removeObject(*this);
 	}
 	return true;
 }
+
 void Animal::click() {
 	Parent_.select(*this);
 }
+
 void Animal::whenSelected() {
 	Parent_.bindAnimalStatistics(*this);
 	Parent_.showAnimalMenu();
 }
+
 void Animal::whenUnselected() {
 	Parent_.hideAnimalMenu();
 }
+
 void Animal::draw(SDL_Renderer* renderer, FPoint offset) {
 	SDL_SetRenderDrawColor(renderer, Color_.r, Color_.g, Color_.b, Color_.a);
 	SDL_FRect rect;
@@ -84,4 +123,8 @@ void Animal::draw(SDL_Renderer* renderer, FPoint offset) {
 bool Animal::isMouseOver(FPoint mouse_pos) const {
 	return mouse_pos >= Position_ &&
 		mouse_pos <= Position_ + Size_ * Statistics_.Size;
+}
+
+FPoint Animal::getCenter() const {
+	return Position_ + getRealSize() / 2;
 }

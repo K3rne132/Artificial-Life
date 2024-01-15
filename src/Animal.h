@@ -12,8 +12,6 @@
 
 
 
-
-
 #pragma once
 #include <memory>
 #include <iostream>
@@ -55,16 +53,21 @@ public:
 	}
 
 	// Returns animal size after applying Size statistic
-	FPoint getRealSize();
+	FPoint getRealSize() const;
+	// Returns animal size after applying Size statistic
+	float getRealWidth() const;
 	// Check whether animal has energy close to 0.f
 	bool shoulDie();
 	// Changes animal position by passing offset (Position += offset)
 	void shiftPosition(FPoint offset);
+	// updates nearest in Movement
+	void updateNearest();
 	/*
 	* Destroys edible object and restores energy (may call reproduce if
 	* animal has more than 50.f energy
 	*/
 	void eat(Drawable& object);
+	void eat(Plant& plant);
 	// Creates new animal of the same species with similiar statistics
 	bool reproduce();
 	// Call present Movement to perform move
@@ -75,6 +78,7 @@ public:
 	virtual void draw(SDL_Renderer* renderer, FPoint offset) override;
 	virtual bool isMouseOver(FPoint mouse_pos) const;
 	virtual AnimalSpecies getSpecies() const = 0;
+	virtual FPoint getCenter() const override;
 
 	friend Map;
 	friend Movement;

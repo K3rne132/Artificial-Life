@@ -51,6 +51,10 @@ public:
 	FPoint getPosition() const {
 		return Position_;
 	}
+	// Return center position
+	virtual FPoint getCenter() const {
+		return Position_ + Size_ / 2;
+	}
 	// Checks whether the cursor is over object
 	virtual bool isMouseOver(FPoint mouse_pos) const;
 	// Draws object (can be shifted by offset)

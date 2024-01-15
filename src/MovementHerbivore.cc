@@ -21,8 +21,10 @@ bool MovementHerbivore::goEat(Nearest& n, Animal& animal) {
 		if (!n.Carnivore_)
 			return true;
 		else if (n.Carnivore_) {
-			if (n.Carnivore_->getRealSize() < animal.getRealSize() * 1.05f)
+			if (n.Carnivore_->getRealSize() < animal.getRealSize() * 1.1f)
 				return true;
+			else if (n.CDistance_ < 2 * n.Carnivore_->getRealWidth())
+				return false;
 			else if (n.PDistance_ < n.CDistance_)
 				return true;
 			else
@@ -34,45 +36,44 @@ bool MovementHerbivore::goEat(Nearest& n, Animal& animal) {
 
 bool MovementHerbivore::goRun(Nearest& n, Animal& animal) {
 	if (n.Carnivore_) {
-		if (n.Carnivore_->getRealSize() > animal.getRealSize() * 1.05f)
+		if (n.Carnivore_->getRealSize() > animal.getRealSize() * 1.1f)
 			return true;
 	}
 	return false;
 }
 
 float MovementHerbivore::move(Map& map, Animal& animal, float time_scale) {
-	FPoint animal_center = animal.getPosition() - animal.getSize() / 2;
-	Nearest nearest = getNearest(map, animal_center);
+	FPoint animal_center = animal.getCenter();
 	Statistics stats = getStatistics(animal);
-	if (goEat(nearest, animal)) {
+	if (goEat(Nearest_, animal)) {
 		Direction_ = NONE;
-		FPoint diff = nearest.Plant_->getPosition() - animal.getPosition();
-		if (diff.norm() < Animal::SIZE) {
-			animal.eat(*nearest.Plant_);
+		FPoint diff = Nearest_.Plant_->getCenter() - animal.getCenter();
+		if (diff.norm() < animal.getRealWidth() / 2) {
+			animal.eat(*Nearest_.Plant_);
 			return 0.f;
 		}
 		float distance = Animal::BASE_SPEED * stats.Speed / stats.Size * time_scale;
-		if (nearest.PDistance_ > distance) {
-			float scale = distance / nearest.PDistance_;
+		if (Nearest_.PDistance_ > distance) {
+			float scale = distance / Nearest_.PDistance_;
 			animal.shiftPosition(diff * scale);
 			return diff.norm() * scale * stats.Speed;
 		}
-		distance = nearest.PDistance_ * time_scale;
+		distance = Nearest_.PDistance_ * time_scale;
 		animal.shiftPosition(diff);
 		return diff.norm() * stats.Speed;
 	}
-	else if (goRun(nearest, animal)) {
+	else if (goRun(Nearest_, animal)) {
 		Direction_ = NONE;
-		if (nearest.Plant_) {
-			FPoint diff = nearest.Plant_->getPosition() - animal.getPosition();
-			if (diff.norm() < Animal::SIZE) {
-				animal.eat(*nearest.Plant_);
+		if (Nearest_.Plant_) {
+			FPoint diff = Nearest_.Plant_->getCenter() - animal.getCenter();
+			if (diff.norm() < animal.getRealWidth() / 2) {
+				animal.eat(*Nearest_.Plant_);
 				return 0.f;
 			}
 		}
-		FPoint diff = nearest.Carnivore_->getPosition() - animal.getPosition();
+		FPoint diff = Nearest_.Carnivore_->getCenter() - animal.getCenter();
 		float distance = Animal::BASE_SPEED * stats.Speed / stats.Size * time_scale;
-		float scale = distance / nearest.CDistance_;
+		float scale = distance / Nearest_.CDistance_;
 		animal.shiftPosition(!diff * scale);
 		return diff.norm() * scale * stats.Speed;
 	}

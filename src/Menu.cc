@@ -57,6 +57,10 @@ void Menu::createMainInterface(Simulation& simulation) {
 			if (simulation.getMap().writeToFile("data/maps/" + FilePath_->getInput()))
 				std::cout << "Zapisano w: data/maps/" + FilePath_->getInput() + "\n";
 		});
+	auto pause = new TextButton(FPoint(48.f, 190.f), FPoint(120.f, 42.f),
+		simulation, " Pauza", [&simulation]() { simulation.pause(); });
+	auto resume = new TextButton(FPoint(192.f, 190.f), FPoint(120.f, 42.f),
+		simulation, " Wznow", [&simulation]() { simulation.resume(); });
 	auto toggle_menu = new TextButton(FPoint(10.f, 110.f), FPoint(238.f, 42.f),
 		simulation, " Pokaz/Ukryj", [&simulation]() { simulation.toggleMainMenu(); });
 	auto speed_down = new TextButton(FPoint(10.f, 250.f), FPoint(42.f, 42.f),
@@ -75,6 +79,8 @@ void Menu::createMainInterface(Simulation& simulation) {
 	auto plant_count = new UITextValue(
 		FPoint(10.f, 430.f), simulation, "Roslin: ");
 	plant_count->bindValue(&Plant::Count);
+	addMainMenuElement(std::unique_ptr<Button>(pause));
+	addMainMenuElement(std::unique_ptr<Button>(resume));
 	addMainMenuElement(std::unique_ptr<Button>(FilePath_));
 	addMainMenuElement(std::unique_ptr<Button>(write_file));
 	addIndependentMenuElement(std::unique_ptr<Button>(toggle_menu));

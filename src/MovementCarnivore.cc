@@ -16,24 +16,23 @@
 #include "Herbivore.h"
 
 float MovementCarnivore::move(Map& map, Animal& animal, float time_scale) {
-	FPoint animal_center = animal.getPosition() - animal.getSize() / 2;
-	Nearest nearest = getNearest(map, animal_center);
+	FPoint animal_center = animal.getCenter() - animal.getSize() / 2;
 	Statistics stats = getStatistics(animal);
-	if (nearest.Herbivore_ && // if found edible animal in sight
-		nearest.Herbivore_->getRealSize() < animal.getRealSize() * 1.05f) {
+	if (Nearest_.Herbivore_ && // if found edible animal in sight
+		Nearest_.Herbivore_->getRealSize() < animal.getRealSize() * 1.1f) {
 		Direction_ = NONE;
-		FPoint diff = nearest.Herbivore_->getPosition() - animal.getPosition();
-		if (diff.norm() < Animal::SIZE) {
-			animal.eat(*nearest.Herbivore_);
+		FPoint diff = Nearest_.Herbivore_->getCenter() - animal.getCenter();
+		if (diff.norm() < animal.getRealWidth() / 2) {
+			animal.eat(*Nearest_.Herbivore_);
 			return 0.f;
 		}
 		float distance = Animal::BASE_SPEED * stats.Speed / stats.Size * time_scale;
-		if (nearest.HDistance_ > distance) {
-			float scale = distance / nearest.HDistance_;
+		if (Nearest_.HDistance_ > distance) {
+			float scale = distance / Nearest_.HDistance_;
 			animal.shiftPosition(diff * scale);
 			return diff.norm() * scale * stats.Speed;
 		}
-		distance = nearest.HDistance_ * time_scale;
+		distance = Nearest_.HDistance_ * time_scale;
 		animal.shiftPosition(diff);
 		return diff.norm() * stats.Speed;
 	}

@@ -24,8 +24,8 @@ Statistics& Movement::getStatistics(Animal& animal) const {
 
 Nearest Movement::getNearest(Map& map, FPoint from) const {
 	Nearest result;
-	for (auto& obj : map) {
-		Carnivore* carn = dynamic_cast<Carnivore*>(obj.get());
+	for (size_t i = 0; i < map.getSize(); ++i) {
+		Carnivore* carn = dynamic_cast<Carnivore*>(&map[i]);
 		if (carn) {
 			float distance = (from - carn->getPosition()).norm();
 			if (distance < SIGHT && distance < result.CDistance_) {
@@ -34,7 +34,7 @@ Nearest Movement::getNearest(Map& map, FPoint from) const {
 			}
 			continue;
 		}
-		Herbivore* herb = dynamic_cast<Herbivore*>(obj.get());
+		Herbivore* herb = dynamic_cast<Herbivore*>(&map[i]);
 		if (herb) {
 			float distance = (from - herb->getPosition()).norm();
 			if (distance < SIGHT && distance < result.HDistance_) {
@@ -43,7 +43,7 @@ Nearest Movement::getNearest(Map& map, FPoint from) const {
 			}
 			continue;
 		}
-		Plant* plant = dynamic_cast<Plant*>(obj.get());
+		Plant* plant = dynamic_cast<Plant*>(&map[i]);
 		if (plant) {
 			float distance = (from - plant->getPosition()).norm();
 			if (distance < SIGHT && distance < result.PDistance_) {
@@ -78,4 +78,23 @@ FPoint Movement::randomizeDirection(float distance) {
 
 bool Movement::isRandom() {
 	return std::abs(Direction_ - NONE) > 0.1f;
+}
+
+void Movement::updateNearest(Map& map, FPoint from) {
+	Nearest_ = getNearest(map, from);
+}
+
+void Movement::removeNearest(Drawable& drawable) {
+	if (Nearest_.Carnivore_ == &drawable) {
+		Nearest_.Carnivore_ = nullptr;
+		return;
+	}
+	if (Nearest_.Herbivore_ == &drawable) {
+		Nearest_.Herbivore_ = nullptr;
+		return;
+	}
+	if (Nearest_.Plant_ == &drawable) {
+		Nearest_.Plant_ = nullptr;
+		return;
+	}
 }

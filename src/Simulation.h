@@ -38,11 +38,15 @@ private:
 	TextInput* TextInputSelected_;
 	Animal*    AnimalSelected_;
 	float      Speed_;
+	float      StoredSpeed_;
 	long long  PlantGeneration_;
 	long long  TimeElapsedPlant_;
 	bool       MainMenuHidden_;
 
-	bool synchronize(long long time_diff);
+	void generatePlant(long long milliseconds);
+	void updateAnimals();
+	void moveAnimals(long long milliseconds);
+	void synchronize(long long milliseconds);
 	void dispatchEvent();
 	void addMapBorder();
 	void resetCamera();
@@ -52,7 +56,7 @@ public:
 		Map_(map), Menu_(menu), Event_(), Controls_(Camera_, *this),
 		ButtonSelected_(nullptr), Quit_(false), TextInputSelected_(nullptr),
 		AnimalSelected_(nullptr), Speed_(1.f), MainMenuHidden_(false),
-		PlantGeneration_(100), TimeElapsedPlant_(0) {
+		StoredSpeed_(1.f), PlantGeneration_(100), TimeElapsedPlant_(0) {
 		Settings::loadFonts();
 		addMapBorder();
 		resetCamera();
@@ -81,11 +85,10 @@ public:
 	void speedUp();
 	// Slows down the simulation to 0.f
 	void speedDown();
-	/*
-	* Generates new plant in random place after PlantGeneration_ time
-	* (milliseconds are aggregating)
-	*/
-	void generatePlant(long long milliseconds);
+	// Stores old speed value and sets speed to 0.f
+	void pause();
+	// Restores stored value
+	void resume();
 	// Moves camera by offset
 	void moveCamera(float x, float y);
 	// Moves camera by offset

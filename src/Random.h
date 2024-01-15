@@ -15,10 +15,10 @@
 #pragma once
 #include <random>
 
+static std::default_random_engine rng;
+
 // Returns random int in range(min, max)
 static int getRandomInt(int min, int max) {
-	std::random_device dev;
-	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(min, max);
 	return dist(rng);
 }
@@ -30,9 +30,8 @@ static int getRandomInt(int max) {
 
 // Returns random float in range(min, max)
 static float getRandomFloat(float min, float max) {
-	float diff = max - min;
-	int rand = getRandomInt(diff * 1000);
-	return static_cast<float>(rand) / 1000.f + min;
+	std::uniform_real_distribution<float> dist(min, max);
+	return dist(rng);
 }
 
 // Returns random float in range(0.f, max)
